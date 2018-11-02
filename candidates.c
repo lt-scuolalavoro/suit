@@ -1,6 +1,7 @@
 #include "stdio.h"
 #include "string.h"
 #include "stdlib.h"
+#include "stdbool.h"
 
 struct candidate {
   //declaration of the structure variables
@@ -9,6 +10,7 @@ struct candidate {
   char firstName[20];
   char lastName[20];
   int age;
+  bool employed;
   float salary;
 };
 //declaration function
@@ -25,6 +27,7 @@ void main(){
   fp = fopen("database.txt", "r");
   int numDip = findLines(fp);
 
+
   int i;
   //declaration that defines a physically grouped list of variables;
   struct candidate dip[numDip];
@@ -33,9 +36,8 @@ void main(){
 
   for(i=0; i<numDip; i++){
     //the function fscanf reads formatted input from a stream;
-    fscanf(fp, "%i %s %s %i %f", &dip[i].id, dip[i].firstName, dip[i].lastName, &dip[i].age, &dip[i].salary);
+    fscanf(fp, "%i %s %s %i %d", &dip[i].id, dip[i].firstName, dip[i].lastName, &dip[i].age, &dip[i].employed);
   }
-  printf("%i\n", dip[6].age);
 
   char appoggio[50];
   printf("lastName: ");

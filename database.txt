@@ -1,7 +1,7 @@
-1 Giuseppe Lepore 17 1200
-2 Simone Verna 17 2000
-3 Marcello Tarallo 3 1000
-4 Martino Pagano 100 3000
-5 Simone Cacciapaglia 50 10000
-6 Giuseppe DeSantis 63 8283
-7 Emanuele Rizzi 11 1000
+1 Giuseppe  Lepore        17   1    1200
+2 Simone    Verna         17   0
+3 Marcello  Tarallo       3    0
+4 Martino   Pagano        100  0
+5 Simone    Cacciapaglia  50   0
+6 Giuseppe  DeSantis      63   0
+7 Emanuele  Rizzi         11   0
