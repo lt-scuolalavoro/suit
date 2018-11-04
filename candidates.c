@@ -9,7 +9,8 @@ struct candidate {
   //Name and surname must be a maximum of 20 characters
   char firstName[20];
   char lastName[20];
-  int age;
+  //int age;
+  char birthday[10];
   bool employed;
   float salary;
 };
@@ -36,13 +37,14 @@ void main(){
 
   for(i=0; i<nCandidates; i++){
     //the function fscanf reads formatted input from a stream;
-    fscanf(fp, "%i %s %s %i %d", &cand[i].id, cand[i].firstName, cand[i].lastName, &cand[i].age, &cand[i].employed);
+    fscanf(fp, "%i %s %s %s %d", &cand[i].id, cand[i].firstName, cand[i].lastName, cand[i].birthday, &cand[i].employed);
   }
 
   char temp[50];
   printf("lastName: ");
   scanf("%s", temp);
-  printf("Age : %i\n", age(temp,cand,nCandidates));
+
+  //printf("Age : %i\n", age(temp,cand,nCandidates));
 
   fclose(fp);
 }
