@@ -9,7 +9,6 @@ struct candidate {
   //Name and surname must be a maximum of 20 characters
   char firstName[20];
   char lastName[20];
-  //int age;
   char birthday[10];
   bool employed;
   float salary;
