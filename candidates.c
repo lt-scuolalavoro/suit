@@ -9,7 +9,7 @@ struct candidate {
   //Name and surname must be a maximum of 20 characters
   char firstName[20];
   char lastName[20];
-  char birthday[11]; //array must be of 11 chars to accomodate for the \0 terminator.
+  char birthDate[11]; //array must be of 11 chars to accomodate for the \0 terminator.
   bool employed;
   float salary;
 };
@@ -35,7 +35,7 @@ void main(){
   rewind(fp);
   for(i=0; i<nCandidates; i++){
     //Read CSV text file;
-    fscanf(fp, "%d,%[^,],%[^,],%[^,],%d", &cand[i].id, cand[i].firstName, cand[i].lastName, cand[i].birthday, &cand[i].employed);
+    fscanf(fp, "%d,%[^,],%[^,],%[^,],%d", &cand[i].id, cand[i].firstName, cand[i].lastName, cand[i].birthDate, &cand[i].employed);
   }
   
   fclose(fp);
@@ -47,7 +47,7 @@ char age(char temp[], struct candidate *cand, int nCandidates){
     //the function strcmp compares the string pointed to, by str1 to the string pointed to by str2;
     if(strcmp(temp, cand[i].lastName)==0){
       found = 1;
-      return cand[i].birthday;
+      return cand[i].birthDate;
     }
   }
 }
@@ -67,7 +67,7 @@ void convertDbToCsv(char *filename, int nCand, struct candidate cand[]){
   FILE *fp;
   fp = fopen(filename, "w");
   for (int i = 0; i < nCand; ++i){
-    fprintf(fp, "%d,%s,%s,%s,%d\n", cand[i].id, cand[i].firstName, cand[i].lastName, cand[i].birthday, cand[i].employed);
+    fprintf(fp, "%d,%s,%s,%s,%d\n", cand[i].id, cand[i].firstName, cand[i].lastName, cand[i].birthDate, cand[i].employed);
   }
   fclose(fp);
 }
