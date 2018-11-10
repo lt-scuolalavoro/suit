@@ -9,42 +9,35 @@ struct candidate {
   //Name and surname must be a maximum of 20 characters
   char firstName[20];
   char lastName[20];
-  char birthday[10];
+  char birthday[11]; //array must be of 11 chars to accomodate for the \0 terminator.
   bool employed;
   float salary;
 };
 //declaration function
 
 //this function, given in input a FILE, returns its number of lines;
-int findLines(FILE *);
+int evaluateEntriesNumber(FILE *);
 //this function, given in input lastName, the struct of the candidates and the numbers of the candidates, returns the age of the person;
 char age(char [], struct candidate *cand, int nCandidates);
-
+void convertDbToCsv(char *, int , struct candidate[]);
 
 void main(){
   //Database file must be in the same directory level;
   FILE *fp;
-  fp = fopen("database.txt", "r");
-  int nCandidates = findLines(fp);
-
-
+  char filename[30] = "database.txt";
+  fp = fopen(filename, "r+");
+  int nCandidates = evaluateEntriesNumber(fp);
   int i;
   //declaration that defines a physically grouped list of variables;
   struct candidate cand[nCandidates];
-  //rewind function sets the file position to the beginning of the file of the given stream;
+
+  //Set the file position to the beginning of fp;
   rewind(fp);
-
   for(i=0; i<nCandidates; i++){
-    //the function fscanf reads formatted input from a stream;
-    fscanf(fp, "%i %s %s %s %d", &cand[i].id, cand[i].firstName, cand[i].lastName, cand[i].birthday, &cand[i].employed);
+    //Read CSV text file;
+    fscanf(fp, "%d,%[^,],%[^,],%[^,],%d", &cand[i].id, cand[i].firstName, cand[i].lastName, cand[i].birthday, &cand[i].employed);
   }
-
-  char temp[50];
-  printf("lastName: ");
-  scanf("%s", temp);
-
-  //printf("Age : %i\n", age(temp,cand,nCandidates));
-
+  
   fclose(fp);
 }
 
@@ -54,12 +47,12 @@ char age(char temp[], struct candidate *cand, int nCandidates){
     //the function strcmp compares the string pointed to, by str1 to the string pointed to by str2;
     if(strcmp(temp, cand[i].lastName)==0){
       found = 1;
-      return cand[i].age;
+      return cand[i].birthday;
     }
   }
 }
 
-int findLines(FILE *fp){
+int evaluateEntriesNumber(FILE *fp){
   char ch[100];
   int lines=0;
   int num=0;
@@ -68,4 +61,13 @@ int findLines(FILE *fp){
     lines++;
   }
   return lines;
+}
+
+void convertDbToCsv(char *filename, int nCand, struct candidate cand[]){
+  FILE *fp;
+  fp = fopen(filename, "w");
+  for (int i = 0; i < nCand; ++i){
+    fprintf(fp, "%d,%s,%s,%s,%d\n", cand[i].id, cand[i].firstName, cand[i].lastName, cand[i].birthday, cand[i].employed);
+  }
+  fclose(fp);
 }

@@ -1,7 +1,7 @@
-1 Giuseppe  Lepore        19/08/2001   1
-2 Simone    Verna         03/05/2001   0
-3 Marcello  Tarallo       25/09/2000   0
-4 Martino   Pagano        30/12/2001   0
-5 Simone    Cacciapaglia  15/02/2002   0
-6 Giuseppe  DeSantis      15/08/2001   0
-7 Emanuele  Rizzi         11/11/2001   0
+1,Giuseppe,Lepore,19/08/2001,1
+2,Simone,Verna,03/05/2001,0
+3,Marcello,Tarallo,25/09/2000,0
+4,Martino,Pagano,30/12/2001,0
+5,Simone,Cacciapaglia,15/02/2002,0
+6,Giuseppe,DeSantis,15/08/2001,0
+7,Emanuele,Rizzi,11/11/2001,0
