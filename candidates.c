@@ -14,8 +14,7 @@ struct candidate {
     bool employed;
     float salary;
 };
-//declaration function
-
+//Functions declaration
 //this function, given in input a FILE, returns its number of lines;
 int evaluateEntriesNumber(FILE *);
 //this function, given in input lastName, the struct of the candidates and the numbers of the candidates, returns the age of the person;
@@ -157,7 +156,7 @@ int evaluateEntriesNumber(FILE *fp){
   }
   return lines;
 }
-
+//Print the struct array on the text file, each field separated by commas 
 void convertDbToCsv(char *filename, int nCand, struct candidate cand[]){
   FILE *fp;
   fp = fopen(filename, "w");
