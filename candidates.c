@@ -18,7 +18,7 @@ struct candidate {
 //this function, given in input a FILE, returns its number of lines;
 int evaluateEntriesNumber(FILE *);
 //this function, given in input lastName, the struct of the candidates and the numbers of the candidates, returns the age of the person;
-char age(char [], struct candidate *cand, int nCandidates);
+char * age(char [], struct candidate *cand, int nCandidates);
 void convertDbToCsv(char *, int , struct candidate[]);
 
 void main(){
@@ -37,11 +37,11 @@ void main(){
     //Read CSV text file;
     fscanf(fp, "%d,%[^,],%[^,],%[^,],%d", &cand[i].id, cand[i].firstName, cand[i].lastName, cand[i].birthDate, &cand[i].employed);
   }
-  
+
   fclose(fp);
 }
 
-char age(char temp[], struct candidate *cand, int nCandidates){
+char * age(char temp[], struct candidate *cand, int nCandidates){
   int found = 0;
   for(int i=0; i<nCandidates; i++){
     //the function strcmp compares the string pointed to, by str1 to the string pointed to by str2;
