@@ -21,6 +21,8 @@ int evaluateEntriesNumber(FILE *);
 char * age(char [], struct candidate *cand, int nCandidates);
 void convertDbToCsv(char *, int , struct candidate[]);
 int addNewCandidate(FILE *, struct candidate *, int);
+void printCandidate(struct candidate *, int );
+void removeCandidate(struct candidate *, int );
 
 void main(){
   //Database file must be in the same directory level;
@@ -156,7 +158,7 @@ int evaluateEntriesNumber(FILE *fp){
   }
   return lines;
 }
-//Print the struct array on the text file, each field separated by commas 
+//Print the struct array on the text file, each field separated by commas
 void convertDbToCsv(char *filename, int nCand, struct candidate cand[]){
   FILE *fp;
   fp = fopen(filename, "w");
