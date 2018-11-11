@@ -3,5 +3,6 @@
 3,Marcello,Tarallo,25/09/2000,1
 4,Martino,Pagano,30/12/2001,1
 5,Simone,Cacciapaglia,15/02/2002,1
-6,Giuseppe,DeSantis,15/08/2001,1
+6,Giuseppe,De Santis,15/08/2001,1
 7,Emanuele,Rizzi,11/11/2001,1
+8,Mario,Ceci,15/06/2001,1,1200.00
