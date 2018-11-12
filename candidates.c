@@ -4,20 +4,20 @@
 #include "stdbool.h"
 
 struct candidate {
-    //declaration of the structure variables
+    // Declaration of the structure variables
     bool removed;
     int id;
-    //Name and surname must be a maximum of 20 characters
+    // Name and surname must be a maximum of 20 characters
     char firstName[20];
     char lastName[20];
     char birthDate[11]; //array must be of 11 chars to accomodate for the \0 terminator.
     bool employed;
     float salary;
 };
-//Functions declaration
-//this function, given in input a FILE, returns its number of lines;
+// Functions declaration
+// This function, given in input a FILE, returns its number of lines;
 int evaluateEntriesNumber(FILE * );
-//this function, given in input lastName, the struct of the candidates and the numbers of the candidates, returns the age of the person;
+// This function, given in input lastName, the struct of the candidates and the numbers of the candidates, returns the age of the person;
 char * age(char[], struct candidate * cand, int nCandidates);
 void convertDbToCsv(char * , int, struct candidate[]);
 int addNewCandidate(FILE * , struct candidate * , int);
@@ -25,7 +25,7 @@ void printCandidate(struct candidate * , int);
 void removeCandidate(struct candidate * , int);
 void refreshDocument(FILE * , struct candidate * , int, char * );
 void main() {
-    //Database file must be in the same directory level;
+    // Database file must be in the same directory level;
     FILE * fp;
     char filename[30] = "database.txt";
     fp = fopen(filename, "r+");
@@ -36,16 +36,16 @@ void main() {
     int found;
     bool exit=1;
     char choice2;
-    //Create dynamic array
+    // Create dynamic array
     struct candidate * cand = malloc(nCandidates * sizeof(struct candidate));
 
-    //Set the file position to the beginning of fp;
+    // Set the file position to the beginning of fp;
     rewind(fp);
     for (i = 0; i < nCandidates; i++) {
-        //Read CSV text file;
+        // Read CSV text file;
         fscanf(fp, "%d,%d,%[^,],%[^,],%[^,],%d,%f", & cand[i].removed, & cand[i].id, cand[i].firstName, cand[i].lastName, cand[i].birthDate, & cand[i].employed, & cand[i].salary);
     }
-    //Menu
+    // Menu
     do {
         printf("1. Print candidates;\n2. Print deleted candidates;\n3. Search candidate by last name;\n4. Add candidate;\n5. Remove candidate;\n6. Exit.\n");
         do {
@@ -129,7 +129,7 @@ void main() {
 char * age(char temp[], struct candidate * cand, int nCandidates) {
     int found = 0;
     for (int i = 0; i < nCandidates; i++) {
-        //the function strcmp compares the string pointed to, by str1 to the string pointed to by str2;
+        // The function strcmp compares the string pointed to, by str1 to the string pointed to by str2;
         if (strcmp(temp, cand[i].lastName) == 0) {
             found = 1;
             return cand[i].birthDate;
@@ -163,13 +163,13 @@ int evaluateEntriesNumber(FILE * fp) {
     int lines = 0;
     int num = 0;
     rewind(fp);
-    //while the lines is not NULL increase the counter variable;
+    // While the lines is not NULL increase the counter variable;
     while (fgets(ch, sizeof(ch), fp) != NULL) {
         lines++;
     }
     return lines;
 }
-//Print the struct array on the text file, each field separated by commas
+// Print the struct array on the text file, each field separated by commas
 void convertDbToCsv(char * filename, int nCand, struct candidate cand[]) {
     FILE * fp;
     fp = fopen(filename, "w");
@@ -178,7 +178,7 @@ void convertDbToCsv(char * filename, int nCand, struct candidate cand[]) {
     }
     fclose(fp);
 }
-//Add a new candidate to the struct array and return the updated number of entries
+// Add a new candidate to the struct array and return the updated number of entries
 int addNewCandidate(FILE * fp, struct candidate * cand, int nCand) {
     nCand++;
     int i = nCand - 1; //Last position of the array
