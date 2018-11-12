@@ -2,6 +2,7 @@
 #include "string.h"
 #include "stdlib.h"
 #include "stdbool.h"
+#include "ctype.h"
 
 struct candidate {
     // Declaration of the structure variables
@@ -33,12 +34,12 @@ void main() {
     int choice;
     int i, nCandVisualized;
     char lastName[20];
+    char tmpLastName[20];
     int found;
     bool exit=1;
     char choice2;
     // Create dynamic array
     struct candidate * cand = malloc(nCandidates * sizeof(struct candidate));
-
     // Set the file position to the beginning of fp;
     rewind(fp);
     for (i = 0; i < nCandidates; i++) {
@@ -83,10 +84,17 @@ void main() {
             break;
         case 3:
             printf("Last name: ");
-            scanf("%s", lastName);
+            scanf(" %20[^\n]", lastName);
             found = 0;
+            for (i=0; i<sizeof(lastName)/sizeof(char); i++) {
+                lastName[i]=tolower(lastName[i]);
+            }
             for (i = 0; i < nCandidates; i++) {
-                if (strcmp(lastName, cand[i].lastName) == 0) {
+                strcpy(tmpLastName, cand[i].lastName);
+                for (int j=0; j<sizeof(tmpLastName)/sizeof(char); j++) {
+                    tmpLastName[j]=tolower(cand[i].lastName[j]);
+                }
+                if (strcmp(lastName, tmpLastName) == 0) {
                     if (cand[i].removed == 0) {
                         found = 1;
                         printCandidate(cand, i);
@@ -104,7 +112,7 @@ void main() {
         case 5:
             found = 0;
             printf("Last name: ");
-            scanf("%s", lastName);
+            scanf(" %20[^\n]", lastName);
             for (i = 0; i < nCandidates; i++) {
                 if (strcmp(lastName, cand[i].lastName) == 0 && cand[i].removed == 0) {
                     found = 1;
@@ -185,9 +193,9 @@ int addNewCandidate(FILE * fp, struct candidate * cand, int nCand) {
     cand[i].removed = 0;
     cand[i].id = nCand;
     printf("First name: ");
-    scanf("%s", cand[i].firstName);
+    scanf(" %20[^\n]", cand[i].firstName);
     printf("Last name: ");
-    scanf("%s", cand[i].lastName);
+    scanf(" %20[^\n]", cand[i].lastName);
     printf("Birth date: ");
     scanf("%s", cand[i].birthDate);
     char choice;
