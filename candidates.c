@@ -11,7 +11,7 @@ struct candidate {
     // Name and surname must be a maximum of 20 characters
     char firstName[20];
     char lastName[20];
-    char birthDate[11]; //array must be of 11 chars to accomodate for the \0 terminator.
+    char birthDate[11]; // Array must be of 11 chars to accomodate for the \0 terminator.
     bool employed;
     float salary;
 };
@@ -21,10 +21,10 @@ int evaluateEntriesNumber(FILE * );
 // This function, given in input lastName, the struct of the candidates and the numbers of the candidates, returns the age of the person;
 char * age(char[], struct candidate * cand, int nCandidates);
 void convertDbToCsv(char * , int, struct candidate[]);
-int addNewCandidate(FILE * , struct candidate * , int);
+int addNewCandidate(char * , struct candidate * , int);
 void printCandidate(struct candidate * , int);
 void removeCandidate(struct candidate * , int);
-void refreshDocument(FILE * , struct candidate * , int, char * );
+void updateDatabase(FILE * , struct candidate * , int, char * );
 void main() {
     // Database file must be in the same directory level;
     FILE * fp;
@@ -59,6 +59,7 @@ void main() {
         } while (choice < 1 || choice > 6);
         printf("\n");
         switch (choice) {
+        // Print candidates
         case 1:
             nCandVisualized = 0;
             for (i = 0; i < nCandidates; i++) {
@@ -71,6 +72,7 @@ void main() {
                 printf("No candidates found.\n");
             }
             break;
+        // Print deleted cabdudates
         case 2:
             nCandVisualized = 0;
             for (i = 0; i < nCandidates; i++) {
@@ -83,6 +85,7 @@ void main() {
                 printf("No deleted candidates found.\n");
             }
             break;
+        // Search candidate
         case 3:
             printf("Last name: ");
             scanf(" %20[^\n]", lastName);
@@ -106,10 +109,12 @@ void main() {
                 printf("No candidate found with last name: %s", lastName);
             }
             break;
+        // Add candidate
         case 4:
             cand = realloc(cand, (nCandidates + 1) * sizeof(struct candidate));
-            nCandidates = addNewCandidate(fp, cand, nCandidates);
+            nCandidates = addNewCandidate(filename, cand, nCandidates);
             break;
+        // Remove candidate
         case 5:
             found = 0;
             printf("Last name: ");
@@ -119,13 +124,14 @@ void main() {
                     found = 1;
                     removeCandidate(cand, i);
                     printf("%s %s removed.", cand[i].firstName, cand[i].lastName);
-                    refreshDocument(fp, cand, nCandidates, filename);
+                    updateDatabase(fp, cand, nCandidates, filename);
                 }
             }
             if (found == 0) {
                 printf("No candidate found with last name: %s", lastName);
             }
             break;
+        // Exit
         case 6:
             exit=0;
         }
@@ -145,7 +151,7 @@ char * age(char temp[], struct candidate * cand, int nCandidates) {
         }
     }
 }
-void refreshDocument(FILE * fp, struct candidate * cand, int nCand, char * filename) {
+void updateDatabase(FILE * fp, struct candidate * cand, int nCand, char * filename) {
     fp = fopen(filename, "r+");
     for (int i = 0; i < nCand; i++) {
         if (cand[i].employed == 0) {
@@ -166,7 +172,6 @@ void printCandidate(struct candidate * cand, int i) {
     }
     printf("\n");
 }
-
 // Function that sets removed equals to 1 to the chosen candidate
 void removeCandidate(struct candidate * cand, int i) {
     cand[i].removed = 1;
@@ -192,9 +197,12 @@ void convertDbToCsv(char * filename, int nCand, struct candidate cand[]) {
     fclose(fp);
 }
 // Add a new candidate to the struct array and return the updated number of entries
-int addNewCandidate(FILE * fp, struct candidate * cand, int nCand) {
+int addNewCandidate(char * filename, struct candidate * cand, int nCand) {
+    FILE *fp;
+    // Reopen the file in append mode
+    fp = fopen(filename, "a");
     nCand++;
-    int i = nCand - 1; //Last position of the array
+    int i = nCand - 1; // Last position of the array
     cand[i].removed = 0;
     cand[i].id = nCand;
     printf("First name: ");
@@ -220,6 +228,6 @@ int addNewCandidate(FILE * fp, struct candidate * cand, int nCand) {
             printf("Invalid value\n");
         }
     } while (choice != 'y' && choice != 'n');
-    fseek(fp, 0, SEEK_END);
+    fclose(fp);
     return nCand;
 }
