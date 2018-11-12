@@ -35,6 +35,7 @@ void main() {
     char lastName[20];
     int found;
     char choice2;
+    bool exit;
     //Create dynamic array
     struct candidate * cand = malloc(nCandidates * sizeof(struct candidate));
     //Set the file position to the beginning of fp;
@@ -45,15 +46,15 @@ void main() {
     }
     //Menu
     do {
-        printf("1. Print candidates;\n2. Print deleted candidates;\n3. Search candidate by last name;\n4. Add candidate;\n5. Remove candidate.\n");
+        printf("\n1. Print candidates;\n2. Print deleted candidates;\n3. Search candidate by last name;\n4. Add candidate;\n5. Remove candidate;\n6. Exit.\n");
         do {
             printf("Insert: ");
             scanf("%d", & choice);
-            if (choice < 1 || choice > 5) {
+            if (choice < 1 || choice > 6) {
                 printf("Invalid value.\n");
             }
         }
-        while (choice < 1 || choice > 5);
+        while (choice < 1 || choice > 6);
         printf("\n");
         switch (choice) {
         case 1:
@@ -99,6 +100,7 @@ void main() {
         case 4:
             cand = realloc(cand, (nCandidates + 1) * sizeof(struct candidate));
             nCandidates = addNewCandidate(fp, cand, nCandidates);
+            printf("%s %s", cand[nCandidates-1].firstName, cand[nCandidates-1].lastName);
             break;
         case 5:
             found = 0;
@@ -116,17 +118,11 @@ void main() {
                 printf("No candidate found with last name: %s", lastName);
             }
             break;
+        case 6:
+            exit=1;
         }
-        do {
-            printf("\nContinue? [y,n] ");
-            scanf(" %c", & choice2);
-            if (choice2 != 'y' && choice2 != 'n') {
-                printf("Invalid value.");
-            }
-        }
-        while (choice2 != 'y' && choice2 != 'n');
     }
-    while (choice2 == 'y');
+    while (exit==0);
     free(cand);
     fclose(fp);
 }
@@ -199,20 +195,22 @@ int addNewCandidate(FILE * fp, struct candidate * cand, int nCand) {
     do {
         printf("Is the candidate employed? [y/n] ");
         scanf(" %c", & choice);
+
         if (choice == 'y') {
             cand[i].employed = 1;
             printf("Salary: ");
             scanf("%f", & cand[i].salary);
+            rewind(fp);
             fprintf(fp, "\n%d,%d,%s,%s,%s,%d,%.2f", cand[i].removed, cand[i].id, cand[i].firstName, cand[i].lastName, cand[i].birthDate, cand[i].employed, cand[i].salary);
         } else if (choice == 'n') {
             cand[i].employed = 0;
             cand[i].salary = 0.0;
+            rewind(fp);
             fprintf(fp, "\n%d,%d,%s,%s,%s,%d", cand[i].removed, cand[i].id, cand[i].firstName, cand[i].lastName, cand[i].birthDate, cand[i].employed);
         } else {
             printf("Invalid value\n");
         }
     }
     while (choice != 'y' && choice != 'n');
-    fseek(fp, 0, SEEK_END);
     return nCand;
 }
