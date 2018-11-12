@@ -34,6 +34,7 @@ void main() {
     int choice;
     int i, nCandVisualized;
     char lastName[20];
+	// Temporary variable used in the search function
     char tmpLastName[20];
     int found;
     bool exit=1;
@@ -155,6 +156,8 @@ void refreshDocument(FILE * fp, struct candidate * cand, int nCand, char * filen
     }
     fseek(fp, 0, SEEK_END);
 }
+
+// Function that prints the chosen candidate
 void printCandidate(struct candidate * cand, int i) {
     if (cand[i].employed == 1) {
         printf("%s %s %s Salary: %.2f", cand[i].firstName, cand[i].lastName, cand[i].birthDate, cand[i].salary);
@@ -163,6 +166,8 @@ void printCandidate(struct candidate * cand, int i) {
     }
     printf("\n");
 }
+
+// Function that sets removed equals to 1 to the chosen candidate
 void removeCandidate(struct candidate * cand, int i) {
     cand[i].removed = 1;
 }
