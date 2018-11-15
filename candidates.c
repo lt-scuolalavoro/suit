@@ -23,7 +23,7 @@ int addNewCandidate(char * , struct candidate * , int);
 void printCandidate(struct candidate * , int);
 void removeCandidate(struct candidate * , int);
 void updateDatabase(FILE * , struct candidate * , int, char * );
-int searchByLastName(struct candidate *, char *, int);
+int searchByLastName(struct candidate * , char * , int);
 void main() {
     // Database file must be in the same directory level;
     FILE * fp;
@@ -36,7 +36,7 @@ void main() {
     // Temporary variable used in the switch
     char lastName[20];
     int index;
-    bool exit=1;
+    bool exit = 1;
     // Create dynamic array
     struct candidate * cand = malloc(nCandidates * sizeof(struct candidate));
     // Set the file position to the beginning of fp;
@@ -57,7 +57,7 @@ void main() {
         } while (choice < 1 || choice > 6);
         printf("\n");
         switch (choice) {
-        // Print candidates
+            // Print candidates
         case 1:
             nCandVisualized = 0;
             for (i = 0; i < nCandidates; i++) {
@@ -70,7 +70,7 @@ void main() {
                 printf("No candidates found.\n");
             }
             break;
-        // Print removed candidates
+            // Print removed candidates
         case 2:
             nCandVisualized = 0;
             for (i = 0; i < nCandidates; i++) {
@@ -83,43 +83,43 @@ void main() {
                 printf("No deleted candidates found.\n");
             }
             break;
-        // Search for candidate
+            // Search for candidate
         case 3:
             printf("Last name: ");
             scanf(" %20[^\n]", lastName);
             index = searchByLastName(cand, lastName, nCandidates);
             if (index == -1) {
                 printf("No candidate found with last name: %s", lastName);
-            }else{
+            } else {
                 printCandidate(cand, index);
             }
             break;
-        // Add candidate
+            // Add candidate
         case 4:
             cand = realloc(cand, (nCandidates + 1) * sizeof(struct candidate));
             nCandidates = addNewCandidate(filename, cand, nCandidates);
             break;
-        // Remove candidate
+            // Remove candidate
         case 5:
             printf("Last name: ");
             scanf(" %20[^\n]", lastName);
             index = searchByLastName(cand, lastName, nCandidates);
             if (index == -1) {
                 printf("No candidate found with last name: %s", lastName);
-            }else{
-              removeCandidate(cand, index);
-              printf("%s %s removed.", cand[index].firstName, cand[index].lastName);
-              updateDatabase(fp, cand, nCandidates, filename);
+            } else {
+                removeCandidate(cand, index);
+                printf("%s %s removed.", cand[index].firstName, cand[index].lastName);
+                updateDatabase(fp, cand, nCandidates, filename);
             }
             break;
-        // Exit
+            // Exit
         case 6:
             free(cand);
             fclose(fp);
-            exit=0;
+            exit = 0;
         }
         printf("\n\n");
-    } while (exit==1);
+    } while (exit == 1);
 }
 
 char * age(char temp[], struct candidate * cand, int nCandidates) {
@@ -146,29 +146,29 @@ void updateDatabase(FILE * fp, struct candidate * cand, int nCand, char * filena
 // Search for a candidate into the struct (case insensitive)
 // I: Array of struct candidate, candidate Last Name, number of entries
 // O: Index of the candidate in array or -1 if not found
-int searchByLastName(struct candidate * cand, char * lastName, int nEntries){
-  char tmpLastName[20];
-  int i = 0;
-  int index = -1;
-  // Transform input to lower case
-  while(lastName[i]!= '0' && i<20){
-    lastName[i]=tolower(lastName[i]);
-    i++;
-  }
-  i = 0;
-  do{
-      // Transform lastName to lower case
-      if(cand[i].removed == 0){
-        for (int j=0; j<sizeof(tmpLastName)/sizeof(char); j++) {
-          tmpLastName[j]=tolower(cand[i].lastName[j]);
+int searchByLastName(struct candidate * cand, char * lastName, int nEntries) {
+    char tmpLastName[20];
+    int i = 0;
+    int index = -1;
+    // Transform input to lower case
+    while (lastName[i] != '0' && i < 20) {
+        lastName[i] = tolower(lastName[i]);
+        i++;
+    }
+    i = 0;
+    do {
+        // Transform lastName to lower case
+        if (cand[i].removed == 0) {
+            for (int j = 0; j < sizeof(tmpLastName) / sizeof(char); j++) {
+                tmpLastName[j] = tolower(cand[i].lastName[j]);
+            }
+            if (strcmp(lastName, tmpLastName) == 0) {
+                index = i;
+            }
         }
-        if (strcmp(lastName, tmpLastName) == 0) {
-            index = i;
-        }
-      }
-      i++;
-  }while(index == -1 && i < nEntries);
-  return index;
+        i++;
+    } while (index == -1 && i < nEntries);
+    return index;
 }
 // Function that prints the chosen candidate
 void printCandidate(struct candidate * cand, int i) {
@@ -205,7 +205,7 @@ void convertDbToCsv(char * filename, int nCand, struct candidate cand[]) {
 }
 // Add a new candidate to the struct array and return the updated number of entries
 int addNewCandidate(char * filename, struct candidate * cand, int nCand) {
-    FILE *fp;
+    FILE * fp;
     // Reopen the file in append mode
     fp = fopen(filename, "a");
     nCand++;
@@ -221,7 +221,7 @@ int addNewCandidate(char * filename, struct candidate * cand, int nCand) {
     char choice;
     do {
         printf("Is the candidate employed? [y/n] ");
-        scanf(" %c", &choice);
+        scanf(" %c", & choice);
         if (choice == 'y') {
             cand[i].employed = 1;
             printf("Salary: ");
