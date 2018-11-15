@@ -33,11 +33,10 @@ void main() {
     int choice;
     int i; // Loops index
     int nCandVisualized;
+    // Temporary variable used in the switch
     char lastName[20];
-	  // Temporary variable used in the search function
     int index;
     bool exit=1;
-    char choice2;
     // Create dynamic array
     struct candidate * cand = malloc(nCandidates * sizeof(struct candidate));
     // Set the file position to the beginning of fp;
