@@ -15,15 +15,18 @@ struct candidate {
     bool employed;
     float salary;
 };
+
 // Functions declaration
 int evaluateEntriesNumber(FILE * );
-char * age(char[], struct candidate * cand, int nCandidates);
+char * age(char[], struct candidate * candidates, int nCandidates);
 void convertDbToCsv(char * , int, struct candidate[]);
 int addNewCandidate(char * , struct candidate * , int);
 void printCandidate(struct candidate * , int);
 void removeCandidate(struct candidate * , int);
 void updateDatabase(FILE * , struct candidate * , int, char * );
 int searchByLastName(struct candidate * , char * , int);
+void formatDateInSQL(char*, int, struct candidate[]);
+void format(char*, int, struct candidate[]);
 void main() {
     // Database file must be in the same directory level;
     FILE * fp;
@@ -38,31 +41,41 @@ void main() {
     int index;
     bool exit = 1;
     // Create dynamic array
-    struct candidate * cand = malloc(nCandidates * sizeof(struct candidate));
+    struct candidate *candidates = malloc(nCandidates * sizeof(struct candidate));
     // Set the file position to the beginning of fp;
     rewind(fp);
     for (i = 0; i < nCandidates; i++) {
+        candidates[i].salary = 0;
         // Read CSV text file;
-        fscanf(fp, "%d,%d,%[^,],%[^,],%[^,],%d,%f", & cand[i].removed, & cand[i].id, cand[i].firstName, cand[i].lastName, cand[i].birthDate, & cand[i].employed, & cand[i].salary);
+        fscanf(fp, "%d,%d,%[^,],%[^,],%[^,],%d,%f", 
+            &candidates[i].removed, 
+            &candidates[i].id, 
+            candidates[i].firstName, 
+            candidates[i].lastName, 
+            candidates[i].birthDate, 
+            &candidates[i].employed, 
+            &candidates[i].salary
+        );
+        
     }
     // Menu
     do {
-        printf("1. Print candidates;\n2. Print deleted candidates;\n3. Search candidate by last name;\n4. Add candidate;\n5. Remove candidate;\n6. Exit.\n");
+        printf("1. Print candidates;\n2. Print deleted candidates;\n3. Search candidate by last name;\n4. Add candidate;\n5. Remove candidate;\n6. Reformat database\n7. Exit\n");
         do {
             printf("Insert: ");
             scanf("%d", & choice);
-            if (choice < 1 || choice > 6) {
+            if (choice < 1 || choice > 7) {
                 printf("Invalid value.\n");
             }
-        } while (choice < 1 || choice > 6);
+        } while (choice < 1 || choice > 7);
         printf("\n");
         switch (choice) {
             // Print candidates
         case 1:
             nCandVisualized = 0;
             for (i = 0; i < nCandidates; i++) {
-                if (cand[i].removed == 0) {
-                    printCandidate(cand, i);
+                if (candidates[i].removed == 0) {
+                    printCandidate(candidates, i);
                     nCandVisualized++;
                 }
             }
@@ -74,8 +87,8 @@ void main() {
         case 2:
             nCandVisualized = 0;
             for (i = 0; i < nCandidates; i++) {
-                if (cand[i].removed == 1) {
-                    printCandidate(cand, i);
+                if (candidates[i].removed == 1) {
+                    printCandidate(candidates, i);
                     nCandVisualized++;
                 }
             }
@@ -87,34 +100,38 @@ void main() {
         case 3:
             printf("Last name: ");
             scanf(" %20[^\n]", lastName);
-            index = searchByLastName(cand, lastName, nCandidates);
+            index = searchByLastName(candidates, lastName, nCandidates);
             if (index == -1) {
                 printf("No candidate found with last name: %s", lastName);
             } else {
-                printCandidate(cand, index);
+                printCandidate(candidates, index);
             }
             break;
             // Add candidate
         case 4:
-            cand = realloc(cand, (nCandidates + 1) * sizeof(struct candidate));
-            nCandidates = addNewCandidate(filename, cand, nCandidates);
+            candidates = realloc(candidates, (nCandidates + 1) * sizeof(struct candidate));
+            nCandidates = addNewCandidate(filename, candidates, nCandidates);
             break;
             // Remove candidate
         case 5:
             printf("Last name: ");
             scanf(" %20[^\n]", lastName);
-            index = searchByLastName(cand, lastName, nCandidates);
+            index = searchByLastName(candidates, lastName, nCandidates);
             if (index == -1) {
                 printf("No candidate found with last name: %s", lastName);
             } else {
-                removeCandidate(cand, index);
-                printf("%s %s removed.", cand[index].firstName, cand[index].lastName);
-                updateDatabase(fp, cand, nCandidates, filename);
+                removeCandidate(candidates, index);
+                printf("%s %s removed.", candidates[index].firstName, candidates[index].lastName);
+                updateDatabase(fp, candidates, nCandidates, filename);
             }
             break;
-            // Exit
+
         case 6:
-            free(cand);
+          format(filename, nCandidates, candidates);
+          break;
+        // Exit
+        case 7:
+            free(candidates);
             fclose(fp);
             exit = 0;
         }
@@ -122,23 +139,23 @@ void main() {
     } while (exit == 1);
 }
 
-char * age(char temp[], struct candidate * cand, int nCandidates) {
+char * age(char temp[], struct candidate * candidates, int nCandidates) {
     int found = 0;
     for (int i = 0; i < nCandidates; i++) {
         // The function strcmp compares the string pointed to, by str1 to the string pointed to by str2;
-        if (strcmp(temp, cand[i].lastName) == 0) {
+        if (strcmp(temp, candidates[i].lastName) == 0) {
             found = 1;
-            return cand[i].birthDate;
+            return candidates[i].birthDate;
         }
     }
 }
-void updateDatabase(FILE * fp, struct candidate * cand, int nCand, char * filename) {
+void updateDatabase(FILE * fp, struct candidate * candidates, int nCand, char * filename) {
     fp = fopen(filename, "r+");
     for (int i = 0; i < nCand; i++) {
-        if (cand[i].employed == 0) {
-            fprintf(fp, "%d,%d,%s,%s,%s,%d\n", cand[i].removed, cand[i].id, cand[i].firstName, cand[i].lastName, cand[i].birthDate, cand[i].employed);
+        if (candidates[i].employed == 0) {
+            fprintf(fp, "%d,%d,%s,%s,%s,%d\n", candidates[i].removed, candidates[i].id, candidates[i].firstName, candidates[i].lastName, candidates[i].birthDate, candidates[i].employed);
         } else {
-            fprintf(fp, "%d,%d,%s,%s,%s,%d,%.2f\n", cand[i].removed, cand[i].id, cand[i].firstName, cand[i].lastName, cand[i].birthDate, cand[i].employed, cand[i].salary);
+            fprintf(fp, "%d,%d,%s,%s,%s,%d,%.2f\n", candidates[i].removed, candidates[i].id, candidates[i].firstName, candidates[i].lastName, candidates[i].birthDate, candidates[i].employed, candidates[i].salary);
         }
     }
     fseek(fp, 0, SEEK_END);
@@ -146,7 +163,7 @@ void updateDatabase(FILE * fp, struct candidate * cand, int nCand, char * filena
 // Search for a candidate into the struct (case insensitive)
 // I: Array of struct candidate, candidate Last Name, number of entries
 // O: Index of the candidate in array or -1 if not found
-int searchByLastName(struct candidate * cand, char * lastName, int nEntries) {
+int searchByLastName(struct candidate * candidates, char * lastName, int nEntries) {
     char tmpLastName[20];
     int i = 0;
     int index = -1;
@@ -158,9 +175,9 @@ int searchByLastName(struct candidate * cand, char * lastName, int nEntries) {
     i = 0;
     do {
         // Transform lastName to lower case
-        if (cand[i].removed == 0) {
+        if (candidates[i].removed == 0) {
             for (int j = 0; j < sizeof(tmpLastName) / sizeof(char); j++) {
-                tmpLastName[j] = tolower(cand[i].lastName[j]);
+                tmpLastName[j] = tolower(candidates[i].lastName[j]);
             }
             if (strcmp(lastName, tmpLastName) == 0) {
                 index = i;
@@ -171,17 +188,17 @@ int searchByLastName(struct candidate * cand, char * lastName, int nEntries) {
     return index;
 }
 // Function that prints the chosen candidate
-void printCandidate(struct candidate * cand, int i) {
-    if (cand[i].employed == 1) {
-        printf("%s %s %s Salary: %.2f", cand[i].firstName, cand[i].lastName, cand[i].birthDate, cand[i].salary);
+void printCandidate(struct candidate * candidates, int i) {
+    if (candidates[i].employed == 1) {
+        printf("%s %s %s Salary: %.2f", candidates[i].firstName, candidates[i].lastName, candidates[i].birthDate, candidates[i].salary);
     } else {
-        printf("%s %s %s (Not employed)", cand[i].firstName, cand[i].lastName, cand[i].birthDate);
+        printf("%s %s %s (Not employed)", candidates[i].firstName, candidates[i].lastName, candidates[i].birthDate);
     }
     printf("\n");
 }
 // Function that sets removed equals to 1 to the chosen candidate
-void removeCandidate(struct candidate * cand, int i) {
-    cand[i].removed = 1;
+void removeCandidate(struct candidate * candidates, int i) {
+    candidates[i].removed = 1;
 }
 int evaluateEntriesNumber(FILE * fp) {
     char ch[100];
@@ -195,46 +212,114 @@ int evaluateEntriesNumber(FILE * fp) {
     return lines;
 }
 // Print the struct array on the text file, each field separated by commas
-void convertDbToCsv(char * filename, int nCand, struct candidate cand[]) {
+void convertDbToCsv(char * filename, int nCand, struct candidate candidates[]) {
     FILE * fp;
     fp = fopen(filename, "w");
     for (int i = 0; i < nCand; ++i) {
-        fprintf(fp, "%d,%s,%s,%s,%d\n", cand[i].id, cand[i].firstName, cand[i].lastName, cand[i].birthDate, cand[i].employed);
+        fprintf(fp, "%d,%s,%s,%s,%d\n", candidates[i].id, candidates[i].firstName, candidates[i].lastName, candidates[i].birthDate, candidates[i].employed);
     }
     fclose(fp);
 }
 // Add a new candidate to the struct array and return the updated number of entries
-int addNewCandidate(char * filename, struct candidate * cand, int nCand) {
+int addNewCandidate(char * filename, struct candidate * candidates, int nCand) {
     FILE * fp;
     // Reopen the file in append mode
     fp = fopen(filename, "a");
     nCand++;
     int i = nCand - 1; // Last position of the array
-    cand[i].removed = 0;
-    cand[i].id = nCand;
+    candidates[i].removed = 0;
+    candidates[i].id = nCand;
     printf("First name: ");
-    scanf(" %20[^\n]", cand[i].firstName);
+    scanf(" %20[^\n]", candidates[i].firstName);
     printf("Last name: ");
-    scanf(" %20[^\n]", cand[i].lastName);
+    scanf(" %20[^\n]", candidates[i].lastName);
     printf("Birth date: ");
-    scanf("%s", cand[i].birthDate);
+    scanf("%s", candidates[i].birthDate);
     char choice;
     do {
         printf("Is the candidate employed? [y/n] ");
         scanf(" %c", & choice);
         if (choice == 'y') {
-            cand[i].employed = 1;
+            candidates[i].employed = 1;
             printf("Salary: ");
-            scanf("%f", & cand[i].salary);
-            fprintf(fp, "%d,%d,%s,%s,%s,%d,%.2f\n", cand[i].removed, cand[i].id, cand[i].firstName, cand[i].lastName, cand[i].birthDate, cand[i].employed, cand[i].salary);
+            scanf("%f", & candidates[i].salary);
+            fprintf(fp, "%d,%d,%s,%s,%s,%d,%.2f\n", candidates[i].removed, candidates[i].id, candidates[i].firstName, candidates[i].lastName, candidates[i].birthDate, candidates[i].employed, candidates[i].salary);
         } else if (choice == 'n') {
-            cand[i].employed = 0;
-            cand[i].salary = 0.0;
-            fprintf(fp, "%d,%d,%s,%s,%s,%d\n", cand[i].removed, cand[i].id, cand[i].firstName, cand[i].lastName, cand[i].birthDate, cand[i].employed);
+            candidates[i].employed = 0;
+            candidates[i].salary = 0.0;
+            fprintf(fp, "%d,%d,%s,%s,%s,%d\n", candidates[i].removed, candidates[i].id, candidates[i].firstName, candidates[i].lastName, candidates[i].birthDate, candidates[i].employed);
         } else {
             printf("Invalid value\n");
         }
     } while (choice != 'y' && choice != 'n');
     fclose(fp);
     return nCand;
+}
+
+void formatDateInSQL(char* filename, int nCand, struct candidate candidates[]){
+  printf("we lo zi\n");
+  FILE * fp;
+  fp = fopen(filename, "w");
+  char *elements[3], *p, newDate[11];
+  int i, j=0;
+  for(i = 0; i < nCand; i++){
+    p = strtok(candidates[i].birthDate, "/");
+    while(p != NULL){
+      elements[j] = p;
+      p = strtok(NULL, "/");
+      j++;
+    }
+    j = 0;
+    strcpy(newDate, "");
+    strcat(newDate, elements[2]);
+    strcat(newDate, "-");
+    strcat(newDate, elements[1]);
+    strcat(newDate, "-");
+    strcat(newDate, elements[0]);
+
+    strcpy(candidates[i].birthDate, newDate);
+
+    fprintf(fp, "%d,%d,%s,%s,%s,%d,%.2f\n", 
+        candidates[i].removed,
+        candidates[i].id, 
+        candidates[i].firstName, 
+        candidates[i].lastName, 
+        candidates[i].birthDate, 
+        candidates[i].employed, 
+        candidates[i].salary
+    );
+
+  }
+  fclose(fp);
+}
+
+void format(char* filename, int nCand, struct candidate candidates[]){
+  int choice;
+  bool exit = 1;
+
+  do {
+    printf("What would you like to do?:\n1. Separate values with comma;\n2. change data form in mySQL compatible;\n3. Exit.\n");
+    do {
+        printf("Insert: ");
+        scanf("%d", & choice);
+        if (choice < 1 || choice > 3) {
+            printf("Invalid value.\n");
+          }
+    } while (choice < 1 || choice > 3);
+
+
+      switch (choice){
+        case 1:
+          convertDbToCsv(filename, nCand, candidates);
+        break;
+
+        case 2:
+          formatDateInSQL(filename, nCand, candidates);
+        break;
+
+        case 3:
+          exit = 0;
+        break;
+      }
+  } while(exit == 1);
 }
