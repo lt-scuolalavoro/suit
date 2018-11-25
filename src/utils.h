@@ -1,4 +1,3 @@
-#pragma once
 #include "stdio.h"
 #include "stdbool.h"
 
@@ -25,14 +24,23 @@ int searchByLastName(struct candidate * , char * , int);
 void formatDateInSQL(char*, int, struct candidate*);
 void format(char*, int, struct candidate*);
 
+void writeOnTextFile (FILE * fp, int i, struct candidate *candidates){
+    fprintf(
+        fp, "%d,%s,%s,%s,%d,%.2f,%d\n",  
+        candidates[i].id, 
+        candidates[i].firstName, 
+        candidates[i].lastName, 
+        candidates[i].birthDate, 
+        candidates[i].employed, 
+        candidates[i].salary, 
+        candidates[i].removed
+    );
+}
+
 void updateDatabase(FILE * fp, struct candidate * candidates, int nCand, char * filename) {
     fp = fopen(filename, "r+");
     for (int i = 0; i < nCand; i++) {
-        if (candidates[i].employed == 0) {
-            fprintf(fp, "%d,%d,%s,%s,%s,%d\n", candidates[i].removed, candidates[i].id, candidates[i].firstName, candidates[i].lastName, candidates[i].birthDate, candidates[i].employed);
-        } else {
-            fprintf(fp, "%d,%d,%s,%s,%s,%d,%.2f\n", candidates[i].removed, candidates[i].id, candidates[i].firstName, candidates[i].lastName, candidates[i].birthDate, candidates[i].employed, candidates[i].salary);
-        }
+        writeOnTextFile (fp, i, candidates);
     }
     fseek(fp, 0, SEEK_END);
 }
@@ -92,7 +100,7 @@ void convertDbToCsv(char * filename, int nCand, struct candidate *candidates) {
     FILE * fp;
     fp = fopen(filename, "w");
     for (int i = 0; i < nCand; ++i) {
-        fprintf(fp, "%d,%s,%s,%s,%d\n", candidates[i].id, candidates[i].firstName, candidates[i].lastName, candidates[i].birthDate, candidates[i].employed);
+         writeOnTextFile (fp, i, candidates);
     }
     fclose(fp);
 }
@@ -119,11 +127,11 @@ int addNewCandidate(char * filename, struct candidate * candidates, int nCand) {
             candidates[i].employed = 1;
             printf("Salary: ");
             scanf("%f", & candidates[i].salary);
-            fprintf(fp, "%d,%d,%s,%s,%s,%d,%.2f\n", candidates[i].removed, candidates[i].id, candidates[i].firstName, candidates[i].lastName, candidates[i].birthDate, candidates[i].employed, candidates[i].salary);
+            writeOnTextFile (fp, i, candidates);
         } else if (choice == 'n') {
             candidates[i].employed = 0;
             candidates[i].salary = 0.0;
-            fprintf(fp, "%d,%d,%s,%s,%s,%d\n", candidates[i].removed, candidates[i].id, candidates[i].firstName, candidates[i].lastName, candidates[i].birthDate, candidates[i].employed);
+             writeOnTextFile (fp, i, candidates);
         } else {
             printf("Invalid value\n");
         }
@@ -155,15 +163,7 @@ void formatDateInSQL(char* filename, int nCand, struct candidate *candidates){
 
     strcpy(candidates[i].birthDate, newDate);
 
-    fprintf(fp, "%d,%d,%s,%s,%s,%d,%.2f\n",
-        candidates[i].removed,
-        candidates[i].id,
-        candidates[i].firstName,
-        candidates[i].lastName,
-        candidates[i].birthDate,
-        candidates[i].employed,
-        candidates[i].salary
-    );
+    writeOnTextFile (fp, i, candidates);
 
   }
   fclose(fp);

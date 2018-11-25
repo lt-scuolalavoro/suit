@@ -25,14 +25,14 @@ void main() {
     for (i = 0; i < nCandidates; i++) {
         candidates[i].salary = 0;
         // Read CSV text file;
-        fscanf(fp, "%d,%d,%[^,],%[^,],%[^,],%d,%f",
-            &candidates[i].removed,
+        fscanf(fp, "%d,%[^,],%[^,],%[^,],%d,%f,%d",
             &candidates[i].id,
             candidates[i].firstName,
             candidates[i].lastName,
             candidates[i].birthDate,
             &candidates[i].employed,
-            &candidates[i].salary
+            &candidates[i].salary,
+            &candidates[i].removed
         );
 
     }
