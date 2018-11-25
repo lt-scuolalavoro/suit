@@ -23,8 +23,9 @@ void updateDatabase(FILE * , struct candidate * , int, char * );
 int searchByLastName(struct candidate * , char * , int);
 void formatDateInSQL(char*, int, struct candidate*);
 void format(char*, int, struct candidate*);
+void writeOnTextFile (FILE *, int i, struct candidate *);
 
-void writeOnTextFile (FILE * fp, int i, struct candidate *candidates){
+void writeOnTextFile (FILE *fp, int i, struct candidate *candidates){
     fprintf(
         fp, "%d,%s,%s,%s,%d,%.2f,%d\n",  
         candidates[i].id, 

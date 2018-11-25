@@ -34,7 +34,6 @@ void main() {
             &candidates[i].salary,
             &candidates[i].removed
         );
-
     }
     // Menu
     do {
@@ -90,7 +89,7 @@ void main() {
             candidates = realloc(candidates, (nCandidates + 1) * sizeof(struct candidate));
             nCandidates = addNewCandidate(filename, candidates, nCandidates);
             break;
-            // Remove candidate
+        // Remove candidate
         case 5:
             printf("Last name: ");
             scanf(" %20[^\n]", lastName);

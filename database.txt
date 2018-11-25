@@ -1,12 +1,12 @@
-0,1,Giuseppe,Lepore,2001-08-19,0,0.00
-1,2,Simone,Verna,2001-05-03,0,0.00
-0,3,Marcello,Tarallo,2000-09-25,0,0.00
-0,4,Martino,Pagano,2001-12-30,0,0.00
-1,5,Simone,Cacciapaglia,2002-02-15,0,0.00
-0,6,Giuseppe,De Santis,2001-08-15,0,0.00
-0,7,Emanuele,Rizzi,2001-11-11,0,0.00
-1,8,Mario,Ceci,2001-06-15,0,0.00
-0,9,Raffaele,DelBasso,2001-07-29,0,0.00
-0,10,Test,Employed,2000-01-01,1,250.05
-0,11,Test With Spaces,Last name,2001-01-20,0,0.00
-0,12,Massimiliano,Missiato,1990-01-01,1,10000000.00
+1,Giuseppe,Lepore,2001-08-19,0,0.00,0
+2,Simone,Verna,2001-05-03,0,0.00,1
+3,Marcello,Tarallo,2000-09-25,0,0.00,1
+4,Martino,Pagano,2001-12-30,0,0.00,0
+5,Simone,Cacciapaglia,2002-02-15,0,0.00,1
+6,Giuseppe,De Santis,2001-08-15,0,0.00,0
+7,Emanuele,Rizzi,2001-11-11,0,0.00,0
+8,Mario,Ceci,2001-06-15,0,0.00,1
+9,Raffaele,DelBasso,2001-07-29,0,0.00,0
+10,Test,Employed,2000-01-01,1,250.05,0
+11,Test With Spaces,Last name,2001-01-20,0,0.00,0
+12,Massimiliano,Missiato,1990-01-01,1,10000000.00,1
