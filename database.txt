@@ -9,3 +9,4 @@
 0,9,Raffaele,DelBasso,2001-07-29,0,0.00
 0,10,Test,Employed,2000-01-01,1,250.05
 0,11,Test With Spaces,Last name,2001-01-20,0,0.00
+0,12,Massimiliano,Missiato,1990-01-01,1,10000000.00
