@@ -1,5 +1,7 @@
 #include "stdio.h"
 #include "stdbool.h"
+#include "string.h"
+
 
 struct candidate {
     // Declaration of the structure variables
@@ -25,6 +27,7 @@ void formatDateInSQL(char*, int, struct candidate*);
 void format(char*, int, struct candidate*);
 void writeOnTextFile (FILE *, int i, struct candidate *);
 int isInteger(char[]);
+void printInOrder(struct candidate * , int , int);
 
 void writeOnTextFile (FILE *fp, int i, struct candidate *candidates){
     fprintf(
@@ -211,4 +214,41 @@ void format(char* filename, int nCand, struct candidate *candidates){
         break;
       }
   } while(exit == 1);
+}
+
+void printInOrder(struct candidate * candidates,int removed, int nCandidates){
+    char orderName[nCandidates][20];
+    int orderPosition [nCandidates];
+    int cont = 0;
+    int i;
+    for (i = 0; i < nCandidates; i++) {
+        if (candidates[i].removed == removed) {
+            strcpy(orderName[cont], candidates[i].firstName);
+            orderPosition[cont] = i;
+            cont++;
+        }
+    }
+
+    if (cont <= 0) {
+        printf("No candidates found.\n");
+    } else {
+        int j, temp1;
+        char temp[20];
+        for(i=0; i<cont-1; i++){
+            for(j=i+1; j<cont; j++){
+                if(strcmp(orderName[i],orderName[j])>0){
+                    strcpy(temp, orderName[i]);
+                    strcpy(orderName[i], orderName[j]);
+                    strcpy(orderName[j], temp);
+                    temp1 = orderPosition[i];
+                    orderPosition[i] = orderPosition[j];
+                    orderPosition[j] = temp1;
+                }
+            }
+        }
+        
+        for(i=0; i<cont; i++){
+            printCandidate(candidates, orderPosition[i]);
+        }
+    }
 }

@@ -54,29 +54,11 @@ void main() {
         switch (inputConverted) {
         // Print candidates
         case 1:
-            nCandVisualized = 0;
-            for (i = 0; i < nCandidates; i++) {
-                if (candidates[i].removed == 0) {
-                    printCandidate(candidates, i);
-                    nCandVisualized++;
-                }
-            }
-            if (nCandVisualized == 0) {
-                printf("No candidates found.\n");
-            }
+            printInOrder(candidates, 0, nCandidates);
             break;
         // Print removed candidates
         case 2:
-            nCandVisualized = 0;
-            for (i = 0; i < nCandidates; i++) {
-                if (candidates[i].removed == 1) {
-                    printCandidate(candidates, i);
-                    nCandVisualized++;
-                }
-            }
-            if (nCandVisualized == 0) {
-                printf("No deleted candidates found.\n");
-            }
+            printInOrder(candidates, 1, nCandidates);
             break;
         // Search for candidate
         case 3:
