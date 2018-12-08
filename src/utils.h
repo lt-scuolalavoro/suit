@@ -217,13 +217,14 @@ void format(char* filename, int nCand, struct candidate *candidates){
 }
 
 void printInOrder(struct candidate * candidates,int removed, int nCandidates){
-    char orderName[nCandidates][20];
+    char orderName[nCandidates][40];
     int orderPosition [nCandidates];
     int cont = 0;
     int i;
     for (i = 0; i < nCandidates; i++) {
         if (candidates[i].removed == removed) {
             strcpy(orderName[cont], candidates[i].firstName);
+            strcpy(orderName[cont]+strlen(candidates[i].firstName), candidates[i].lastName);
             orderPosition[cont] = i;
             cont++;
         }
@@ -232,8 +233,9 @@ void printInOrder(struct candidate * candidates,int removed, int nCandidates){
     if (cont <= 0) {
         printf("No candidates found.\n");
     } else {
+        // Sort
         int j, temp1;
-        char temp[20];
+        char temp[40];
         for(i=0; i<cont-1; i++){
             for(j=i+1; j<cont; j++){
                 if(strcmp(orderName[i],orderName[j])>0){
