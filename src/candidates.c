@@ -86,7 +86,21 @@ void main() {
             } else {
                 removeCandidate(candidates, index);
                 printf("%s %s removed.", candidates[index].firstName, candidates[index].lastName);
-                updateDatabase(fp, candidates, nCandidates, filename);
+                int i;
+                // Temporary variable
+                char j[50];
+                // Set pointer to the beginning of file
+                fseek(fp, 0, SEEK_SET);
+                for (i=0; i<index+1; i++) {
+                    // Set pointer to the end of the line
+                    fscanf(fp, "%[^\n]", j);
+                    // Set pointer to the next line
+                    fseek(fp, 2, SEEK_CUR);
+                }
+                // Set pointer to the last char of the previous line
+                fseek(fp, -3, SEEK_CUR);
+                // Print "1" in file
+                fprintf(fp, "1");
             }
             break;
 		// Format structure
