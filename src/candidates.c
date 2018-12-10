@@ -10,7 +10,7 @@ void main() {
     FILE * fp;
     char filename[30] = "../database.txt";
     fp = fopen(filename, "r+");
-    int nCandidates = evaluateEntriesNumber(fp);
+    int nCandidates = evaluateEntriesNumber(fp)-1 ;
     // Input is now a char[]
     char choice[10];
     int i; // Loops index
@@ -25,10 +25,26 @@ void main() {
     struct candidate *candidates = malloc(nCandidates * sizeof(struct candidate));
     // Set the file position to the beginning of fp;
     rewind(fp);
-    for (i = 0; i < nCandidates; i++) {
-        candidates[i].salary = 0;
-        // Read CSV text file;
-        fscanf(fp, "%d,%[^,],%[^,],%[^,],%d,%f,%d",
+  char txt[100];
+    i=0;
+    // Set pointer to the beginning of file
+    fseek(fp, 0, SEEK_SET);
+    while (i<nCandidates) {
+        // Scan the first char of each line
+        fscanf(fp, "%c", txt);
+        // If it begins with #
+        if (txt[0]=='#') {
+            // It's a comment: scan until next line
+            fscanf(fp, "%[^\n]", &txt);
+            // Set pointer to next line
+            fseek(fp, 1, SEEK_CUR);
+        } else {
+            // Else, scan candidate
+            // Set pointer to the beginning of the line
+            fseek(fp, -1, SEEK_CUR);
+            candidates[i].salary = 0;
+            // Read CSV text file;
+            fscanf(fp, "%d,%[^,],%[^,],%[^,],%d,%f,%d",
             &candidates[i].id,
             candidates[i].firstName,
             candidates[i].lastName,
@@ -36,8 +52,13 @@ void main() {
             &candidates[i].employed,
             &candidates[i].salary,
             &candidates[i].removed
-        );
+            );
+            i++;
+        }
+        
     }
+
+
     // Menu
     do {
         printf("1. Print candidates;\n2. Print deleted candidates;\n3. Search candidate by last name;\n4. Add candidate;\n5. Remove candidate;\n6. Reformat database\n7. Exit\n");
