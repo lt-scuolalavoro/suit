@@ -112,6 +112,11 @@ void convertDbToCsv(char * filename, int nCand, struct candidate *candidates) {
 // Add a new candidate to the struct array and return the updated number of entries
 int addNewCandidate(char * filename, struct candidate * candidates, int nCand) {
     FILE * fp;
+    char str[11];
+    char * token;
+    bool check = 1;
+    int temp;
+    int j;
     // Reopen the file in append mode
     fp = fopen(filename, "a");
     nCand++;
@@ -123,7 +128,75 @@ int addNewCandidate(char * filename, struct candidate * candidates, int nCand) {
     printf("Last name: ");
     scanf(" %20[^\n]", candidates[i].lastName);
     printf("Birth date [dd-mm-yyyy]: ");
-    scanf("%s", candidates[i].birthDate);
+    scanf("%s", str);
+
+    //
+    token = strtok(str, "-");
+
+    do{
+        if(check = 0){
+            printf("Insert the correct date");
+            check = 1;
+        }
+        for(j = 0; j < 3; j++){
+            switch(j){
+                case 0 :{
+                    if(token[j] < 1)
+                        check = 0;
+                    else
+                        if(token[j] > 31 && strlen(&token[j]) == 4){
+                            strcpy(temp,token[2]);
+                            strcpy(token[2],token[0]);
+                            strcpy(token[0],temp);
+                        }
+                }
+                break;
+                case 1:{
+                    if(token[j] < 1)
+                        check = 0;
+                    else
+                        if(token[j] > 31 && strlen(&token[j]) == 4){
+                            strcpy(temp,token[2]);
+                            strcpy(token[2],token[1]);
+                            strcpy(token[1],temp);
+                        }else{
+                            if(token[j] > 12 && token[j] < 31){
+                                strcpy(temp,token[0]);
+                                strcpy(token[0],token[1]);
+                                strcpy(token[1],temp);
+                            }
+                        }
+                }
+                break;
+                case 2:{
+                    if(token[j] < 1)
+                        check = 0;
+                    else
+                        if(token[j] > 12 && token[j] < 31){
+                            strcpy(temp, token[0]);
+                            strcpy(token[0],token[2]);
+                            strcpy(token[2],temp);
+                        }
+                    if(strlen(&token[j]) < 4)
+                        check = 0;
+                    }
+                    break;
+                }
+            }
+    }while(check != 1);
+
+    j=0;
+    char str2[11] = "";
+    while( token != NULL) {
+       //printf( " %s", token );
+       strcat(str2,token);
+       if(j < 2){
+           strcat(str2,"-");
+       }
+       token = strtok(NULL, "-");
+       j = j + 1 ;
+    }
+    strcpy(candidates[i].birthDate,str2);
     char choice;
     do {
         printf("Is the candidate employed? [y/n] ");
@@ -248,7 +321,7 @@ void printInOrder(struct candidate * candidates,int removed, int nCandidates){
                 }
             }
         }
-        
+
         for(i=0; i<cont; i++){
             printCandidate(candidates, orderPosition[i]);
         }
