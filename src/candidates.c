@@ -4,13 +4,14 @@
 #include "stdbool.h"
 #include "ctype.h"
 #include "utils.h"
+#define BUFSIZE 100
 
 void main() {
     // Database file must be in the same directory level;
     FILE * fp;
     char filename[30] = "../database.txt";
     fp = fopen(filename, "r+");
-    int nCandidates = evaluateEntriesNumber(fp)-1 ;
+    int nCandidates = evaluateEntriesNumber(fp);
     // Input is now a char[]
     char choice[10];
     int i; // Loops index
@@ -25,25 +26,15 @@ void main() {
     struct candidate *candidates = malloc(nCandidates * sizeof(struct candidate));
     // Set the file position to the beginning of fp;
     rewind(fp);
-  char txt[100];
+  char txt[BUFSIZE];
     i=0;
-    // Set pointer to the beginning of file
+    int k=0;
     fseek(fp, 0, SEEK_SET);
-    while (i<nCandidates) {
-        // Scan the first char of each line
+    while (!feof(fp)) {
         fscanf(fp, "%c", txt);
-        // If it begins with #
-        if (txt[0]=='#') {
-            // It's a comment: scan until next line
-            fscanf(fp, "%[^\n]", &txt);
-            // Set pointer to next line
-            fseek(fp, 1, SEEK_CUR);
-        } else {
-            // Else, scan candidate
-            // Set pointer to the beginning of the line
+        if (txt[0]!='#'){
             fseek(fp, -1, SEEK_CUR);
             candidates[i].salary = 0;
-            // Read CSV text file;
             fscanf(fp, "%d,%[^,],%[^,],%[^,],%d,%f,%d",
             &candidates[i].id,
             candidates[i].firstName,
@@ -53,10 +44,14 @@ void main() {
             &candidates[i].salary,
             &candidates[i].removed
             );
+            fgets(txt, BUFSIZE, fp);
             i++;
+           } else {
+                fgets(txt,BUFSIZE,fp);
+                nCandidates--;
+           }
+           k++;
         }
-        
-    }
 
 
     // Menu
@@ -94,6 +89,7 @@ void main() {
             break;
         // Add candidate
         case 4:
+            printf("%d", nCandidates);
             candidates = realloc(candidates, (nCandidates + 1) * sizeof(struct candidate));
             nCandidates = addNewCandidate(filename, candidates, nCandidates);
             break;

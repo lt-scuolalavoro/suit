@@ -31,7 +31,7 @@ void printInOrder(struct candidate * , int , int);
 
 void writeOnTextFile (FILE *fp, int i, struct candidate *candidates){
     fprintf(
-        fp, "%d,%s,%s,%s,%d,%.2f,%d\n",
+        fp, "\n%d,%s,%s,%s,%d,%.2f,%d",
         candidates[i].id,
         candidates[i].firstName,
         candidates[i].lastName,
