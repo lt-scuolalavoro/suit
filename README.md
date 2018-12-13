@@ -11,8 +11,10 @@ You also have to install these tools:
 * [gcc](https://sourceforge.net/projects/mingw-w64/) - C compiler
 ### Compile and run
 In __suit__ folder:
-1. Compile: ```gcc -o bin/suit src/candidates.c```    
-2. Run: ```bin/suit```
+1. Compile:\
+```gcc -o bin/suit src/candidates.c```    
+2. Run:\
+```bin/suit```
 
 ## Built with
 * C
