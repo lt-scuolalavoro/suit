@@ -1,5 +1,5 @@
 # Suit
-This app will keep track of all the candidates who sent a curriculum for being hired in the company, storing in a database name, surname, birth date and some other basic informations of the candidate.
+This app will keep track of all the __HR__ components of the company, storing in a database name, surname, birth date and some other basic informations of the candidate.
 
 ## Getting started
 First of all, you have to clone the repository:
