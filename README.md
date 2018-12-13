@@ -1,8 +1,18 @@
 # Suit
-This is a simple HR project.
+This app will keep track of all the candidates who sent a curriculum for being hired in the company, storing in a database name, surname, birth date and some other basic informations of the candidate.
 
-## What Does it do?
-This app will keep track of all the candidates who sent a curriculum for being hired in the company, storing in a database name, surname, birth date and some other basic informations of the candidate. Later on there will be new features and functionalities implemented.
+## Getting started
+First of all, you have to clone the repository:
+```
+git clone https://github.com/lt-scuolalavoro/suit.git
+```
+### Prerequisites
+You also have to install these tools: 
+* [gcc](https://sourceforge.net/projects/mingw-w64/) - C compiler
+### Compile and run
+In __suit__ folder:
+1. Compile: ```gcc -o bin/suit src/candidates.c```    
+2. Run: ```bin/suit```
 
-## How it is made?
-For now the code is written in C and the database is a txt file. In future the code will be written in an object-oriented language and the database will be an SQL.
+## Built with
+* C
