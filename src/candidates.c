@@ -26,8 +26,9 @@ void main() {
     struct candidate *candidates = malloc(nCandidates * sizeof(struct candidate));
     // Set the file position to the beginning of fp;
     rewind(fp);
-  char txt[BUFSIZE];
+    char txt[BUFSIZE];
     i=0;
+    // k: comments counter
     int k=0;
     fseek(fp, 0, SEEK_SET);
     while (!feof(fp)) {
@@ -49,8 +50,11 @@ void main() {
            } else {
                 fgets(txt,BUFSIZE,fp);
                 nCandidates--;
+                // Only if candidates are not over
+                if (i<nCandidates-2) {
+                    k++;
+                } 
            }
-           k++;
         }
 
 
@@ -89,7 +93,6 @@ void main() {
             break;
         // Add candidate
         case 4:
-            printf("%d", nCandidates);
             candidates = realloc(candidates, (nCandidates + 1) * sizeof(struct candidate));
             nCandidates = addNewCandidate(filename, candidates, nCandidates);
             break;
@@ -108,7 +111,8 @@ void main() {
                 char j[50];
                 // Set pointer to the beginning of file
                 fseek(fp, 0, SEEK_SET);
-                for (i=0; i<index+1; i++) {
+                // Reach correct line
+                for (i=0; i<index+1+k; i++) {
                     // Set pointer to the end of the line
                     fscanf(fp, "%[^\n]", j);
                     // Set pointer to the next line
