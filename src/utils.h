@@ -22,12 +22,13 @@ int addNewCandidate(char * , struct candidate * , int);
 void printCandidate(struct candidate * , int);
 void removeCandidate(struct candidate * , int);
 void updateDatabase(FILE * , struct candidate * , int, char * );
-int searchByLastName(struct candidate * , char * , int);
+int * searchByLastName(struct candidate * , char * , int);
 void formatDateInSQL(char*, int, struct candidate*);
 void format(char*, int, struct candidate*);
 void writeOnTextFile (FILE *, int i, struct candidate *);
 int isInteger(char[]);
 void printInOrder(struct candidate * , int , int);
+int * searchByName(struct candidate * , int [], char *, int);
 
 void writeOnTextFile (FILE *fp, int i, struct candidate *candidates){
     fprintf(
@@ -52,10 +53,14 @@ void updateDatabase(FILE * fp, struct candidate * candidates, int nCand, char * 
 // Search for a candidate into the struct (case insensitive)
 // I: Array of struct candidate, candidate Last Name, number of entries
 // O: Index of the candidate in array or -1 if not found
-int searchByLastName(struct candidate * candidates, char * lastName, int nEntries) {
+int* searchByLastName(struct candidate * candidates, char * lastName, int nEntries) {
     char tmpLastName[20];
-    int i = 0;
-    int index = -1;
+    int i = 0, cont = 0;
+    int* index = malloc(nEntries*sizeof(int)); 
+    for(int y=0; y<nEntries; y++){
+        index[y]=-100;
+    }
+    index [0]= -1;
     // Transform input to lower case
     while (lastName[i] != '0' && i < 20) {
         lastName[i] = tolower(lastName[i]);
@@ -69,12 +74,42 @@ int searchByLastName(struct candidate * candidates, char * lastName, int nEntrie
                 tmpLastName[j] = tolower(candidates[i].lastName[j]);
             }
             if (strcmp(lastName, tmpLastName) == 0) {
-                index = i;
+                index[cont] = i;
+                cont += 1;
             }
         }
         i++;
-    } while (index == -1 && i < nEntries);
+    } while (i < nEntries);
     return index;
+}
+int * searchByName(struct candidate * candidates, int index[], char * name, int len){
+    // Transform input to lower case
+    int i = 0;
+    char tmpName [20];
+    while (name[i] != '0' && i < 20) {
+        name[i] = tolower(name[i]);
+        i++;
+    }
+    i = 0;
+    int* indexName = malloc(len*sizeof(int));
+    indexName[0]=-1;
+    for(int y=1; y<len; y++){
+        indexName[y]=-100;
+    } 
+    int cont = 0;
+    do {
+        // Transform lastName to lower case
+        
+        for (int j = 0; j < sizeof(tmpName) / sizeof(char); j++) {
+            tmpName[j] = tolower(candidates[index[i]].firstName[j]);
+        }
+        if (strcmp(name, tmpName) == 0) {
+            indexName[cont] = index[i];
+            cont += 1;
+        }
+        i++;
+    } while (i < len);
+    return indexName;
 }
 // Function that prints the chosen candidate
 void printCandidate(struct candidate * candidates, int i) {

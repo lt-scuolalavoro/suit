@@ -60,7 +60,7 @@ void main() {
 
     // Menu
     do {
-        printf("1. Print candidates;\n2. Print deleted candidates;\n3. Search candidate by last name;\n4. Add candidate;\n5. Remove candidate;\n6. Reformat database\n7. Exit\n");
+        printf("1. Print candidates;\n2. Print deleted candidates;\n3. Search candidate;\n4. Add candidate;\n5. Remove candidate;\n6. Reformat database\n7. Exit\n");
         do {
             printf("Insert: ");
             scanf("%s", &choice);
@@ -84,11 +84,37 @@ void main() {
         case 3:
             printf("Last name: ");
             scanf(" %20[^\n]", lastName);
-            index = searchByLastName(candidates, lastName, nCandidates);
-            if (index == -1) {
+            int *index = searchByLastName(candidates, lastName, nCandidates);
+            if (*index == -1) {
                 printf("No candidate found with last name: %s", lastName);
             } else {
-                printCandidate(candidates, index);
+                if(index[1]==-100){
+                    printCandidate(candidates, *(index));
+                }else{
+                    int n=0;
+                    while(index[n]!=-100){
+                        n +=1;
+                    }
+                    i=0;
+                    printf("There are %d results. Choose the name: ", n);
+                    char name[20];
+                    scanf(" %20[^\n]", name);
+                    int * indexN = searchByName(candidates, index, name, n);
+                    if(*indexN == -1){
+                        printf("No candidate found with name: %s", name);
+                    }else{
+                        if(*(indexN+1)==-100){
+                            printCandidate(candidates, *(indexN));
+                        }else{
+                            i = 0;
+                            printf("More than one candidates found: ");
+                            while(i<n){
+                                printCandidate(candidates, *(indexN+i));
+                                i++;
+                            }
+                        }
+                    }
+                }
             }
             break;
         // Add candidate
@@ -98,30 +124,71 @@ void main() {
             break;
         // Remove candidate
         case 5:
+
             printf("Last name: ");
             scanf(" %20[^\n]", lastName);
-            index = searchByLastName(candidates, lastName, nCandidates);
-            if (index == -1) {
+            int *indexSur = searchByLastName(candidates, lastName, nCandidates);
+            if (*indexSur == -1) {
                 printf("No candidate found with last name: %s", lastName);
             } else {
-                removeCandidate(candidates, index);
-                printf("%s %s removed.", candidates[index].firstName, candidates[index].lastName);
-                int i;
-                // Temporary variable
-                char j[50];
-                // Set pointer to the beginning of file
-                fseek(fp, 0, SEEK_SET);
-                // Reach correct line
-                for (i=0; i<index+1+k; i++) {
-                    // Set pointer to the end of the line
-                    fscanf(fp, "%[^\n]", j);
-                    // Set pointer to the next line
-                    fseek(fp, 2, SEEK_CUR);
+                if(indexSur[1]==-100){
+                    removeCandidate(candidates, *indexSur);
+                    printf("%s %s removed.", candidates[*indexSur].firstName, candidates[*indexSur].lastName);
+                    int i;
+                    // Temporary variable
+                    char j[50];
+                    // Set pointer to the beginning of file
+                    fseek(fp, 0, SEEK_SET);
+                    // Reach correct line
+                    for (i=0; i<(*indexSur)+1+k; i++) {
+                        // Set pointer to the end of the line
+                        fscanf(fp, "%[^\n]", j);
+                        // Set pointer to the next line
+                        fseek(fp, 2, SEEK_CUR);
+                    }
+                    // Set pointer to the last char of the previous line
+                    fseek(fp, -3, SEEK_CUR);
+                    // Print "1" in file
+                    fprintf(fp, "1");
+                }else{
+                    int n=0;
+                    while(indexSur[n]!=-100){
+                    n +=1;
+                    }
+                    i=0;
+                    printf("There are %d results. Choose the name: ", n);
+                    char name[20];
+                    scanf(" %20[^\n]", name);
+                    int * indexN = searchByName(candidates, indexSur, name, n);
+                    if(*indexN == -1){
+                        printf("No candidate found with name: %s", name);
+                    }else{
+                        if(*(indexN+1)==-100){
+                            removeCandidate(candidates, *indexN);
+                            printf("%s %s removed.", candidates[*indexN].firstName, candidates[*indexN].lastName);
+                            int i;
+                            // Temporary variable
+                            char j[50];
+                            // Set pointer to the beginning of file
+                            fseek(fp, 0, SEEK_SET);
+                            // Reach correct line
+                            for (i=0; i<(*indexN)+1+k; i++) {
+                                // Set pointer to the end of the line
+                                fscanf(fp, "%[^\n]", j);
+                                // Set pointer to the next line
+                                fseek(fp, 2, SEEK_CUR);
+                            }
+                            // Set pointer to the last char of the previous line
+                            fseek(fp, -3, SEEK_CUR);
+                            // Print "1" in file
+                            fprintf(fp, "1");
+                        }else{
+                            i = 0;
+                            printf("More than one candidates found: ");
+                        }
+                    }
                 }
-                // Set pointer to the last char of the previous line
-                fseek(fp, -3, SEEK_CUR);
-                // Print "1" in file
-                fprintf(fp, "1");
+                
             }
             break;
 		// Format structure
