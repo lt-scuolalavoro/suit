@@ -153,10 +153,40 @@ int addNewCandidate(char * filename, struct candidate * candidates, int nCand) {
     int i = nCand - 1; // Last position of the array
     candidates[i].removed = 0;
     candidates[i].id = nCand;
+    for(int a=0; a<20; a++){
+        candidates[i].firstName[a] = '\0';
+        candidates[i].lastName[a] = '\0';
+    }
     printf("First name: ");
     scanf(" %20[^\n]", candidates[i].firstName);
+    candidates[i].firstName[0] = toupper(candidates[i].firstName[0]);
+    int j=1;
+    while (j < 19) {
+        if(candidates[i].firstName[j]== ' '){
+            if(candidates[i].firstName[j+1]!= '\0'){
+                candidates[i].firstName[j+1] = toupper(candidates[i].firstName[j+1]);
+            } 
+            j += 2;  
+        }else{
+            candidates[i].firstName[j] = tolower(candidates[i].firstName[j]);
+            j += 1;
+        }
+    }
     printf("Last name: ");
     scanf(" %20[^\n]", candidates[i].lastName);
+    candidates[i].lastName[0] = toupper(candidates[i].lastName[0]);
+    j=1;
+    while (j < 19) {
+        if(candidates[i].lastName[j]== ' '){
+            if(candidates[i].lastName[j+1]!= '\0'){
+                candidates[i].lastName[j+1] = toupper(candidates[i].lastName[j+1]);
+            }   
+            j += 2;  
+        }else{
+            candidates[i].lastName[j] = tolower(candidates[i].lastName[j]);
+            j += 1;
+        }
+    }
     printf("Birth date [dd-mm-yyyy]: ");
     scanf("%s", candidates[i].birthDate);
     char choice;
