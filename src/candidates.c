@@ -30,6 +30,8 @@ void main() {
     i=0;
     // k: comments counter
     int k=0;
+    // v: counter
+    int v;
     fseek(fp, 0, SEEK_SET);
     while (!feof(fp)) {
         fscanf(fp, "%c", txt);
@@ -82,8 +84,14 @@ void main() {
             break;
         // Search for candidate
         case 3:
-            printf("Last name: ");
-            scanf(" %20[^\n]", lastName);
+            v = 0;
+            do{
+                if(v>0)
+                    printf("Invalid last name!\n");
+                printf("Last name: ");
+                scanf(" %20[^\n]", lastName);
+                v =+ 1;
+            }while(strlen(lastName)<2||strlen(lastName)>19);
             int *index = searchByLastName(candidates, lastName, nCandidates);
             if (*index == -1) {
                 printf("No candidate found with last name: %s", lastName);
@@ -98,7 +106,14 @@ void main() {
                     i=0;
                     printf("There are %d results. Choose the name: ", n);
                     char name[20];
-                    scanf(" %20[^\n]", name);
+                    v=0;
+                    do{
+                        if(v>0)
+                            printf("Invalid name!\n");
+                        printf("First name: ");
+                        scanf(" %20[^\n]", name);
+                        v =+ 1;
+                    }while(strlen(name)<2||strlen(name)>19);
                     int * indexN = searchByName(candidates, index, name, n);
                     if(*indexN == -1){
                         printf("No candidate found with name: %s", name);
@@ -114,8 +129,10 @@ void main() {
                             }
                         }
                     }
+                    free(indexN);
                 }
             }
+            free(index);
             break;
         // Add candidate
         case 4:
@@ -124,9 +141,14 @@ void main() {
             break;
         // Remove candidate
         case 5:
-
-            printf("Last name: ");
-            scanf(" %20[^\n]", lastName);
+            v = 0;
+            do{
+                if(v>0)
+                    printf("Invalid last name!\n");
+                printf("Last name: ");
+                scanf(" %20[^\n]", lastName);
+                v =+ 1;
+            }while(strlen(lastName)<2||strlen(lastName)>19);
             int *indexSur = searchByLastName(candidates, lastName, nCandidates);
             if (*indexSur == -1) {
                 printf("No candidate found with last name: %s", lastName);
@@ -158,7 +180,14 @@ void main() {
                     i=0;
                     printf("There are %d results. Choose the name: ", n);
                     char name[20];
-                    scanf(" %20[^\n]", name);
+                    v=0;
+                    do{
+                        if(v>0)
+                            printf("Invalid name!\n");
+                        printf("Name: ");
+                        scanf(" %20[^\n]", name);
+                        v =+ 1;
+                    }while(strlen(name)<2||strlen(name)>19);
                     int * indexN = searchByName(candidates, indexSur, name, n);
                     if(*indexN == -1){
                         printf("No candidate found with name: %s", name);
@@ -187,9 +216,10 @@ void main() {
                             printf("More than one candidates found: ");
                         }
                     }
-                }
-                
+                    free(indexN);
+                } 
             }
+            free(indexSur);
             break;
 		// Format structure
         case 6:

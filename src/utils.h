@@ -30,6 +30,9 @@ int isInteger(char[]);
 void printInOrder(struct candidate * , int , int);
 int * searchByName(struct candidate * , int [], char *, int);
 
+// v: counter
+    int v;
+
 void writeOnTextFile (FILE *fp, int i, struct candidate *candidates){
     fprintf(
         fp, "\n%d,%s,%s,%s,%d,%.2f,%d",
@@ -157,8 +160,14 @@ int addNewCandidate(char * filename, struct candidate * candidates, int nCand) {
         candidates[i].firstName[a] = '\0';
         candidates[i].lastName[a] = '\0';
     }
-    printf("First name: ");
-    scanf(" %20[^\n]", candidates[i].firstName);
+    v = 0;
+    do{
+        if(v>0)
+            printf("Invalid last name!\n");
+        printf("First name: ");
+        scanf(" %20[^\n]", candidates[i].firstName);
+        v =+ 1;
+    }while(strlen(candidates[i].firstName)<2||strlen(candidates[i].firstName)>19);
     candidates[i].firstName[0] = toupper(candidates[i].firstName[0]);
     int j=1;
     while (j < 19) {
@@ -172,8 +181,14 @@ int addNewCandidate(char * filename, struct candidate * candidates, int nCand) {
             j += 1;
         }
     }
-    printf("Last name: ");
-    scanf(" %20[^\n]", candidates[i].lastName);
+    v = 0;
+    do{
+        if(v>0)
+            printf("Invalid last name!\n");
+        printf("Last name: ");
+        scanf(" %20[^\n]", candidates[i].lastName);
+        v =+ 1;
+    }while(strlen(candidates[i].lastName)<2||strlen(candidates[i].lastName)>19);
     candidates[i].lastName[0] = toupper(candidates[i].lastName[0]);
     j=1;
     while (j < 19) {
@@ -187,8 +202,23 @@ int addNewCandidate(char * filename, struct candidate * candidates, int nCand) {
             j += 1;
         }
     }
-    printf("Birth date [dd-mm-yyyy]: ");
-    scanf("%s", candidates[i].birthDate);
+    int ok = 1;
+    v = 0;
+    do{
+        if(v!=0)
+            printf("Invalid date!\n");
+        printf("Birth date [dd-mm-yyyy]: ");
+        scanf("%s", candidates[i].birthDate);
+        if(strlen(candidates[i].birthDate)!=10){
+        }else{
+            if(candidates[i].birthDate[2] != '-'|| candidates[i].birthDate[5] != '-'){
+            }else{
+                ok = 0;
+            }
+        }
+        v += 1;
+    }while(ok==1);
+    
     char choice;
     do {
         printf("Is the candidate employed? [y/n] ");
