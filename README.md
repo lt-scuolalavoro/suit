@@ -1,10 +1,10 @@
 # Suit
 This app will keep track of all the __HR__ components of the company, storing in a database name, surname, birth date and some other basic informations of the candidate.
 
-## Setup the environment
+## Environment setup
 In order to avoid several possible issues during the setup, it is highly recommended to work on Linux.\
 If you are not on Linux, you can setup a virtual machine, otherwise you can directly jump [here](https://github.com/lt-scuolalavoro/suit#2-install-gcc-and-libmysqlclient).
-### 1. Setup the virtual machine 
+### 1. Set the virtual machine up 
 #### Download required resources
 1. Download and install [Virtual Box](https://www.virtualbox.org/wiki/Downloads).
 2. Download [Ubuntu ISO](https://www.ubuntu.com/download/desktop).
