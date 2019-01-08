@@ -3,7 +3,7 @@ This app will keep track of all the __HR__ components of the company, storing in
 
 ## Setup the environment
 In order to avoid several possible issues during the setup, it is highly recommended to work on Linux.\
-If you are not on Linux, you can setup a virtual machine, otherwise you can directly jump [here](https://github.com/lt-scuolalavoro/suit#install-gcc-and-libmysqlclint).
+If you are not on Linux, you can setup a virtual machine, otherwise you can directly jump [here](https://github.com/lt-scuolalavoro/suit#2-install-gcc-and-libmysqlclient).
 ### 1. Setup the virtual machine 
 #### Download required resources
 1. Download and install [Virtual Box](https://www.virtualbox.org/wiki/Downloads).
