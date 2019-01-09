@@ -19,6 +19,8 @@ If you are not on Linux, you can create a virtual machine, otherwise you can dir
 6. Finish the installation as normal installation.
 7. Restart the virtual machine.
 
+_You can leave the default values for the options not mentioned in these steps._
+
 ### 2. Install gcc and libmysqlclient
 In the Ubuntu terminal:
 ```
