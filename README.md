@@ -1,6 +1,11 @@
 # Suit
 This app will keep track of all the __HR__ components of the company, storing in a database name, surname, birth date and some other basic informations of the candidate.
 
+## Index
+* [Environment setup](https://github.com/lt-scuolalavoro/suit#environment-setup)
+* [Clone the repository](https://github.com/lt-scuolalavoro/suit#clone-the-repository)
+* [Compile and run](https://github.com/lt-scuolalavoro/suit#compile-and-run)
+
 ## Environment setup
 In order to avoid several possible issues during the setup, it is highly recommended to work on Linux.\
 If you are not on Linux, you can create a virtual machine, otherwise you can directly jump [here](https://github.com/lt-scuolalavoro/suit#2-install-gcc-and-libmysqlclient).
