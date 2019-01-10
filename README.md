@@ -27,8 +27,53 @@ In the Ubuntu terminal:
 sudo apt install gcc
 sudo apt-get install libmysqlclient-dev
 ```
+### 3. Install XAMPP
+#### 1. Download the installation package from [here](https://www.apachefriends.org/it/download.html).
+#### 2. Make the installation package executable
+Move to the Downloads folder by using the following command:
+```
+$ cd /home/[username]/Downloads
+```
+The installation package you downloaded needs to be made executable before it can be used further.
 
-### 3. Install your favorite editor/IDE
+Run the following command for this purpose:
+```
+$ chmod 755 [package name]
+```
+Example:
+```
+$ chmod 755 xampp-linux-x64-7.2.10-0-installer.run
+```
+#### 3. Run the Setup Wizard
+Run the following command in order to launch the graphical setup wizard:
+```
+$ sudo ./[package name]
+
+```
+#### 4. Finish the installation
+#### 5. Install net-tools
+You need net-tools in order to use XAMPP. Run the following command to install the package:
+```
+$ sudo apt install net-tools
+```
+#### 6. Run XAMPP
+You can run XAMPP through the terminal entering the following command:
+```
+$ sudo /opt/lampp/lampp start
+```
+Note: you have to sttart XAMPP every time you restart the system.
+
+#### 7. Verify installation
+After you have installed and run XAMPP, you should verify that it works correctly. To do so, enter the following URL in your browser:
+```
+http://localhost/dashboard/
+```
+If you've done everything correctly you should see this page:
+![XAMPP Dashboard](https://vitux.com/wp-content/uploads/2018/10/word-image-14-768x369.png)
+
+You can access phpmyadmin to manage the database at `http://localhost/phpmyadmin/`.
+
+### 4. Install your favorite editor/IDE
 You can find the most popular editors in the **Ubuntu Software Center**.
 
 ## Clone the repository
