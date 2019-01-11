@@ -26,6 +26,7 @@ If you are not on Linux, you can create a virtual machine, otherwise you can dir
 
 _You can leave the default values for the options not mentioned in these steps._
 
+##### Now you should open this readme file in your virtual machine, so you can easily click on the links or copy and paste the commands.
 ### 2. Install gcc and libmysqlclient
 In the Ubuntu terminal:
 ```
@@ -37,7 +38,7 @@ sudo apt-get install libmysqlclient-dev
 #### 2. Make the installation package executable
 Move to the Downloads folder by using the following command:
 ```
-$ cd /home/[username]/Downloads
+$ cd Downloads
 ```
 The installation package you downloaded needs to be made executable before it can be used further.
 
