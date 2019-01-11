@@ -42,9 +42,19 @@ sudo apt install apache2 ; sudo apt install mysql-server ; sudo apt install php-
 ```
 __Enable the services:__
 ```
-sudo service mysql enable
-sudo service apache2 enable
+systemctl enable mysql
+systemctl enable apache2
 ```
+__Disable phpmyadmin password check during login:__
+1. Paste the following command in your terminal:
+```
+gedit /etc/phpmyadmin/config.inc.php
+```
+2. Press CTRL+F and search for ```AllowNoPassword```
+3. Uncomment the line
+
+*__Please note that you will find two lines. Uncomment both.__*
+
 ### 4. Install your favorite editor/IDE
 You can find the most popular editors in the **Ubuntu Software Center**.
 
