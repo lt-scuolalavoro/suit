@@ -35,7 +35,17 @@ sudo apt-get install libmysqlclient-dev
 sudo apt install mysql-client-core-5.7   
 sudo apt install mariadb-client-core-10.1
 ```
-### 3. Install your favorite editor/IDE
+### 3. Install LAMP
+__Install LAMP by using the following command in the terminal:__
+```
+sudo apt install apache2 ; sudo apt install mysql-server ; sudo apt install php-pear php-fpm php-dev php-zip php-curl php-xmlrpc php-gd php-mysql php-mbstring php-xml libapache2-mod-php ; sudo apt-get install -y phpmyadmin
+```
+__Enable the services:__
+```
+sudo service mysql enable
+sudo service apache2 enable
+```
+### 4. Install your favorite editor/IDE
 You can find the most popular editors in the **Ubuntu Software Center**.
 
 ## Clone the repository
