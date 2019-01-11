@@ -27,11 +27,13 @@ If you are not on Linux, you can create a virtual machine, otherwise you can dir
 _You can leave the default values for the options not mentioned in these steps._
 
 ##### Now you should open this readme file in your virtual machine, so you can easily click on the links or copy and paste the commands.
-### 2. Install gcc and libmysqlclient
+### 2. Install gcc, libmysqlclient and mysql client
 In the Ubuntu terminal:
 ```
 sudo apt install gcc
 sudo apt-get install libmysqlclient-dev
+sudo apt install mysql-client-core-5.7   
+sudo apt install mariadb-client-core-10.1
 ```
 ### 3. Install XAMPP
 #### 1. Download the installation package from [here](https://www.apachefriends.org/it/download.html).
