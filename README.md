@@ -27,34 +27,21 @@ If you are not on Linux, you can create a virtual machine, otherwise you can dir
 _You can leave the default values for the options not mentioned in these steps._
 
 ##### Now you should open this readme file in your virtual machine, so you can easily click on the links or copy and paste the commands.
-### 2. Install gcc, libmysqlclient and mysql client
+### 2. Install gcc and libmysqlclient
 In the Ubuntu terminal:
 ```
-sudo apt install gcc
-sudo apt-get install libmysqlclient-dev
-sudo apt install mysql-client-core-5.7   
-sudo apt install mariadb-client-core-10.1
+sudo apt install gcc libmysqlclient-dev
 ```
 ### 3. Install LAMP
 __Install LAMP by using the following command in the terminal:__
 ```
-sudo apt install apache2 ; sudo apt install mysql-server ; sudo apt install php-pear php-fpm php-dev php-zip php-curl php-xmlrpc php-gd php-mysql php-mbstring php-xml libapache2-mod-php ; sudo apt-get install -y phpmyadmin
+sudo apt install apache2 ; sudo apt install mysql-server ; sudo apt install php-pear php-fpm php-dev php-zip php-curl php-xmlrpc php-gd php-mysql php-mbstring php-xml libapache2-mod-php 
 ```
+
 __Enable the services:__
 ```
-systemctl enable mysql
-systemctl enable apache2
+sudo systemctl enable mysql apache2
 ```
-__Disable phpmyadmin password check during login:__
-1. Paste the following command in your terminal:
-```
-gedit /etc/phpmyadmin/config.inc.php
-```
-2. Press CTRL+F and search for ```AllowNoPassword```
-3. Uncomment the line
-
-*__Please note that you will find two lines. Uncomment both.__*
-
 ### 4. Install your favorite editor/IDE
 You can find the most popular editors in the **Ubuntu Software Center**.
 
