@@ -8,7 +8,7 @@ This app will keep track of all the __HR__ components of the company, storing in
 
 ## Environment setup
 In order to avoid several possible issues during the setup, it is highly recommended to work on Linux.\
-If you are not on Linux, you can create a virtual machine, otherwise you can directly jump [here](https://github.com/lt-scuolalavoro/suit#2-install-gcc-and-libmysqlclient).
+If you are not on Linux, you can create a virtual machine, otherwise you can directly jump [here](https://github.com/lt-scuolalavoro/suit#2-install-gcc-libmysqlclient-and-git).
 ### 1. Set the virtual machine up 
 #### Download required resources
 1. Download and install [Virtual Box](https://www.virtualbox.org/wiki/Downloads).
@@ -27,10 +27,10 @@ If you are not on Linux, you can create a virtual machine, otherwise you can dir
 _You can leave the default values for the options not mentioned in these steps._
 
 ##### Now you should open this readme file in your virtual machine, so you can easily click on the links or copy and paste the commands.
-### 2. Install gcc and libmysqlclient
+### 2. Install gcc, libmysqlclient and git
 In the Ubuntu terminal:
 ```
-sudo apt install gcc libmysqlclient-dev
+sudo apt install gcc libmysqlclient-dev git
 ```
 ### 3. Install LAMP
 __Install LAMP by using the following command in the terminal:__
@@ -46,6 +46,7 @@ sudo systemctl enable mysql apache2
 You can find the most popular editors in the **Ubuntu Software Center**.
 
 ## Clone the repository
+Move to the directory where you want to clone the project and use the following command in the terminal:
 ```
 git clone https://github.com/lt-scuolalavoro/suit.git
 ```
@@ -55,6 +56,13 @@ In __suit__ folder:
 ```gcc -o bin/suit src/candidates.c```    
 2. Run:\
 ```bin/suit```
+
+__MySQL programs:__
+1. Compile:\
+```gcc -o bin/[name] res/mysql/[file name] `mysql_config --cflags --libs` ```
+2. Run:\
+```sudo ./[name]```
+
 ## Useful docs 
 * [MySQL C](https://docs.google.com/document/d/1XyP09J5EF2wkSpmlwJ9Ew7IGDa0sb1mDyL_xx6XuTk8/edit) - MySQL C API programming tutorial
  
