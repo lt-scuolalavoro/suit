@@ -59,9 +59,9 @@ In __suit__ folder:
 
 __MySQL programs:__
 1. Compile:\
-```gcc -o bin/[name] res/mysql/[file name] `mysql_config --cflags --libs` ```
+```gcc -o bin/[name].exe resources/mysql/[file name] `mysql_config --cflags --libs` ```
 2. Run:\
-```sudo ./[name]```
+```sudo bin/[name].exe```
 
 ## Useful docs 
 * [MySQL C](https://docs.google.com/document/d/1XyP09J5EF2wkSpmlwJ9Ew7IGDa0sb1mDyL_xx6XuTk8/edit) - MySQL C API programming tutorial
