@@ -1,7 +1,8 @@
-#include <mysql.h>
-#include <my_global.h>
-#include <signal.h>
-#include "utils.h"
+/*
+    Program that creates a table in a Database
+*/
+
+#include "headers/utils.h"
 
 int main(int argc, char** argv) {
     char query[300];
@@ -24,6 +25,7 @@ int main(int argc, char** argv) {
         printf("Too many arguments.\n");
         return 1;
     }
+    // Connect to mysql server
     setupDb("localhost", "root", NULL, argv[1]);
     // Input phase
     printf("Enter the number of columns of your table: ");

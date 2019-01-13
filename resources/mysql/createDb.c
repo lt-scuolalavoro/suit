@@ -1,13 +1,12 @@
-#include <mysql.h>
-#include <my_global.h>
-#include "utils.h"
+/*
+    Program that creates a database
+*/
+
+#include "headers/utils.h"
 
 int main(int argc, char** argv) {
-    
     char query[40];
     char partialQuery[] = "CREATE DATABASE ";
-    // Create the pointer
-    con = mysql_init(NULL);
     // Check arguments passed
     if (argc == 1) {
         printf("Missing dbName.\n");
@@ -18,8 +17,8 @@ int main(int argc, char** argv) {
             return 1;
         }
     }
+    // Connect to mysql server
     setupDb("localhost", "root", NULL, NULL);
-
     // Create the query ("CREATE DATABASE + argv[1]")
     strcpy(query, partialQuery);
     strcat(query, argv[1]);

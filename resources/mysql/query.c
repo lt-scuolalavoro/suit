@@ -1,10 +1,14 @@
-#include <mysql.h>
-#include <my_global.h>
-#include "utils.h"
+/*
+    Program that executes a query in a database
+*/
+
+#include "headers/utils.h"
 
 int main(int argc, char *argv[]){
     char query[350];
 
+    signal(SIGINT, closeProgram); // Ctrl + C event handling
+    // Check arguments
     if(argc < 2) {
         printf("Missing dbName.\n");
         return 1;

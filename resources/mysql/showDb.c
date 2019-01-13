@@ -1,5 +1,7 @@
-#include <mysql.h>
-#include <my_global.h>
+/*
+    Program that shows all the databases of the server
+*/
+
 #include "utils.h"
 
 main(int argc, char **argv[])
