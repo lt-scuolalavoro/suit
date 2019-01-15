@@ -30,6 +30,7 @@ int main(int argc, char** argv) {
     // Input phase
     printf("Enter the number of columns of your table: ");
     scanf("%d", &nColumns);
+    // Create the query
     strcpy(query, partialQuery);
     strcat(query, argv[2]);
     strcat(query, "(");
@@ -45,9 +46,8 @@ int main(int argc, char** argv) {
         }
         strcat(query, column);
     }
-    strcat(query, ")");
     // End input phase
-    
+    strcat(query, ")");
     // Execute the query
     executeQuery(query, "created successfully.", argv[2]);
 

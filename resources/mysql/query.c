@@ -17,11 +17,12 @@ int main(int argc, char *argv[]){
         printf("Too many arguments.\n");
         return 1;
     }
+    // Connect to mysql server
     setupDb("localhost", "root", NULL, argv[1]);
 
     printf("Enter the query (end with semicolon):\n");
     scanf("%[^;]", query);
-
+    // Execute the query
     executeQuery(query, ": Operation completed successfully.", argv[1]);
 
     return 0;

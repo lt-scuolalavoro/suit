@@ -6,7 +6,7 @@
 int main(int argc, char** argv) {
     char query[40];
     char partialQuery[] = "DROP DATABASE ";
-    
+    // Check the arguments
     if (argc == 1) {
         printf("Missing dbName.\n");
         return 1;
