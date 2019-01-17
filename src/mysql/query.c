@@ -2,7 +2,7 @@
     Program that executes a query in a database
 */
 
-#include "headers/utils.h"
+#include "../lib/mysql_utils.h"
 
 int main(int argc, char *argv[]){
     char query[350];
@@ -24,6 +24,8 @@ int main(int argc, char *argv[]){
     scanf("%[^;]", query);
     // Execute the query
     executeQuery(query, ": Operation completed successfully.", argv[1]);
+
+    closeProgram();
 
     return 0;
 }

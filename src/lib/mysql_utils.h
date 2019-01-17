@@ -7,6 +7,7 @@
 #include <signal.h>
 #include "cli_utils.h"
 
+void closeConnection();
 void closeProgram(); 
 void executeQuery(char*, char*, char*);
 void finishWithError();
@@ -14,11 +15,15 @@ void setupDb(char*, char*, char*, char*);
 
 MYSQL *con;
 
+void closeConnection(){
+    mysql_close(con);
+    printf("Connection closed.");
+}
 // Exit the program closing mysql connection
 void closeProgram() {
     mysql_close(con);
     printf("\nBye.\n");
-    exit(1);
+    exit(0);
 }
 /* Execute query and print a feedback message
     Input: query, text desired to be displayed and a general argument

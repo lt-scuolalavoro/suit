@@ -2,7 +2,7 @@
     Program that creates a table in a Database
 */
 
-#include "headers/utils.h"
+#include "../lib/mysql_utils.h"
 
 int main(int argc, char** argv) {
     char query[300];

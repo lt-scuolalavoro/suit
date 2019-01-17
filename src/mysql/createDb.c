@@ -2,7 +2,7 @@
     Program that creates a database
 */
 
-#include "headers/utils.h"
+#include "../lib/mysql_utils.h"
 
 int main(int argc, char** argv) {
     char query[40];
@@ -24,6 +24,8 @@ int main(int argc, char** argv) {
     strcat(query, argv[1]);
     // Execute query
     executeQuery(query, "created successfully.", argv[1]);
+
+    closeProgram();
 
     return 0;
 }

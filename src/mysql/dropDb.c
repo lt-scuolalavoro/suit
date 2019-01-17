@@ -1,7 +1,7 @@
 /*
     Program that drops a database
 */
-#include "headers/utils.h"
+#include "../lib/mysql_utils.h"
 
 int main(int argc, char** argv) {
     char query[40];

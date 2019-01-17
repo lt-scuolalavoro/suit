@@ -18,7 +18,7 @@ In __suit__ folder:
 
 __MySQL programs:__
 1. Compile:\
-```gcc -o bin/[name].exe resources/mysql/[file name] `mysql_config --cflags --libs` ```
+```gcc -o bin/[name].exe src/mysql/[file name] `mysql_config --cflags --libs` ```
 2. Run:\
 ```sudo bin/[name].exe```
 
@@ -27,3 +27,4 @@ __MySQL programs:__
  
 ## Built with
 * C
+* MySQL
