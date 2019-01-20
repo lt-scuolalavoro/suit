@@ -192,24 +192,18 @@ int addNewCandidate(char * filename, struct candidate * candidates, int nCand) {
 
     swapStr(strData[0], strData[2]);
 
-    printf("\n");
-    for(i = 0; i < 3; i++) {
-        printf("%s-", strData[i]);
-    }
-    printf("\n");
+    j=0;
+    char str2[11] = "";
 
-    // j=0;
-    // char str2[11] = "";
-    // while( strData != NULL) {
-    //    //printf( " %s", token );
-    //    strcat(str2,token);
-    //    if(j < 2){
-    //        strcat(str2,"-");
-    //    }
-    //    token = strtok(NULL, "-");
-    //    j = j + 1 ;
-    // }
-    // strcpy(candidates[i].birthDate,str2);
+    for(j = 0; j < 3; j++){
+        strcat(str2,strData[j]);
+        if(j < 2)
+            strcat(str2,"-");
+    }
+
+    printf("%s", str2);
+    
+    strcpy(candidates[i].birthDate,str2);
     char choice;
     do {
         printf("Is the candidate employed? [y/n] ");
