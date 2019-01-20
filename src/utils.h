@@ -122,58 +122,66 @@ int addNewCandidate(char * filename, struct candidate * candidates, int nCand) {
     int i = nCand - 1; // Last position of the array
     candidates[i].removed = 0;
     candidates[i].id = nCand;
-    printf("First name: ");
-    scanf(" %20[^\n]", candidates[i].firstName);
-    printf("Last name: ");
-    scanf(" %20[^\n]", candidates[i].lastName);
+    // printf("First name: ");
+    // scanf(" %20[^\n]", candidates[i].firstName);
+    // printf("Last name: ");
+    // scanf(" %20[^\n]", candidates[i].lastName);
     printf("Birth date [dd-mm-yyyy]: ");
     scanf("%s", str);
 
-    char anno[5];
     // Il primo token va in str
     token = strtok(str, "-");
     //  Creiamo un array di string dove inserire le date splittate
-    char *strData[5];
-    strData[0] = str;
+    char *strData[3];
+
+    for (i=0 ; i<3; i++) {
+        if ((strData[i] = malloc(sizeof(char) * 5)) == NULL) {
+            printf("unable to allocate memory \n");
+            return -1;
+        }
+    }
+    
+    /*
+        10-20-1000
+        10-1000-20
+        20-10-1000
+        20-1000-10
+        1000-10-20
+        1000-20-10
+
+    */
+
+    strcpy(strData[0], str);
 
     for(i = 1; i <= 2; i++) {
         token = strtok(NULL, "-");
-        strData[i] = token;        
+        strcpy(strData[i], token);        
     }                        
     
-    for(j = 2; j > 0; j--){
+    for(j = 2; j >= 0; j--){
         switch(j){
             case 0 :{
                 // Controlla se è l'anno -> lo mette in strData[2]
                 if(atoi(strData[j]) > 31 && strlen(strData[j]) == 4){
-                    strcpy(temp, strData[2]);
-                    strcpy(strData[2], strData[0]);
-                    strcpy(strData[0], temp);
+                    swapStr(strData[0], strData[2]);
                 }
             }
             break;
             case 1:{
+                // Controlla se è il giorno -> lo mette in strData[0]
+                if(atoi(strData[j]) > 12 && atoi(strData[j]) < 31){
+                    swapStr(strData[0], strData[1]);
+                }
                 // Controlla se è l'anno -> lo mette in strData[2]
                 if(atoi(strData[j]) > 31 && strlen(strData[j]) == 4){
-                    strcpy(temp, strData[2]);
-                    strcpy(strData[2], strData[1]);
-                    strcpy(strData[1], temp);
-                }else{
-                    // Controlla se è il giorno -> lo mette in strData[0]
-                    if(atoi(strData[j]) > 12 && atoi(strData[j]) < 31){
-                        strcpy(temp, strData[0]);
-                        strcpy(strData[0], strData[1]);
-                        strcpy(strData[1], temp);
-                    }
+                    swapStr(strData[2], strData[1]);
                 }
             }
             break;
             case 2:{
                 // Controlla se è il giorno -> lo mette in strData[0]
                 if(atoi(strData[j]) > 12 && atoi(strData[j]) < 31){
-                    strcpy(temp, strData[0]);
-                    strcpy(strData[0],strData[2]);
-                    strcpy(strData[2],temp);
+                    swapStr(strData[0], strData[2]);
                 }
                 if(strlen(strData[j]) < 4)
                     check = 0;
@@ -181,6 +189,9 @@ int addNewCandidate(char * filename, struct candidate * candidates, int nCand) {
             break;
         }
     }
+
+    swapStr(strData[0], strData[2]);
+
     printf("\n");
     for(i = 0; i < 3; i++) {
         printf("%s-", strData[i]);
