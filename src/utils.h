@@ -1,7 +1,6 @@
+#include "str_utils.h"
 #include "stdio.h"
 #include "stdbool.h"
-#include "string.h"
-
 
 struct candidate {
     // Declaration of the structure variables
@@ -115,7 +114,7 @@ int addNewCandidate(char * filename, struct candidate * candidates, int nCand) {
     char str[11];
     char * token;
     bool check = 1;
-    int temp;
+    char temp[5];
     int j;
     // Reopen the file in append mode
     fp = fopen(filename, "a");
@@ -130,73 +129,76 @@ int addNewCandidate(char * filename, struct candidate * candidates, int nCand) {
     printf("Birth date [dd-mm-yyyy]: ");
     scanf("%s", str);
 
-    //
+    char anno[5];
+    // Il primo token va in str
     token = strtok(str, "-");
+    //  Creiamo un array di string dove inserire le date splittate
+    char *strData[5];
+    strData[0] = str;
 
-    do{
-        if(check = 0){
-            printf("Insert the correct date");
-            check = 1;
-        }
-        for(j = 0; j < 3; j++){
-            switch(j){
-                case 0 :{
-                    if(token[j] < 1)
-                        check = 0;
-                    else
-                        if(token[j] > 31 && strlen(&token[j]) == 4){
-                            strcpy(temp,token[2]);
-                            strcpy(token[2],token[0]);
-                            strcpy(token[0],temp);
-                        }
-                }
-                break;
-                case 1:{
-                    if(token[j] < 1)
-                        check = 0;
-                    else
-                        if(token[j] > 31 && strlen(&token[j]) == 4){
-                            strcpy(temp,token[2]);
-                            strcpy(token[2],token[1]);
-                            strcpy(token[1],temp);
-                        }else{
-                            if(token[j] > 12 && token[j] < 31){
-                                strcpy(temp,token[0]);
-                                strcpy(token[0],token[1]);
-                                strcpy(token[1],temp);
-                            }
-                        }
-                }
-                break;
-                case 2:{
-                    if(token[j] < 1)
-                        check = 0;
-                    else
-                        if(token[j] > 12 && token[j] < 31){
-                            strcpy(temp, token[0]);
-                            strcpy(token[0],token[2]);
-                            strcpy(token[2],temp);
-                        }
-                    if(strlen(&token[j]) < 4)
-                        check = 0;
-                    }
-                    break;
+    for(i = 1; i <= 2; i++) {
+        token = strtok(NULL, "-");
+        strData[i] = token;        
+    }                        
+    
+    for(j = 2; j > 0; j--){
+        switch(j){
+            case 0 :{
+                // Controlla se è l'anno -> lo mette in strData[2]
+                if(atoi(strData[j]) > 31 && strlen(strData[j]) == 4){
+                    strcpy(temp, strData[2]);
+                    strcpy(strData[2], strData[0]);
+                    strcpy(strData[0], temp);
                 }
             }
-    }while(check != 1);
-
-    j=0;
-    char str2[11] = "";
-    while( token != NULL) {
-       //printf( " %s", token );
-       strcat(str2,token);
-       if(j < 2){
-           strcat(str2,"-");
-       }
-       token = strtok(NULL, "-");
-       j = j + 1 ;
+            break;
+            case 1:{
+                // Controlla se è l'anno -> lo mette in strData[2]
+                if(atoi(strData[j]) > 31 && strlen(strData[j]) == 4){
+                    strcpy(temp, strData[2]);
+                    strcpy(strData[2], strData[1]);
+                    strcpy(strData[1], temp);
+                }else{
+                    // Controlla se è il giorno -> lo mette in strData[0]
+                    if(atoi(strData[j]) > 12 && atoi(strData[j]) < 31){
+                        strcpy(temp, strData[0]);
+                        strcpy(strData[0], strData[1]);
+                        strcpy(strData[1], temp);
+                    }
+                }
+            }
+            break;
+            case 2:{
+                // Controlla se è il giorno -> lo mette in strData[0]
+                if(atoi(strData[j]) > 12 && atoi(strData[j]) < 31){
+                    strcpy(temp, strData[0]);
+                    strcpy(strData[0],strData[2]);
+                    strcpy(strData[2],temp);
+                }
+                if(strlen(strData[j]) < 4)
+                    check = 0;
+            }
+            break;
+        }
     }
-    strcpy(candidates[i].birthDate,str2);
+    printf("\n");
+    for(i = 0; i < 3; i++) {
+        printf("%s-", strData[i]);
+    }
+    printf("\n");
+
+    // j=0;
+    // char str2[11] = "";
+    // while( strData != NULL) {
+    //    //printf( " %s", token );
+    //    strcat(str2,token);
+    //    if(j < 2){
+    //        strcat(str2,"-");
+    //    }
+    //    token = strtok(NULL, "-");
+    //    j = j + 1 ;
+    // }
+    // strcpy(candidates[i].birthDate,str2);
     char choice;
     do {
         printf("Is the candidate employed? [y/n] ");
@@ -327,3 +329,4 @@ void printInOrder(struct candidate * candidates,int removed, int nCandidates){
         }
     }
 }
+
