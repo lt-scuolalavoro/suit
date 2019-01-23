@@ -1,17 +1,16 @@
-#include "stdio.h"
-#include "stdbool.h"
-#include "string.h"
+#include <stdio.h>
+#include <string.h>
 
 
 struct candidate {
     // Declaration of the structure variables
-    bool removed;
+    int removed;
     int id;
     // Name and surname must be a maximum of 20 characters
     char firstName[20];
     char lastName[20];
     char birthDate[11]; // Array must be of 11 chars to accomodate for the \0 terminator.
-    bool employed;
+    int employed;
     float salary;
 };
 
@@ -222,7 +221,7 @@ int addNewCandidate(char * filename, struct candidate * candidates, int nCand) {
     char choice;
     do {
         printf("Is the candidate employed? [y/n] ");
-        scanf(" %c", & choice);
+        scanf(" %c", &choice);
         if (choice == 'y') {
             candidates[i].employed = 1;
             printf("Salary: ");
@@ -287,7 +286,7 @@ void format(char* filename, int nCand, struct candidate *candidates){
     printf("What would you like to do?:\n1. Separate values with comma;\n2. change data form in mySQL compatible;\n3. Exit.\n");
     do {
         printf("Insert: ");
-        scanf("%s", &choice);
+        scanf("%s", choice);
         inputConverted=atoi(choice);
         if ((inputConverted < 1 || inputConverted > 3) || isInteger(choice)==0) {
             printf("Invalid value.\n");

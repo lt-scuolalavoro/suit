@@ -1,8 +1,8 @@
-#include "stdio.h"
-#include "string.h"
-#include "stdlib.h"
-#include "stdbool.h"
-#include "ctype.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <ctype.h>
 #include "utils.h"
 #define BUFSIZE 100
 
@@ -33,6 +33,7 @@ void main() {
     // v: counter
     int v;
     fseek(fp, 0, SEEK_SET);
+
     while (!feof(fp)) {
         fscanf(fp, "%c", txt);
         if (txt[0]!='#'){
@@ -49,23 +50,22 @@ void main() {
             );
             fgets(txt, BUFSIZE, fp);
             i++;
-           } else {
-                fgets(txt,BUFSIZE,fp);
-                nCandidates--;
-                // Only if candidates are not over
-                if (i<nCandidates-2) {
-                    k++;
-                } 
-           }
+        } else {
+            fgets(txt,BUFSIZE,fp);
+            nCandidates--;
+            // Only if candidates are not over
+            if (i<nCandidates-2) {
+                k++;
+            } 
         }
-
+    }
 
     // Menu
     do {
         printf("1. Print candidates;\n2. Print deleted candidates;\n3. Search candidate;\n4. Add candidate;\n5. Remove candidate;\n6. Reformat database\n7. Exit\n");
         do {
             printf("Insert: ");
-            scanf("%s", &choice);
+            scanf("%s", choice);
             // atoi=cast from char[] to int
             inputConverted=atoi(choice);
             if ((inputConverted < 1 || inputConverted > 7) || isInteger(choice)==0) {
