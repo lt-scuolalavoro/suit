@@ -1,5 +1,5 @@
-.vscode/
 .idea/
+.vscode/
 *.exe
 !suit.exe
 !setupDb.exe
