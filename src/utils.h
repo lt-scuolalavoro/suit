@@ -1,3 +1,4 @@
+#include "str_utils.h"
 #include "stdio.h"
 #include "stdbool.h"
 #include "string.h"
@@ -29,9 +30,10 @@ void writeOnTextFile (FILE *, int i, struct candidate *);
 int isInteger(char[]);
 void printInOrder(struct candidate * , int , int);
 int * searchByName(struct candidate * , int [], char *, int);
+char* convertDateToSql(char*);
 
 // v: counter
-    int v;
+int v;
 
 void writeOnTextFile (FILE *fp, int i, struct candidate *candidates){
     fprintf(
@@ -59,7 +61,7 @@ void updateDatabase(FILE * fp, struct candidate * candidates, int nCand, char * 
 int* searchByLastName(struct candidate * candidates, char * lastName, int nEntries) {
     char tmpLastName[20];
     int i = 0, cont = 0;
-    int* index = malloc(nEntries*sizeof(int)); 
+    int* index = malloc(nEntries*sizeof(int));
     for(int y=0; y<nEntries; y++){
         index[y]=-100;
     }
@@ -98,11 +100,11 @@ int * searchByName(struct candidate * candidates, int index[], char * name, int 
     indexName[0]=-1;
     for(int y=1; y<len; y++){
         indexName[y]=-100;
-    } 
+    }
     int cont = 0;
     do {
         // Transform lastName to lower case
-        
+
         for (int j = 0; j < sizeof(tmpName) / sizeof(char); j++) {
             tmpName[j] = tolower(candidates[index[i]].firstName[j]);
         }
@@ -147,9 +149,13 @@ void convertDbToCsv(char * filename, int nCand, struct candidate *candidates) {
     }
     fclose(fp);
 }
+
 // Add a new candidate to the struct array and return the updated number of entries
 int addNewCandidate(char * filename, struct candidate * candidates, int nCand) {
     FILE * fp;
+    char str[11];
+    bool check = 1;
+    char temp[5];
     // Reopen the file in append mode
     fp = fopen(filename, "a");
     nCand++;
@@ -174,8 +180,8 @@ int addNewCandidate(char * filename, struct candidate * candidates, int nCand) {
         if(candidates[i].firstName[j]== ' '){
             if(candidates[i].firstName[j+1]!= '\0'){
                 candidates[i].firstName[j+1] = toupper(candidates[i].firstName[j+1]);
-            } 
-            j += 2;  
+            }
+            j += 2;
         }else{
             candidates[i].firstName[j] = tolower(candidates[i].firstName[j]);
             j += 1;
@@ -195,8 +201,8 @@ int addNewCandidate(char * filename, struct candidate * candidates, int nCand) {
         if(candidates[i].lastName[j]== ' '){
             if(candidates[i].lastName[j+1]!= '\0'){
                 candidates[i].lastName[j+1] = toupper(candidates[i].lastName[j+1]);
-            }   
-            j += 2;  
+            }
+            j += 2;
         }else{
             candidates[i].lastName[j] = tolower(candidates[i].lastName[j]);
             j += 1;
@@ -218,7 +224,7 @@ int addNewCandidate(char * filename, struct candidate * candidates, int nCand) {
         }
         v += 1;
     }while(ok==1);
-    
+
     char choice;
     do {
         printf("Is the candidate employed? [y/n] ");
@@ -343,9 +349,82 @@ void printInOrder(struct candidate * candidates,int removed, int nCandidates){
                 }
             }
         }
-        
+
         for(i=0; i<cont; i++){
             printCandidate(candidates, orderPosition[i]);
         }
     }
+}
+
+char* convertDateToSql(char *str) {
+    int j, i;
+    char * token;
+    char *str2 = (char *) malloc(sizeof(char) * 11);
+    strcpy(str2, "");
+
+    // Insert the first token in 'token'
+    token = strtok(str, "-");
+    // Create an array of 3 String
+    char *strData[3];
+
+    //  For every string allocate 5 char
+    for (i=0 ; i<3; i++) {
+        strData[i] = malloc(sizeof(char) * 5);
+    }
+//  Cut the date and save every piece of it in strData
+//  Copy the first token in strData
+    strcpy(strData[0], str);
+
+//  Copy the last two tokens of the date in strData[1,2]
+    for(i = 1; i <= 2; i++) {
+        // Get the sequence of str( data ) till the first '-' met and save it in token
+        token = strtok(NULL, "-");
+        strcpy(strData[i], token);
+    }
+
+    for(j = 2; j >= 0; j--){
+        switch(j){
+            case 0 :{
+                // If it is the year, save it to strData[2]
+                // atoi = casting to int
+                if(atoi(strData[j]) > 31 && strlen(strData[j]) == 4){
+                    swapStr(strData[0], strData[2]);
+                }
+            }
+            break;
+
+            case 1:{
+                // If it is the day, save it to strData[0]
+                if(atoi(strData[j]) > 12 && atoi(strData[j]) < 31){
+                    swapStr(strData[0], strData[1]);
+                }
+                // If it is the year, save it to strData[2]
+                if(atoi(strData[j]) > 31 && strlen(strData[j]) == 4){
+                    swapStr(strData[2], strData[1]);
+                }
+            }
+            break;
+
+            case 2:{
+                // If it is the day, save it to strData[0]
+                if(atoi(strData[j]) > 12 && atoi(strData[j]) < 31){
+                    swapStr(strData[0], strData[2]);
+                }
+            }
+            break;
+        }
+    }
+
+    // Swap the day with the year ( dd mm yyyy -> yyyy mm dd )
+    swapStr(strData[0], strData[2]);
+
+    // Compose the string, joining strData[] with '-'
+    // concatenation of str2,strData[] and '-' to get ( yyyy-mm-dd )
+    for(j = 0; j < 3; j++){
+        strcat(str2,strData[j]);
+        if(j < 2)
+            strcat(str2,"-");
+    }
+
+    return str2;
 }
