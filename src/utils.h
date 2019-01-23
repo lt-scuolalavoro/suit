@@ -27,6 +27,7 @@ void format(char*, int, struct candidate*);
 void writeOnTextFile (FILE *, int i, struct candidate *);
 int isInteger(char[]);
 void printInOrder(struct candidate * , int , int);
+char* convertDateToSql(char*);
 
 void writeOnTextFile (FILE *fp, int i, struct candidate *candidates){
     fprintf(
@@ -108,115 +109,47 @@ void convertDbToCsv(char * filename, int nCand, struct candidate *candidates) {
     }
     fclose(fp);
 }
+
 // Add a new candidate to the struct array and return the updated number of entries
 int addNewCandidate(char * filename, struct candidate * candidates, int nCand) {
     FILE * fp;
     char str[11];
-    char * token;
     bool check = 1;
     char temp[5];
-    int j;
     // Reopen the file in append mode
     fp = fopen(filename, "a");
     nCand++;
-    int i = nCand - 1; // Last position of the array
-    candidates[i].removed = 0;
-    candidates[i].id = nCand;
-    // printf("First name: ");
-    // scanf(" %20[^\n]", candidates[i].firstName);
-    // printf("Last name: ");
-    // scanf(" %20[^\n]", candidates[i].lastName);
+    int index = nCand - 1; // Last position of the array
+    candidates[index].removed = 0;
+    candidates[index].id = nCand;
+    printf("First name: ");
+    scanf(" %20[^\n]", candidates[index].firstName);
+    printf("Last name: ");
+    scanf(" %20[^\n]", candidates[index].lastName);
     printf("Birth date [dd-mm-yyyy]: ");
     scanf("%s", str);
 
-    // Il primo token va in str
-    token = strtok(str, "-");
-    //  Creiamo un array di string dove inserire le date splittate
-    char *strData[3];
+    char *sqlDate = convertDateToSql(str);
+    // Copying output of convertDateToSql to birthDate of the new candidate
+    strcpy(candidates[index].birthDate, sqlDate);
 
-    for (i=0 ; i<3; i++) {
-        if ((strData[i] = malloc(sizeof(char) * 5)) == NULL) {
-            printf("unable to allocate memory \n");
-            return -1;
-        }
-    }
-    
-    /*
-        10-20-1000
-        10-1000-20
-        20-10-1000
-        20-1000-10
-        1000-10-20
-        1000-20-10
+    printf("function: %s\n", convertDateToSql(str));
+    printf("new date: %s\n", candidates[index].birthDate);        
 
-    */
-
-    strcpy(strData[0], str);
-
-    for(i = 1; i <= 2; i++) {
-        token = strtok(NULL, "-");
-        strcpy(strData[i], token);        
-    }                        
-    
-    for(j = 2; j >= 0; j--){
-        switch(j){
-            case 0 :{
-                // Controlla se è l'anno -> lo mette in strData[2]
-                if(atoi(strData[j]) > 31 && strlen(strData[j]) == 4){
-                    swapStr(strData[0], strData[2]);
-                }
-            }
-            break;
-            case 1:{
-                // Controlla se è il giorno -> lo mette in strData[0]
-                if(atoi(strData[j]) > 12 && atoi(strData[j]) < 31){
-                    swapStr(strData[0], strData[1]);
-                }
-                // Controlla se è l'anno -> lo mette in strData[2]
-                if(atoi(strData[j]) > 31 && strlen(strData[j]) == 4){
-                    swapStr(strData[2], strData[1]);
-                }
-            }
-            break;
-            case 2:{
-                // Controlla se è il giorno -> lo mette in strData[0]
-                if(atoi(strData[j]) > 12 && atoi(strData[j]) < 31){
-                    swapStr(strData[0], strData[2]);
-                }
-                if(strlen(strData[j]) < 4)
-                    check = 0;
-            }
-            break;
-        }
-    }
-
-    swapStr(strData[0], strData[2]);
-
-    j=0;
-    char str2[11] = "";
-
-    for(j = 0; j < 3; j++){
-        strcat(str2,strData[j]);
-        if(j < 2)
-            strcat(str2,"-");
-    }
-
-    printf("%s", str2);
-    
-    strcpy(candidates[i].birthDate,str2);
+    // Menu
     char choice;
     do {
         printf("Is the candidate employed? [y/n] ");
-        scanf(" %c", & choice);
+        scanf(" %c", &choice);
         if (choice == 'y') {
-            candidates[i].employed = 1;
+            candidates[index].employed = 1;
             printf("Salary: ");
-            scanf("%f", & candidates[i].salary);
-            writeOnTextFile (fp, i, candidates);
+            scanf("%f", & candidates[index].salary);
+            writeOnTextFile (fp, index, candidates);
         } else if (choice == 'n') {
-            candidates[i].employed = 0;
-            candidates[i].salary = 0.0;
-             writeOnTextFile (fp, i, candidates);
+            candidates[index].employed = 0;
+            candidates[index].salary = 0.0;
+             writeOnTextFile (fp, index, candidates);
         } else {
             printf("Invalid value\n");
         }
@@ -226,7 +159,6 @@ int addNewCandidate(char * filename, struct candidate * candidates, int nCand) {
 }
 
 void formatDateInSQL(char* filename, int nCand, struct candidate *candidates){
-  printf("we lo zi\n");
   FILE * fp;
   fp = fopen(filename, "w");
   char *elements[3], *p, newDate[11];
@@ -335,3 +267,75 @@ void printInOrder(struct candidate * candidates,int removed, int nCandidates){
     }
 }
 
+char* convertDateToSql(char *str) {
+    int j, i;
+    char * token;
+    char *str2 = (char *) malloc(sizeof(char) * 11);
+    strcpy(str2, "");
+
+    // Insert the first token in 'token'
+    token = strtok(str, "-");
+    // Create an array of 3 String
+    char *strData[3];
+
+    //  For every string allocate 5 char
+    for (i=0 ; i<3; i++) {
+        strData[i] = malloc(sizeof(char) * 5);
+    }
+//  Cut the date and save every piece of it in strData
+//  Copy the first token in strData
+    strcpy(strData[0], str);
+
+//  Copy the last two tokens of the date in strData[1,2]
+    for(i = 1; i <= 2; i++) {
+        // Get the sequence of str( data ) till the first '-' met and save it in token
+        token = strtok(NULL, "-");
+        strcpy(strData[i], token);        
+    }                        
+    
+    for(j = 2; j >= 0; j--){
+        switch(j){
+            case 0 :{
+                // If it is the year, save it to strData[2] 
+                // atoi = casting to int
+                if(atoi(strData[j]) > 31 && strlen(strData[j]) == 4){
+                    swapStr(strData[0], strData[2]);
+                }
+            }
+            break;
+
+            case 1:{
+                // If it is the day, save it to strData[0] 
+                if(atoi(strData[j]) > 12 && atoi(strData[j]) < 31){
+                    swapStr(strData[0], strData[1]);
+                }
+                // If it is the year, save it to strData[2]
+                if(atoi(strData[j]) > 31 && strlen(strData[j]) == 4){
+                    swapStr(strData[2], strData[1]);
+                }
+            }
+            break;
+
+            case 2:{
+                // If it is the day, save it to strData[0]
+                if(atoi(strData[j]) > 12 && atoi(strData[j]) < 31){
+                    swapStr(strData[0], strData[2]);
+                }
+            }
+            break;
+        }
+    }
+
+    // Swap the day with the year ( dd mm yyyy -> yyyy mm dd )
+    swapStr(strData[0], strData[2]);
+
+    // Compose the string, joining strData[] with '-'
+    // concatenation of str2,strData[] and '-' to get ( yyyy-mm-dd )
+    for(j = 0; j < 3; j++){
+        strcat(str2,strData[j]);
+        if(j < 2)
+            strcat(str2,"-");
+    }
+    
+    return str2;
+}
