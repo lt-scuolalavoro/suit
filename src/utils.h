@@ -17,20 +17,22 @@ struct candidate {
 };
 
 // Functions declaration
-int evaluateEntriesNumber(FILE * );
-void convertDbToCsv(char * , int, struct candidate*);
+char* convertDateToSql(char*);
+
 int addNewCandidate(char * , struct candidate * , int);
+int evaluateEntriesNumber(FILE * );
+int isInteger(char[]);
+int * searchByLastName(struct candidate * , char * , int);
+int * searchByName(struct candidate * , int [], char *, int);
+
+void convertDbToCsv(char * , int, struct candidate*);
+void format(char*, int, struct candidate*);
+void formatDateInSQL(char*, int, struct candidate*);
 void printCandidate(struct candidate * , int);
+void printInOrder(struct candidate * , int , int);
 void removeCandidate(struct candidate * , int);
 void updateDatabase(FILE * , struct candidate * , int, char * );
-int * searchByLastName(struct candidate * , char * , int);
-void formatDateInSQL(char*, int, struct candidate*);
-void format(char*, int, struct candidate*);
 void writeOnTextFile (FILE *, int i, struct candidate *);
-int isInteger(char[]);
-void printInOrder(struct candidate * , int , int);
-int * searchByName(struct candidate * , int [], char *, int);
-char* convertDateToSql(char*);
 
 // v: counter
 int v;
@@ -210,20 +212,10 @@ int addNewCandidate(char * filename, struct candidate * candidates, int nCand) {
     }
     int ok = 1;
     v = 0;
-    do{
-        if(v!=0)
-            printf("Invalid date!\n");
-        printf("Birth date [dd-mm-yyyy]: ");
-        scanf("%s", candidates[i].birthDate);
-        if(strlen(candidates[i].birthDate)!=10){
-        }else{
-            if(candidates[i].birthDate[2] != '-'|| candidates[i].birthDate[5] != '-'){
-            }else{
-                ok = 0;
-            }
-        }
-        v += 1;
-    }while(ok==1);
+    printf("Birth date [dd-mm-yyyy]: ");
+    scanf("%s", str);
+
+    strcpy(candidates[i].birthDate, convertDateToSql(str));
 
     char choice;
     do {
@@ -247,7 +239,6 @@ int addNewCandidate(char * filename, struct candidate * candidates, int nCand) {
 }
 
 void formatDateInSQL(char* filename, int nCand, struct candidate *candidates){
-  printf("we lo zi\n");
   FILE * fp;
   fp = fopen(filename, "w");
   char *elements[3], *p, newDate[11];
@@ -355,7 +346,9 @@ void printInOrder(struct candidate * candidates,int removed, int nCandidates){
         }
     }
 }
-
+// Converts any date to SQL format
+// Input: any date separated with '-' and 4 digits year
+// Output: the same date formatted in yyyy-mm-dd
 char* convertDateToSql(char *str) {
     int j, i;
     char * token;
