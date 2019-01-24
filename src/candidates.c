@@ -9,7 +9,7 @@
 void main() {
     // Database file must be in the same directory level;
     FILE * fp;
-    char filename[30] = "../database.txt";
+    char filename[30] = "database.txt";
     fp = fopen(filename, "r+");
     int nCandidates = evaluateEntriesNumber(fp);
     // Input is now a char[]
