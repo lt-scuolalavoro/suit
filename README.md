@@ -5,9 +5,9 @@ This app will keep track of all the __HR__ components of the company, storing in
 To access the wiki of this software, click [here](https://github.com/lt-scuolalavoro/suit/wiki).
 
 ## Clone the repository
-Move to the directory where you want to clone the project and use the following command in the terminal:
+Clone the project in your home directory by using the following command in the terminal:
 ```
-git clone https://github.com/lt-scuolalavoro/suit.git
+cd ~ && git clone https://github.com/lt-scuolalavoro/suit.git
 ```
 ## Compile and run
 In __suit__ folder:
