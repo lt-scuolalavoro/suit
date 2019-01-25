@@ -3,7 +3,27 @@
 */
 #include "mysql_utils.h"
 
+void printOpeningTags();
+void printClosingTags();
 void printCandidates(char *);
+
+// Build the html page
+void printOpeningTags() {
+    printf("Content-type: text/html\n\n");
+    printf("<!doctype html>\n");
+    printf("<html>\n");
+    printf("<head>\n");
+    printf("<link rel='stylesheet' type='text/css' href='../style.css?v=1'>\n");
+    printf("</head>\n");
+    printf("<body>\n");
+}
+
+void printClosingTags() {
+    printf("<br>");
+    printf("<a href=\"../home.html\">Back</a>\n");
+    printf("</body>\n");
+    printf("</html>\n");
+}
 
 /* Executes SELECT * FROM Candidate in the db and prints the result in a table
     Input: query condition (e.g. WHERE firstName = 'foo')
