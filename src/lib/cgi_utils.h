@@ -15,12 +15,12 @@ void printOpeningTags() {
     printf("<head>\n");
     printf("<link rel='stylesheet' type='text/css' href='../style.css?v=1'>\n");
     printf("</head>\n");
-    printf("<body>\n");
+    printf("<body>");
 }
 
 void printClosingTags() {
     printf("<br>");
-    printf("<a href=\"../home.html\">Back</a>\n");
+    printf("<h2><a href=\"../home.html\">Torna indietro</a></h2>\n");
     printf("</body>\n");
     printf("</html>\n");
 }
