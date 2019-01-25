@@ -1,10 +1,11 @@
 @import url('https://fonts.googleapis.com/css?family=Neuton');
+@import url('https://fonts.googleapis.com/css?family=Lato');
 
 body {
     background-color: #3876a0;
     color: black;
     height: 100%;
-	font-family: 'Neuton', serif;
+    font-family: 'Neuton', serif;
 }
 
 *{
@@ -12,22 +13,25 @@ body {
 }
 
 h1 {
-	border-radius: 5px;
+    border-radius: 5px;
     text-align: center;
-	border: 2px solid;
+    border: 2px solid;
     font-size: 50px;
+    position: relative;
+    margin-top: 2px;
 }
 
 h2 {
-	letter-spacing: 1.5px;
+    letter-spacing: 1.5px;
     text-align: left;
     font-size: 30px;
+   
 }
 
 p {
-    margin: 100px;
+    margin: 50px;
     text-align: center;
-    font-size: 30px;
+    font-size: 35px;
 }
 
 p2 {
@@ -41,7 +45,6 @@ p2 {
     left: 48.5%;
     transform: translateX(-50%);
     margin: 20px;
-
 }
 
 .menu {
@@ -54,7 +57,7 @@ p2 {
 }
 
 .testo{
-	border-radius: 30px;
+    border-radius: 30px;
     background-color: transparent;
     height: 6vw;
     margin-top: -100px;
@@ -69,8 +72,13 @@ p2 {
     background-color: #21587c;
 }
 table, th, td {
+    font-family: 'Lato', sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
     border: 2px solid white;
     border-collapse: collapse;
     padding: 10px;
     background-color: #21587c;
+    font-size: 20px;
 }
