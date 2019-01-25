@@ -38,6 +38,7 @@ p2 {
     left: 50%;
     transform: translateX(-50%);
     margin: 20px;
+    
 }
 
 .menu {
@@ -58,9 +59,14 @@ p2 {
     font-size: 25px;
     cursor: pointer;
     user-select: none;
+    transition: background-color 0.5s ease;
+}
+.testo:hover{
+    background-color: #21587c;
 }
 table, th, td {
     border: 2px solid white;
     border-collapse: collapse;
     padding: 10px;
+    background-color: #21587c;
 }
