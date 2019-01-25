@@ -4,4 +4,4 @@
 !suit.exe
 !setupDb.exe
 *.o
-
+*.cgi

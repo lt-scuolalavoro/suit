@@ -6,6 +6,10 @@ body {
 	font-family: 'Roboto Slab', serif;
 }
 
+*{
+    color: white;
+}
+
 h1 {
     text-align: center;
 	  border: 2px solid;
@@ -54,4 +58,9 @@ p2 {
     font-size: 25px;
     cursor: pointer;
     user-select: none;
+}
+table, th, td {
+    border: 2px solid white;
+    border-collapse: collapse;
+    padding: 10px;
 }
