@@ -1,9 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto+Slab');
+@import url('https://fonts.googleapis.com/css?family=Neuton');
+
 body {
-    background-color: #338bffe0;
-    color: white;
+    background-color: #3876a0;
+    color: black;
     height: 100%;
-	font-family: 'Roboto Slab', serif;
+	font-family: 'Neuton', serif;
 }
 
 *{
@@ -11,12 +12,14 @@ body {
 }
 
 h1 {
+	border-radius: 5px;
     text-align: center;
-	  border: 2px solid;
+	border: 2px solid;
     font-size: 50px;
 }
 
 h2 {
+	letter-spacing: 1.5px;
     text-align: left;
     font-size: 30px;
 }
@@ -29,16 +32,16 @@ p {
 
 p2 {
     text-align: left;
-    font-size: 15px;
+    font-size: 20px;
 }
 
 .container{
     display: inline-block;
     position: relative;
-    left: 50%;
+    left: 48.5%;
     transform: translateX(-50%);
     margin: 20px;
-    
+
 }
 
 .menu {
@@ -51,8 +54,9 @@ p2 {
 }
 
 .testo{
+	border-radius: 30px;
     background-color: transparent;
-    height: 5vw;
+    height: 6vw;
     margin-top: -100px;
     text-align: center;
     line-height: 5vw;
