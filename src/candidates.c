@@ -1,9 +1,5 @@
-#include "stdio.h"
-#include "string.h"
-#include "stdlib.h"
-#include "stdbool.h"
-#include "ctype.h"
-#include "utils.h"
+
+#include "lib/utils.h"
 #define BUFSIZE 100
 
 void main() {

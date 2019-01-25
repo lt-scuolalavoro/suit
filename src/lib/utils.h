@@ -2,7 +2,8 @@
 #include "stdio.h"
 #include "stdbool.h"
 #include "string.h"
-
+#include "stdlib.h"
+#include "ctype.h"
 
 struct candidate {
     // Declaration of the structure variables
