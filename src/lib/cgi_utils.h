@@ -6,8 +6,9 @@
 void printOpeningTags();
 void printClosingTags();
 void printCandidates(char *);
+void searchByLastName(char *);
 
-// Build the html page
+// Builds the html page
 void printOpeningTags() {
     printf("Content-type: text/html\n\n");
     printf("<!doctype html>\n");
@@ -18,6 +19,7 @@ void printOpeningTags() {
     printf("<body>");
 }
 
+// Closes the html page
 void printClosingTags() {
     printf("<br>");
     printf("<h2><a href=\"../home.html\">Back</a></h2>\n");
@@ -26,12 +28,12 @@ void printClosingTags() {
 }
 
 /* Executes SELECT * FROM Candidate in the db and prints the result in a table
-    Input: query condition (e.g. WHERE firstName = 'foo')
+    Input: query condition (e.g. WHERE removed = 0)
 */
 void printCandidates(char *condition)
 {
+    // Creates the query
     char query[200] = "";
-
     strcat(query, "SELECT * FROM Candidate ");
     strcat(query, condition);
 
@@ -73,9 +75,15 @@ void printCandidates(char *condition)
 
 }
 
+/* Executes SELECT * FROM Candidate in the db and prints the result in a table
+    Input: last name of the candidate to search (e.g. "Cacciapaglia, Del Basso")
+*/
 void searchByLastName(char* lastname) {
+    // Removes "l=" from the string
     memmove(&lastname[0], &lastname[1], strlen(lastname));
     memmove(&lastname[0], &lastname[1], strlen(lastname));
+
+    // Substitutes all '+' with spaces
     int i;
     for (i=0; i<strlen(lastname); i++) {
         if (lastname[i]=='+') {
@@ -83,6 +91,8 @@ void searchByLastName(char* lastname) {
         }
     }
     setupDbNoOutput("localhost", "root", NULL, "suit");
+
+    // Creates the query
     char query[200] = "";
     strcat(query, "SELECT * FROM Candidate WHERE lastName = '");
     strcat(query, lastname);
@@ -96,6 +106,7 @@ void searchByLastName(char* lastname) {
     MYSQL_ROW row;
     MYSQL_FIELD *field;
 
+    // Prints result
     printf("<table>\n");
     printf("\t<tr>\n");
     while((field = mysql_fetch_field(result))){
