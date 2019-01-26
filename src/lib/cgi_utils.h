@@ -72,3 +72,45 @@ void printCandidates(char *condition)
     mysql_free_result(result);
 
 }
+
+void searchByLastName(char* lastname) {
+    memmove(&lastname[0], &lastname[1], strlen(lastname));
+    memmove(&lastname[0], &lastname[1], strlen(lastname));
+    int i;
+    for (i=0; i<strlen(lastname); i++) {
+        if (lastname[i]=='+') {
+            lastname[i]=' ';
+        }
+    }
+    setupDbNoOutput("localhost", "root", NULL, "suit");
+    char query[200] = "";
+    strcat(query, "SELECT * FROM Candidate WHERE lastName = '");
+    strcat(query, lastname);
+    strcat(query, "' AND removed = 0");
+    executeQueryNoOutput(query);
+    MYSQL_RES *result = mysql_store_result(con);
+    if (result == NULL) {
+        finishWithError();
+    }
+    int num_fields = mysql_num_fields(result);
+    MYSQL_ROW row;
+    MYSQL_FIELD *field;
+
+    printf("<table>\n");
+    printf("\t<tr>\n");
+    while((field = mysql_fetch_field(result))){
+        printf("\t\t<th>%s</th>\n", field->name);
+    };
+    printf("\t</tr>\n");
+    while ((row = mysql_fetch_row(result))) {
+        printf("\t<tr>\n");
+        for (int i = 0; i < num_fields; i++)
+        {
+            printf("\t\t<td>%s</td>\n", row[i] ? row[i] : "NULL");
+        }
+        printf("\t</tr>\n");
+    }
+    printf("</table>\n");
+
+    mysql_free_result(result);
+}

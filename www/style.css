@@ -55,7 +55,10 @@ p2 {
     margin: 25px;
     display: inline-block;
 }
-
+.center {
+    text-align: center;
+    margin-bottom: 3%;
+}
 .testo{
     border-radius: 30px;
     background-color: transparent;
@@ -70,6 +73,14 @@ p2 {
 }
 .testo:hover{
     background-color: #21587c;
+}
+.input {
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+    margin-left: 44.5%;
+    margin-top: -1%;
+    width: 10%;
 }
 table, th, td {
     font-family: 'Lato', sans-serif;
