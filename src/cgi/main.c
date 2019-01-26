@@ -17,7 +17,12 @@ int main(int argc, char const *argv[])
     	} else {
             if (action[0]=='l') {
                 printf("<h1>Suit Database - Search by last name</h1>");
-                searchByLastName(action);
+                char condition[100] = "WHERE lastName = '";
+                action = removeFormName(action);
+                action = replacePlusWithSpaces(action);
+                strcat(condition, action);
+                strcat(condition, "'");
+                printCandidates(condition);
             }
         }
     }

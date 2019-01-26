@@ -6,7 +6,8 @@
 void printOpeningTags();
 void printClosingTags();
 void printCandidates(char *);
-void searchByLastName(char *);
+char* removeFormName(char *);
+char* replacePlusWithSpaces(char *);
 
 // Builds the html page
 void printOpeningTags() {
@@ -75,53 +76,20 @@ void printCandidates(char *condition)
 
 }
 
-/* Executes SELECT * FROM Candidate in the db and prints the result in a table
-    Input: last name of the candidate to search (e.g. "Cacciapaglia, Del Basso")
-*/
-void searchByLastName(char* lastname) {
-    // Removes "l=" from the string
-    memmove(&lastname[0], &lastname[1], strlen(lastname));
-    memmove(&lastname[0], &lastname[1], strlen(lastname));
+// Removes the form name
+char * removeFormName(char* str) {
+    memmove(&str[0], &str[1], strlen(str));
+    memmove(&str[0], &str[1], strlen(str));
+    return str;
+}
 
-    // Substitutes all '+' with spaces
+// Substitutes all '+' with spaces
+char * replacePlusWithSpaces(char* str) {
     int i;
-    for (i=0; i<strlen(lastname); i++) {
-        if (lastname[i]=='+') {
-            lastname[i]=' ';
+    for (i=0; i<strlen(str); i++) {
+        if (str[i]=='+') {
+            str[i]=' ';
         }
     }
-    setupDbNoOutput("localhost", "root", NULL, "suit");
-
-    // Creates the query
-    char query[200] = "";
-    strcat(query, "SELECT * FROM Candidate WHERE lastName = '");
-    strcat(query, lastname);
-    strcat(query, "' AND removed = 0");
-    executeQueryNoOutput(query);
-    MYSQL_RES *result = mysql_store_result(con);
-    if (result == NULL) {
-        finishWithError();
-    }
-    int num_fields = mysql_num_fields(result);
-    MYSQL_ROW row;
-    MYSQL_FIELD *field;
-
-    // Prints result
-    printf("<table>\n");
-    printf("\t<tr>\n");
-    while((field = mysql_fetch_field(result))){
-        printf("\t\t<th>%s</th>\n", field->name);
-    };
-    printf("\t</tr>\n");
-    while ((row = mysql_fetch_row(result))) {
-        printf("\t<tr>\n");
-        for (int i = 0; i < num_fields; i++)
-        {
-            printf("\t\t<td>%s</td>\n", row[i] ? row[i] : "NULL");
-        }
-        printf("\t</tr>\n");
-    }
-    printf("</table>\n");
-
-    mysql_free_result(result);
+    return str;
 }
