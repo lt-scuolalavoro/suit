@@ -1,5 +1,5 @@
 var p1 = document.getElementById('paragraph');
-p1.innerHTML = 'Premere un pulsante per iniziare!';
+p1.innerHTML = 'Press a button to start!';
 
 function carica(){
 	
