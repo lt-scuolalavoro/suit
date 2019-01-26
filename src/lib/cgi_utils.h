@@ -20,7 +20,7 @@ void printOpeningTags() {
 
 void printClosingTags() {
     printf("<br>");
-    printf("<h2><a href=\"../home.html\">Torna indietro</a></h2>\n");
+    printf("<h2><a href=\"../home.html\">Back</a></h2>\n");
     printf("</body>\n");
     printf("</html>\n");
 }
