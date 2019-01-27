@@ -18,7 +18,7 @@ int main(int argc, char const *argv[])
             if (action[0]=='l') {
                 printf("<h1>Suit Database - Search by last name</h1>");
                 char condition[100] = "WHERE lastName = '";
-                action = removeFormName(action);
+                action = deleteCharSequence(action, '=');
                 action = replacePlusWithSpaces(action);
                 strcat(condition, action);
                 strcat(condition, "'");

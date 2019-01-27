@@ -2,12 +2,12 @@
     Includes functions to manage cgi scripts
 */
 #include "mysql_utils.h"
+#include "str_utils.h"
 
 void printOpeningTags();
 void printClosingTags();
 void printCandidates(char *);
-char* removeFormName(char *);
-char* replacePlusWithSpaces(char *);
+
 
 // Builds the html page
 void printOpeningTags() {
@@ -74,22 +74,4 @@ void printCandidates(char *condition)
 
     mysql_free_result(result);
 
-}
-
-// Removes the form name
-char * removeFormName(char* str) {
-    memmove(&str[0], &str[1], strlen(str));
-    memmove(&str[0], &str[1], strlen(str));
-    return str;
-}
-
-// Substitutes all '+' with spaces
-char * replacePlusWithSpaces(char* str) {
-    int i;
-    for (i=0; i<strlen(str); i++) {
-        if (str[i]=='+') {
-            str[i]=' ';
-        }
-    }
-    return str;
 }
