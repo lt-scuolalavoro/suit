@@ -16,6 +16,11 @@ In __suit__ folder:
 2. Run:\
 ```bin/suit```
 
+__Compile main CGI:__
+```
+gcc src/cgi/main.c -o www/cgi/main.cgi `mysql_config --cflags --libs`
+```
+
 __MySQL programs:__
 1. Compile:\
 ```gcc -o bin/[name].exe src/mysql/[file name] `mysql_config --cflags --libs` ```
