@@ -52,7 +52,7 @@ void printCandidates(char *condition)
     MYSQL_ROW row;
     MYSQL_FIELD *field;
     if (mysql_num_rows(result)==0) {
-	printf("<h2>No candidate found</h2>");
+	    printf("<h2>No candidate found</h2>");
     } else {
         printf("<table>\n");
         printf("\t<tr>\n");
