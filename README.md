@@ -17,7 +17,7 @@ In __suit__ folder:
 ```bin/suit```
 
 __Compile main CGI:__
-```gcc src/cgi/main.c -o www/cgi/main.cgi `mysql_config --cflags --libs````
+```gcc src/cgi/main.c -o www/cgi/main.cgi `mysql_config --cflags --libs```
 
 __MySQL programs:__
 1. Compile:\
