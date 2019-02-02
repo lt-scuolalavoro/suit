@@ -15,7 +15,6 @@ void finishWithError();
 void setupDb(char*, char*, char*, char*);
 void setupDbNoOutput(char*, char*, char*, char*);
 
-
 MYSQL *con;
 
 void closeConnection(){
