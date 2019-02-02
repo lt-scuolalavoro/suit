@@ -2,7 +2,8 @@
 This app will keep track of all the __HR__ components of the company, storing in a database name, surname, birth date and some other basic informations of the candidate.
 
 ## Wiki
-To access the wiki of this software, click [here](https://github.com/lt-scuolalavoro/suit/wiki).
+To access the wiki of this software, click [here](https://github.com/lt-scuolalavoro/suit/wiki).\
+To learn how to add a Co-Author, click [here](https://github.com/lt-scuolalavoro/suit/wiki/How-to-add-a-Co-Author-in-a-commit).
 
 ## Clone the repository
 __Clone the project in your home directory__ by using the following command in the terminal:
