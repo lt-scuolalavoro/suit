@@ -5,6 +5,7 @@ Vue.component("suit-table", {
       filter: null,
       sortBy: "name",
       items: [],
+      filteredItems: [],
       fields: [
         { key: "firstName", sortable: true, label: "First name" },
         { key: "lastName", sortable: true, label: "Last name" },
@@ -26,17 +27,29 @@ Vue.component("suit-table", {
     resetModal() {
       this.modalInfo.title = "";
       this.modalInfo.content = "";
+    },
+    typeSearch(){
+      let filteredList=[]
+      let i
+      for(i=0; i<this.items.length; i++){
+        if(this.items[i].lastName.toLowerCase().includes(this.filter.toLowerCase()) || 
+          this.items[i].firstName.toLowerCase().includes(this.filter.toLowerCase())){
+          filteredList.push(this.items[i])
+        }
+      }
+      this.filteredItems=filteredList
     }
   },
   mounted() {
     axios.get("cgi/users.cgi").then(response => (this.items = response.data));
+    this.typeSearch();
   },
   template: `
   <div>
   <b-row>
     <b-form-group horizontal label="Filter" class="mb-2 ml-4">
         <b-input-group>
-        <b-form-input v-model="filter" placeholder="Type to Search" />
+        <b-form-input @input="typeSearch" v-model="filter" placeholder="Type to Search" />
         <b-input-group-append>
             <b-btn :disabled="!filter" @click="filter = ''"" ><i class="fas fa-search"></i></b-btn>
         </b-input-group-append>
@@ -53,7 +66,7 @@ Vue.component("suit-table", {
      <b-table :sort-by.sync="sortBy"
             striped
             hover
-             :items="items"
+             :items="filter == null ? items : filteredItems"
              :fields="fields">
      <template slot="action" slot-scope="row">
          
