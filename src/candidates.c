@@ -58,7 +58,8 @@ void main() {
 
     // Menu
     do {
-        printf("1. Print candidates;\n2. Print deleted candidates;\n3. Search candidate;\n4. Add candidate;\n5. Remove candidate;\n6. Reformat database\n7. Exit\n");
+        printf("1. Print candidates;\n2. Print deleted candidates;\n3. Search candidate;\n4. Add 
+candidate;\n5. Remove candidate;\n6. Reformat database\n7. Exit\n");
         do {
             printf("Insert: ");
             scanf("%s", &choice);
@@ -81,42 +82,42 @@ void main() {
         // Search for candidate
         case 3:
             v = 0;
-            do{
+            do {
                 if(v>0)
                     printf("Invalid last name!\n");
                 printf("Last name: ");
                 scanf(" %20[^\n]", lastName);
                 v =+ 1;
-            }while(strlen(lastName)<2||strlen(lastName)>19);
+             	}while(strlen(lastName)<2||strlen(lastName)>19);
             int *index = searchByLastName(candidates, lastName, nCandidates);
             if (*index == -1) {
                 printf("No candidate found with last name: %s", lastName);
             } else {
-                if(index[1]==-100){
-                    printCandidate(candidates, *(index));
-                }else{
-                    int n=0;
-                    while(index[n]!=-100){
-                        n +=1;
-                    }
-                    i=0;
-                    printf("There are %d results. Choose the name: ", n);
-                    char name[20];
-                    v=0;
-                    do{
-                        if(v>0)
-                            printf("Invalid name!\n");
-                        printf("First name: ");
-                        scanf(" %20[^\n]", name);
-                        v =+ 1;
-                    }while(strlen(name)<2||strlen(name)>19);
-                    int * indexN = searchByName(candidates, index, name, n);
-                    if(*indexN == -1){
-                        printf("No candidate found with name: %s", name);
-                    }else{
-                        if(*(indexN+1)==-100){
-                            printCandidate(candidates, *(indexN));
-                        }else{
+					if(index[1]==-100){
+						printCandidate(candidates, *(index));
+					} else {
+							int n=0;
+							while(index[n]!=-100){
+								n +=1;
+						}	
+						i=0;
+						printf("There are %d results. Choose the name: ", n);
+						char name[20];
+						v=0;
+						do{
+							if(v>0)
+								printf("Invalid name!\n");
+								printf("First name: ");
+								scanf(" %20[^\n]", name);
+								v =+ 1;
+						}while(strlen(name)<2||strlen(name)>19);
+						int * indexN = searchByName(candidates, index, name, n);
+						if(*indexN == -1){
+							printf("No candidate found with name: %s", name);
+						} else {
+								if(*(indexN+1)==-100){
+								printCandidate(candidates, *(indexN));
+								} else {
                             i = 0;
                             printf("More than one candidates found: ");
                             while(i<n){
@@ -138,20 +139,21 @@ void main() {
         // Remove candidate
         case 5:
             v = 0;
-            do{
+            do {
                 if(v>0)
                     printf("Invalid last name!\n");
                 printf("Last name: ");
                 scanf(" %20[^\n]", lastName);
                 v =+ 1;
-            }while(strlen(lastName)<2||strlen(lastName)>19);
+				}while(strlen(lastName)<2||strlen(lastName)>19);
             int *indexSur = searchByLastName(candidates, lastName, nCandidates);
             if (*indexSur == -1) {
                 printf("No candidate found with last name: %s", lastName);
             } else {
                 if(indexSur[1]==-100){
                     removeCandidate(candidates, *indexSur);
-                    printf("%s %s removed.", candidates[*indexSur].firstName, candidates[*indexSur].lastName);
+                    printf("%s %s removed.", candidates[*indexSur].firstName, 
+candidates[*indexSur].lastName);
                     int i;
                     // Temporary variable
                     char j[50];
@@ -168,29 +170,30 @@ void main() {
                     fseek(fp, -3, SEEK_CUR);
                     // Print "1" in file
                     fprintf(fp, "1");
-                }else{
-                    int n=0;
-                    while(indexSur[n]!=-100){
-                    n +=1;
-                    }
+                } else {
+						int n=0;
+						while(indexSur[n]!=-100){
+						n +=1;
+						}
                     i=0;
                     printf("There are %d results. Choose the name: ", n);
                     char name[20];
                     v=0;
-                    do{
-                        if(v>0)
-                            printf("Invalid name!\n");
-                        printf("Name: ");
-                        scanf(" %20[^\n]", name);
-                        v =+ 1;
-                    }while(strlen(name)<2||strlen(name)>19);
+                    do {
+							if(v>0)
+								printf("Invalid name!\n");
+							printf("Name: ");
+							scanf(" %20[^\n]", name);
+							v =+ 1;
+						} while(strlen(name)<2||strlen(name)>19);
                     int * indexN = searchByName(candidates, indexSur, name, n);
                     if(*indexN == -1){
                         printf("No candidate found with name: %s", name);
-                    }else{
-                        if(*(indexN+1)==-100){
-                            removeCandidate(candidates, *indexN);
-                            printf("%s %s removed.", candidates[*indexN].firstName, candidates[*indexN].lastName);
+					} else {
+							if(*(indexN+1)==-100){
+								removeCandidate(candidates, *indexN);
+								printf("%s %s removed.", candidates[*indexN].firstName, 
+	candidates[*indexN].lastName);
                             int i;
                             // Temporary variable
                             char j[50];
@@ -207,7 +210,7 @@ void main() {
                             fseek(fp, -3, SEEK_CUR);
                             // Print "1" in file
                             fprintf(fp, "1");
-                        }else{
+                        } else {
                             i = 0;
                             printf("More than one candidates found: ");
                         }
