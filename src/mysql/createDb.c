@@ -4,15 +4,20 @@
 
 #include "../lib/mysql_utils.h"
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv)
+{
     char query[40];
     char partialQuery[] = "CREATE DATABASE ";
     // Check arguments passed
-    if (argc == 1) {
+    if (argc == 1)
+    {
         printf("Missing dbName.\n");
         return 1;
-    }else {
-        if (argc > 2){
+    }
+    else
+    {
+        if (argc > 2)
+        {
             printf("Too many arguments.\n");
             return 1;
         }

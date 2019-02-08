@@ -4,7 +4,8 @@
 
 #include "../lib/mysql_utils.h"
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv)
+{
     char query[300];
     char partialQuery[] = "CREATE TABLE ";
     char column[60];
@@ -13,15 +14,18 @@ int main(int argc, char** argv) {
 
     signal(SIGINT, closeProgram); // Ctrl + C event handling
     // Check the arguments
-    if (argc == 1) {
+    if (argc == 1)
+    {
         printf("Missing dbName and tableName.\n");
         return 1;
     }
-    if (argc == 2) {
+    if (argc == 2)
+    {
         printf("Missing tableName.\n");
-           return 1;  
+        return 1;
     }
-    if (argc > 3){
+    if (argc > 3)
+    {
         printf("Too many arguments.\n");
         return 1;
     }
@@ -34,14 +38,16 @@ int main(int argc, char** argv) {
     strcpy(query, partialQuery);
     strcat(query, argv[2]);
     strcat(query, "(");
-    
+
     printf("\nEnter columns information.\n");
     printf("Format: [name] [type]\n");
-    for(i = 1; i <= nColumns; i++){
-        memset(column, ' ', sizeof(column)/sizeof(char));
+    for (i = 1; i <= nColumns; i++)
+    {
+        memset(column, ' ', sizeof(column) / sizeof(char));
         printf("Column %d: ", i);
         scanf(" %60[^\n]", column);
-        if(i > 1) {
+        if (i > 1)
+        {
             strcat(query, ", ");
         }
         strcat(query, column);
