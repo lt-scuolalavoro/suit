@@ -28,21 +28,39 @@ Vue.component("suit-table", {
       this.modalInfo.title = "";
       this.modalInfo.content = "";
     },
+    colorRows(){
+      let i
+      n = this.items.length
+      for(i=0; i<n; i++){
+        if(this.items[i].removed=="1"){
+          this.items[i]._rowVariant='danger'
+        }else{
+          if(this.items[i].employed=="1"){
+            this.items[i]._rowVariant='success'
+          }
+        }
+      }
+    },
     typeSearch(){
       let filteredList=[]
       let i
-      for(i=0; i<this.items.length; i++){
+      n = this.items.length
+      for(i=0; i<n; i++){
         if(this.items[i].lastName.toLowerCase().includes(this.filter.toLowerCase()) || 
           this.items[i].firstName.toLowerCase().includes(this.filter.toLowerCase())){
           filteredList.push(this.items[i])
         }
       }
       this.filteredItems=filteredList
-    }
+    },
+    
   },
   mounted() {
-    axios.get("cgi/users.cgi").then(response => (this.items = response.data));
-    this.typeSearch();
+    axios.get("cgi/users.cgi")
+    .then(response => {
+      this.items = response.data;
+      this.colorRows();
+    })
   },
   template: `
   <div>
