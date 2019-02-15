@@ -5,7 +5,11 @@ Vue.component("person-form", {
             lastName: '',
             birthDate: '',
             employed: '',
-            salary: ''
+            salary: '',
+            notes: '',
+            contacts: [],
+            contactName: '',
+            contactLink: ''
         };
     },
 
@@ -24,11 +28,21 @@ Vue.component("person-form", {
         },
         setSalary(value) {
             this.salary = value;
+        },
+        setNotes(value) {
+            this.notes = value;
+        },
+        setContact(){
+            if(this.contactName != '' && this.contactLink != ''){
+                this.contacts.push({name: this.contactName, link: this.contactLink});
+                this.contactName = '';
+                this.contactLink = '';
+            }
         }
     },
 
     template:`
-    <div>
+    <div align = "center">
         <b-form-group horizontal
                       id="formFirstName"
                       label="First name:"
@@ -75,7 +89,7 @@ Vue.component("person-form", {
             </b-form-radio-group>
         </b-form-group>
 
-         <b-form-group horizontal
+        <b-form-group horizontal
                       id="formSalary"
                       label="Salary:"
                       label-for="inputSalaty">
@@ -85,6 +99,49 @@ Vue.component("person-form", {
                           @input="setSalary(salary)">
             </b-form-input>
         </b-form-group>
+
+        <b-form-group horizontal
+                      id="formNotes"
+                      label="Notes:"
+                      label-for="inputNotes">
+            <b-form-textarea id="inputNotes"
+                      placeholder="insert notes about the candidate here"
+                      v-model="notes"
+                      @input="setNotes(notes)"
+                      :rows="3"
+                      no-resize>
+            </b-form-textarea>
+        </b-form-group>
+
+        <b-form-group horizontal
+                      id = "formContacts"
+                      label = "Contacts:"
+                      label-for = "inputContactName">
+            <b-row>
+                <b-col cols = "3">
+                    <b-form-input id="inputContactName"
+                                  placeholder="name (ex: Gmail)"
+                                  v-model="contactName">
+                    </b-form-input>
+                </b-col>
+                <b-col cols = "8">
+                    <b-form-input id="inputContactLink"
+                                  placeholder="link (ex: mariorossi@gmail.com)"
+                                  v-model="contactLink">
+                    </b-form-input>
+                </b-col>
+                <b-col cols = "1">
+                    <b-button id = "ContactsButton"
+                              variant="outline-primary"
+                              @click="setContact()">+</b-button>
+                </b-col>
+            </b-row>
+        </b-form-group>
+
+        <div align = "right">
+            <b-button variant="outline-danger">Cancel</b-button>
+            <b-button variant="outline-primary">Submit</b-button>
+        </div>
     </div>
     `
 });
