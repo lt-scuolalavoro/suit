@@ -9,7 +9,12 @@ Vue.component("person-form", {
             notes: '',
             contacts: [],
             contactName: '',
-            contactLink: ''
+            contactLink: '',
+            fields: [
+                {key: "name", label: "Name"},
+                {key: "link", label: "Link"},
+                {key: "action", label: "Action"}
+            ],
         };
     },
 
@@ -38,7 +43,10 @@ Vue.component("person-form", {
                 this.contactName = '';
                 this.contactLink = '';
             }
-        }
+        },
+        showModalDelete(button){
+            this.$root.$emit("bv::show::modal", "modalDelete", button);
+        },
     },
 
     template:`
@@ -136,12 +144,27 @@ Vue.component("person-form", {
                               @click="setContact()">+</b-button>
                 </b-col>
             </b-row>
-        </b-form-group>
+
+            <b-table striped
+                     :items = "contacts"
+                     :fields = "fields">
+
+                <template slot="action" slot-scope="row">
+                    <b-button-group>
+                        <b-button @click.stop="showModalDelete()" variant="outline-danger" title="Delete contact"size="sm"><i class="far fa-trash-alt"></i></b-button>
+                    </b-button-group>
+                 </template>
+                
+            </b-table>
+
+            </b-form-group>
 
         <div align = "right">
             <b-button variant="outline-danger">Cancel</b-button>
             <b-button variant="outline-primary">Submit</b-button>
         </div>
+
+        <b-modal id="modalDelete" title="Delete contact">Are you sure?</b-modal>
     </div>
     `
 });
