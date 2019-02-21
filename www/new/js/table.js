@@ -10,7 +10,7 @@ Vue.component("suit-table", {
       range1:0,
       range2:0,
       options: [{text: 'Show unemployed candidates', value: 'unemployed'}, 
-      {text: 'Show deleted candidates', value: 'deleted'}, {text: 'Apply salary range', value: 'range'}],
+      {text: 'Show deleted candidates', value: 'deleted'}],
       fields: [
         { key: "firstName", sortable: true, label: "First name" },
         { key: "lastName", sortable: true, label: "Last name" },
@@ -22,21 +22,16 @@ Vue.component("suit-table", {
     };
   },
   methods: {
-  	applyFilter(checked) {
-  		this.condition="";
-  		if(checked.includes("unemployed")) {
-  			this.condition+="u";
-  		}
-  		if(checked.includes("deleted")) {
-  			this.condition+="d";
-  		}
-      if(checked.includes("range")) {
-        range1=parseInt(document.getElementById("range-1").value);
-        range2=parseInt(document.getElementById("range-2").value);
-        this.condition+="r";
+    applyFilter(checked) {
+      this.condition="";
+      if(checked.includes("unemployed")) {
+        this.condition+="u";
       }
-  		this.typeSearch();
-  	},
+      if(checked.includes("deleted")) {
+        this.condition+="d";
+      }
+      this.typeSearch();
+    },
     showModalInfo(button) {
       this.modalInfo.content = "Hello";
       this.$root.$emit("bv::show::modal", "modalInfo", button);
@@ -62,67 +57,62 @@ Vue.component("suit-table", {
       }
     },
     typeSearch(){
-<<<<<<< HEAD
       let filteredList=[]
       let i
-      n = this.items.length
-      for(i=0; i<n; i++){
-        if(this.items[i].lastName.toLowerCase().includes(this.filter.toLowerCase()) || 
-          this.items[i].firstName.toLowerCase().includes(this.filter.toLowerCase())){
-          filteredList.push(this.items[i])
-        }
+      let u=1;
+      let d=0;
+      let r=false;
+      let r1=parseInt(this.range1);
+      let r2=parseInt(this.range2);
+      if (this.condition.includes("u")) {
+        u=0;
       }
-      this.filteredItems=filteredList
-    },
-    
-=======
-    	let filteredList=[]
-    	let i
-    	for(i=0; i<this.items.length; i++){
-    		if(this.filter === '') {
-    				if (this.condition==="u" && this.items[i].employed==0 && this.items[i].removed==0) {
-    					filteredList.push(this.items[i]);
-              			continue;
-    				}
-    				if (this.condition==="d" && this.items[i].employed==1 && this.items[i].removed==1) {
-    					filteredList.push(this.items[i]);
-              			continue;
-    				}
-    				if (this.condition==="ud" && this.items[i].employed==0 && this.items[i].removed==1) {
-    					filteredList.push(this.items[i]);
-              			continue;
-   					}
-		            if (this.condition==="r" && this.items[i].salary>=range1 && this.items[i].salary<=range2) {
-		              filteredList.push(this.items[i]);
-		              continue;
-		            }
-    		} else {
-    			if(this.items[i].lastName.toLowerCase().includes(this.filter.toLowerCase()) || 
-    			this.items[i].firstName.toLowerCase().includes(this.filter.toLowerCase())){
+      if (this.condition.includes("d")) {
+        d=1;
+      }
+      if(r1<r2) {
+        this.condition+="r";
+        r=true;
+      } else {
+        this.condition=this.condition.replace('r', '');
+      }
+      console.log(this.condition);
+      for(i=0; i<this.items.length; i++){
+        if(this.filter === '') {
+            if(this.items[i].employed==u && this.items[i].removed==d) {
+              if (r) {
+                if (this.items[i].salary>=r1 && this.items[i].salary<=r2) {
+                  filteredList.push(this.items[i]);
+                  continue;
+                }
+              } else {
+                filteredList.push(this.items[i]);
+                continue;
+              }
+            }
+        } else {
+          if(this.items[i].lastName.toLowerCase().includes(this.filter.toLowerCase()) || 
+          this.items[i].firstName.toLowerCase().includes(this.filter.toLowerCase())){
             if (this.condition!='') {
-              if (this.condition==="u" && this.items[i].employed==0 && this.items[i].removed==0) {
+              if(this.items[i].employed==u && this.items[i].removed==d) {
+              if (r) {
+                if (this.items[i].salary>=range1 && this.items[i].salary<=range2) {
+                  filteredList.push(this.items[i]);
+                  continue;
+                }
+              } else {
                 filteredList.push(this.items[i]);
                 continue;
               }
-        
-              if (this.condition==="d" && this.items[i].employed==1 && this.items[i].removed==1) {
-                filteredList.push(this.items[i]);
-                continue;
-              }
-        
-              if (this.condition==="ud" && this.items[i].employed==0 && this.items[i].removed==1) {
-                filteredList.push(this.items[i]);
-                continue;
-              }
+            }
             } else {
               filteredList.push(this.items[i]);
             }
-    			}
-    		}
-    	}
-    	this.filteredItems=filteredList;
+          }
+        }
+      }
+      this.filteredItems=filteredList;
     }
->>>>>>> Create filters
   },
   mounted() {
     axios.get("cgi/users.cgi")
@@ -150,11 +140,11 @@ Vue.component("suit-table", {
     <div style="padding-left: -1%; padding-bottom: -2%; padding-top: -3%;">
     <b-card>
     <div>
-    <b-form-checkbox-group plain stacked :options="options" @change="applyFilter">
+    <b-form-checkbox-group plain stacked :options="options" id="check" @change="applyFilter">
     <div>
-    Min: <b-form-input type="number" id="range-1" min="0" size="sm" max="10000"></b-form-input>
-    Max: <b-form-input type="number" id="range-2" min="0" size="sm" max="10000"></b-form-input>
-    </div>  
+    Min: <b-form-input type="number" @input="typeSearch()" v-model="range1" min="0" size="sm" max="10000"></b-form-input>
+    Max: <b-form-input type="number" @input="typeSearch()" v-model="range2" min="0" size="sm" max="10000"></b-form-input>
+    </div>
     </b-form-checkbox-group>
     </div>
     </b-card>
