@@ -79,32 +79,32 @@ Vue.component("suit-table", {
       console.log(this.condition);
       for(i=0; i<this.items.length; i++){
         if(this.filter === '') {
-            if(this.items[i].employed==u && this.items[i].removed==d) {
-              if (r) {
-                if (this.items[i].salary>=r1 && this.items[i].salary<=r2) {
-                  filteredList.push(this.items[i]);
-                  continue;
-                }
-              } else {
+          if(this.items[i].employed==u && this.items[i].removed==d) {
+            if (r) {
+              if (this.items[i].salary>=r1 && this.items[i].salary<=r2) {
                 filteredList.push(this.items[i]);
                 continue;
               }
+            } else {
+              filteredList.push(this.items[i]);
+              continue;
             }
+          }
         } else {
           if(this.items[i].lastName.toLowerCase().includes(this.filter.toLowerCase()) || 
           this.items[i].firstName.toLowerCase().includes(this.filter.toLowerCase())){
             if (this.condition!='') {
               if(this.items[i].employed==u && this.items[i].removed==d) {
-              if (r) {
-                if (this.items[i].salary>=range1 && this.items[i].salary<=range2) {
+                if (r) {
+                  if (this.items[i].salary>=r1 && this.items[i].salary<=r2) {
+                    filteredList.push(this.items[i]);
+                    continue;
+                  }
+                } else {
                   filteredList.push(this.items[i]);
                   continue;
                 }
-              } else {
-                filteredList.push(this.items[i]);
-                continue;
               }
-            }
             } else {
               filteredList.push(this.items[i]);
             }
@@ -124,7 +124,7 @@ Vue.component("suit-table", {
   template: `
   <div>
   <b-row>
-    <b-form-group horizontal label="Filter" class="mb-2 ml-4">
+    <b-form-group class="mb-2 ml-4">
         <b-input-group>
         <b-form-input @input="typeSearch" v-model="filter" placeholder="Type to Search" />
         <b-input-group-append>
@@ -141,7 +141,7 @@ Vue.component("suit-table", {
     <b-card>
     <div>
     <b-form-checkbox-group plain stacked :options="options" id="check" @change="applyFilter">
-    <div>
+    <div>Salary:<br>
     Min: <b-form-input type="number" @input="typeSearch()" v-model="range1" min="0" size="sm" max="10000"></b-form-input>
     Max: <b-form-input type="number" @input="typeSearch()" v-model="range2" min="0" size="sm" max="10000"></b-form-input>
     </div>
