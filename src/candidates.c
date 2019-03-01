@@ -63,8 +63,8 @@ void main()
     // Menu
     do
     {
-        printf("1. Print candidates;\n2. Print deleted candidates;\n3. Search candidate;\n4. Add 
-candidate;\n5. Remove candidate;\n6. Reformat database\n7. Exit\n");
+        printf("1. Print candidates;\n2. Print deleted candidates;\n3. Search candidate;\n4. Add"); 
+        printf("candidate;\n5. Remove candidate;\n6. Reformat database\n7. Exit\n");
         do {
             printf("Insert: ");
             scanf("%s", &choice);
