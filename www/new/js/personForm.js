@@ -15,6 +15,7 @@ Vue.component("person-form", {
                 {key: "link", label: "Link"},
                 {key: "action", label: "Action"}
             ],
+            date: 'date'
         };
     },
 
@@ -78,7 +79,8 @@ Vue.component("person-form", {
                       label="Birth date:"
                       label-for="inputBirthDate">
             <b-form-input id="inputBirthDate"
-                          placeholder="insert the birth date here (yyyy-mm-dd)"
+                          :type = "date"
+                          placeholder="insert the birth date here "
                           v-model="birthDate"
                           @input="setBirthDate(birthDate)">
             </b-form-input>
