@@ -1,59 +1,55 @@
 Vue.component("person-form", {
-    data(){
-        return {
-            person: {
-                firstName: '',
-                lastName: '',
-                birthDate: '',
-                employed: '',
-                salary: '',
-                notes: '',
-                contacts: [],
-                contactName: '',
-                contactLink: ''
-            },
+  data() {
+    return {
+      person: {
+        firstName: "",
+        lastName: "",
+        birthDate: "",
+        employed: "",
+        salary: "",
+        notes: "",
+        contacts: [],
+      },
+      contactName: "",
+      contactLink: "",
 
-             fields: [
-                    {key: "name", label: "Name"},
-                    {key: "link", label: "Link"},
-                    {key: "action", label: "Action"}
-                ],
-                date: 'date'
-        };
+      fields: [
+        { key: "name", label: "Name" },
+        { key: "link", label: "Link" },
+        { key: "action", label: "Action" }
+      ],
+      date: "date"
+    };
+  },
+
+  methods: {
+    setContact() {
+      if (this.contactName != "" && this.contactLink != "") {
+        this.person.contacts.push({
+          name: this.contactName,
+          link: this.contactLink
+        });
+        this.contactName = "";
+        this.contactLink = "";
+      }
     },
-
-    methods: {
-        setFirstName(value) {
-            this.person.firstName = value;
-        },
-        setLastName(value) {
-            this.person.lastName = value;
-        },
-        setBirthDate(value) {
-            this.person.person.birthDate = value;
-        },
-        setEmployed(value) {
-            this.person.employed = value;
-        },
-        setSalary(value) {
-            this.person.salary = value;
-        },
-        setNotes(value) {
-            this.person.notes = value;
-        },
-        setContact(){
-            if(this.person.contactName != '' && this.person.contactLink != ''){
-                this.person.contacts.push({name: this.person.contactName, link: this.person.contactLink});
-                this.person.contactName = '';
-                this.person.contactLink = '';
-            }
-        },
-        showModalDelete(button){
-            this.$root.$emit("bv::show::modal", "modalDelete", button);
-        },
+    showModalDelete(button) {
+      this.$root.$emit("bv::show::modal", "modalDelete", button);
     },
+    addCandidate() {
+      axios
+        .post("cgi/addCandidate.cgi", {
+          firstName: this.person.firstName,
+          lastName: this.person.lastName,
+          birthDate: this.person.birthDate,
+          employed: this.person.employed,
+          salary: this.person.salary,
+        })
+        .then(() => window.location = 'home.html')
+    }
+  },
 
-    template:`
+  template: `
     <div align = "center">
         <b-form-group horizontal
                       id="formFirstName"
@@ -128,13 +124,13 @@ Vue.component("person-form", {
                 <b-col cols = "3">
                     <b-form-input id="inputContactName"
                                   placeholder="name (ex: Gmail)"
-                                  v-model="person.contactName">
+                                  v-model="contactName">
                     </b-form-input>
                 </b-col>
                 <b-col cols = "8">
                     <b-form-input id="inputContactLink"
                                   placeholder="link (ex: mariorossi@gmail.com)"
-                                  v-model="person.contactLink">
+                                  v-model="contactLink">
                     </b-form-input>
                 </b-col>
                 <b-col cols = "1">
@@ -160,7 +156,7 @@ Vue.component("person-form", {
 
         <div align = "right">
             <b-button variant="outline-danger">Cancel</b-button>
-            <b-button variant="outline-primary">Submit</b-button>
+            <b-button @click="addCandidate" variant="outline-primary">Submit</b-button>
         </div>
 
         <b-modal id="modalDelete" title="Delete contact">Are you sure?</b-modal>
@@ -168,6 +164,6 @@ Vue.component("person-form", {
     `
 });
 
-new Vue({ 
-    el: '#form-demo',
- })
+new Vue({
+  el: "#form-demo"
+});
