@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS Candidate (
         lastName VARCHAR(20),
         birthDate DATE,
         employed TINYINT,
-        salary FLOAT,
-        removed TINYINT
+        salary FLOAT DEFAULT 0,
+        removed TINYINT DEFAULT 0
 );
 
 CREATE TABLE suit.version (db_version TINYINT);
