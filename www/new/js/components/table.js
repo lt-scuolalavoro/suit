@@ -18,7 +18,8 @@ Vue.component("suit-table", {
         { key: "salary", sortable: true, label: "Salary" },
         { key: "action", label: "Actions" }
       ],
-      modalInfo: { title: "", content: "" }
+      modalInfo: { title: "", content: "" },
+      idToRemove: 0,
     };
   },
   methods: {
@@ -32,12 +33,20 @@ Vue.component("suit-table", {
       }
       this.typeSearch();
     },
+    removeCandidate(){
+      axios
+        .post("cgi/removeCandidate.cgi", {
+            id: this.idToRemove
+        })
+        .then(() => location.reload())
+    },
     showModalInfo(button) {
       this.modalInfo.content = "Hello";
       this.$root.$emit("bv::show::modal", "modalInfo", button);
     },
-    showModalDelete(button) {
+    showModalDelete(button, row) {
       this.$root.$emit("bv::show::modal", "modalDelete", button);
+      this.idToRemove = row.item.id;
     },
     resetModal() {
       this.modalInfo.title = "";
@@ -160,13 +169,11 @@ Vue.component("suit-table", {
              :fields="fields">
 
      <template slot="action" slot-scope="row">
-         
          <b-button-group>
             <b-button variant="outline-primary" size="sm" @click.stop="row.toggleDetails"><i class="fas fa-ellipsis-v"></i></b-button>
             <b-button variant="outline-primary" onclick="location.href='user.html'" title="Edit candidate" size="sm"><i class="fas fa-pencil-alt"></i></b-button>
-            <b-button @click.stop="showModalDelete()" variant="outline-danger" title="Delete candidate"size="sm"><i class="far fa-trash-alt"></i></b-button>
+            <b-button @click.stop="showModalDelete(this, row)" variant="outline-danger" title="Delete candidate"size="sm"><i class="far fa-trash-alt"></i></b-button>
          </b-button-group>
-
      </template>
      <template slot="row-details" slot-scope="row">
       <b-card>
@@ -180,7 +187,7 @@ Vue.component("suit-table", {
         </b-row>
         <b-row class="mb-2">
           <b-col sm="3" class="text-sm-right"><b>Employed: </b></b-col>
-          <b-col>{{ row.item.Employed == 0 ? 'Yes' : 'No' }}</b-col>
+          <b-col>{{ row.item.employed == 1 ? 'Yes' : 'No' }}</b-col>
         </b-row>
         <b-row class="mb-2">
           <b-col sm="3" class="text-sm-right"><b>Salary: </b></b-col>
@@ -194,7 +201,7 @@ Vue.component("suit-table", {
       <pre>{{modalInfo.content}}</pre>
     </b-modal>
 
-    <b-modal id="modalDelete" title="Delete candidate">Are you sure?</b-modal>
+    <b-modal @ok="removeCandidate" id="modalDelete" title="Delete candidate">Are you sure?</b-modal>
 </div>
     `
 });
