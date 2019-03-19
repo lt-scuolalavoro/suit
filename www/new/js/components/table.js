@@ -9,8 +9,10 @@ Vue.component("suit-table", {
       condition:"",
       range1:0,
       range2:0,
-      options: [{text: 'Show unemployed candidates', value: 'unemployed'}, 
-      {text: 'Show deleted candidates', value: 'deleted'}],
+      options: [
+        {text: 'Show all', value: 'all'}, 
+        {text: 'Show deleted candidates', value: 'deleted', disabled: false}
+      ],
       fields: [
         { key: "firstName", sortable: true, label: "First name" },
         { key: "lastName", sortable: true, label: "Last name" },
@@ -25,8 +27,11 @@ Vue.component("suit-table", {
   methods: {
     applyFilter(checked) {
       this.condition="";
-      if(checked.includes("unemployed")) {
-        this.condition+="u";
+      if(checked.includes("all")) {
+        this.condition+="a";
+        this.options[1].disabled=true;
+      } else {
+        this.options[1].disabled=false;
       }
       if(checked.includes("deleted")) {
         this.condition+="d";
@@ -65,19 +70,32 @@ Vue.component("suit-table", {
         }
       }
     },
+    setInitialSituation() {
+      let i
+      n = this.items.length
+      this.filteredItems=[]
+      for (i=0; i<n; i++) {
+        if (this.items[i].removed==0) {
+          this.filteredItems.push(this.items[i]);
+        }
+      }
+    },
     typeSearch(){
       let filteredList=[]
       let i
-      let u=1;
+      let a=0;
       let d=0;
       let r=false;
       let r1=parseInt(this.range1);
       let r2=parseInt(this.range2);
-      if (this.condition.includes("u")) {
-        u=0;
+      if (this.condition.includes("a")) {
+        a=1;
       }
       if (this.condition.includes("d")) {
         d=1;
+      }
+      if (this.condition==="") {
+        this.setInitialSituation();
       }
       if(r1<r2) {
         this.condition+="r";
@@ -85,48 +103,81 @@ Vue.component("suit-table", {
       } else {
         this.condition=this.condition.replace('r', '');
       }
-      console.log(this.condition);
-      for(i=0; i<this.items.length; i++){
-        if(this.filter === '') {
-          if(this.items[i].employed==u && this.items[i].removed==d) {
-            if (r) {
-              if (this.items[i].salary>=r1 && this.items[i].salary<=r2) {
-                filteredList.push(this.items[i]);
-                continue;
-              }
-            } else {
-              filteredList.push(this.items[i]);
-              continue;
+      if (this.condition==="") {
+        this.setInitialSituation();
+        if (this.filter!=="") {
+          for (i=0; i<this.filteredItems.length; i++) {
+            if(this.filteredItems[i].lastName.toLowerCase().includes(this.filter.toLowerCase()) || 
+            this.filteredItems[i].firstName.toLowerCase().includes(this.filter.toLowerCase())){
+              filteredList.push(this.filteredItems[i]);
             }
           }
-        } else {
-          if(this.items[i].lastName.toLowerCase().includes(this.filter.toLowerCase()) || 
-          this.items[i].firstName.toLowerCase().includes(this.filter.toLowerCase())){
-            if (this.condition!='') {
-              if(this.items[i].employed==u && this.items[i].removed==d) {
-                if (r) {
-                  if (this.items[i].salary>=r1 && this.items[i].salary<=r2) {
-                    filteredList.push(this.items[i]);
-                    continue;
-                  }
-                } else {
+          this.filteredItems=filteredList;
+        }
+      } else {
+        for(i=0; i<this.items.length; i++){
+          if(this.filter === "") {
+            if (this.items[i].removed==d) {
+              if (r) {
+                if (this.items[i].salary>=r1 && this.items[i].salary<=r2) {
                   filteredList.push(this.items[i]);
                   continue;
                 }
+              } else {
+                filteredList.push(this.items[i]);
+                continue;
               }
-            } else {
-              filteredList.push(this.items[i]);
+            }
+            if (a==1) {
+              if (r) {
+                if (this.items[i].salary>=r1 && this.items[i].salary<=r2) {
+                  filteredList.push(this.items[i]);
+                  continue;
+                }
+              } else {
+                filteredList.push(this.items[i]);
+                continue;
+              }
+            }
+          } else {
+            if(this.items[i].lastName.toLowerCase().includes(this.filter.toLowerCase()) || 
+            this.items[i].firstName.toLowerCase().includes(this.filter.toLowerCase())){
+              if (this.condition!=='') {
+                if (this.items[i].removed==d) {
+                  if (r) {
+                    if (this.items[i].salary>=r1 && this.items[i].salary<=r2) {
+                      filteredList.push(this.items[i]);
+                      continue;
+                    }
+                  } else {
+                    filteredList.push(this.items[i]);
+                    continue;
+                  }
+                }
+                if (a==1) {
+                  if (r) {
+                    if (this.items[i].salary>=r1 && this.items[i].salary<=r2) {
+                      filteredList.push(this.items[i]);
+                      continue;
+                    }
+                  } else {
+                    filteredList.push(this.items[i]);
+                    continue;
+                  }
+                }
+              }
             }
           }
         }
+        this.filteredItems=filteredList;
       }
-      this.filteredItems=filteredList;
     }
   },
   mounted() {
     axios.get("cgi/users.cgi")
     .then(response => {
       this.items = response.data;
+      this.setInitialSituation();
       this.colorRows();
     })
   },
@@ -151,8 +202,8 @@ Vue.component("suit-table", {
     <div>
     <b-form-checkbox-group plain stacked :options="options" id="check" @change="applyFilter">
     <div>Salary:<br>
-    Min: <b-form-input type="number" @input="typeSearch()" v-model="range1" min="0" size="sm" max="10000"></b-form-input>
-    Max: <b-form-input type="number" @input="typeSearch()" v-model="range2" min="0" size="sm" max="10000"></b-form-input>
+    Min: <b-form-input type="number" @input="typeSearch()" v-model="range1" min="0" size="sm" max="1000000"></b-form-input>
+    Max: <b-form-input type="number" @input="typeSearch()" v-model="range2" min="0" size="sm" max="1000000"></b-form-input>
     </div>
     </b-form-checkbox-group>
     </div>
@@ -165,7 +216,7 @@ Vue.component("suit-table", {
      <b-table :sort-by.sync="sortBy"
             striped
             hover
-             :items="filter=='' && condition=='' ? items : filteredItems"
+             :items="filteredItems"
              :fields="fields">
 
      <template slot="action" slot-scope="row">
