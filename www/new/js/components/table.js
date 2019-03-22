@@ -61,7 +61,7 @@ Vue.component("suit-table", {
       let i
       n = this.items.length
       for(i=0; i<n; i++){
-        if(this.items[i].removed=="1"){
+        if(this.items[i].deleted=="1"){
           this.items[i]._rowVariant='danger'
         }else{
           if(this.items[i].employed=="1"){
@@ -75,7 +75,7 @@ Vue.component("suit-table", {
       n = this.items.length
       this.filteredItems=[]
       for (i=0; i<n; i++) {
-        if (this.items[i].removed==0) {
+        if (this.items[i].deleted==0) {
           this.filteredItems.push(this.items[i]);
         }
       }
@@ -117,7 +117,7 @@ Vue.component("suit-table", {
       } else {
         for(i=0; i<this.items.length; i++){
           if(this.filter === "") {
-            if (this.items[i].removed==d) {
+            if (this.items[i].deleted==d) {
               if (r) {
                 if (this.items[i].salary>=r1 && this.items[i].salary<=r2) {
                   filteredList.push(this.items[i]);
@@ -143,7 +143,7 @@ Vue.component("suit-table", {
             if(this.items[i].lastName.toLowerCase().includes(this.filter.toLowerCase()) || 
             this.items[i].firstName.toLowerCase().includes(this.filter.toLowerCase())){
               if (this.condition!=='') {
-                if (this.items[i].removed==d) {
+                if (this.items[i].deleted==d) {
                   if (r) {
                     if (this.items[i].salary>=r1 && this.items[i].salary<=r2) {
                       filteredList.push(this.items[i]);

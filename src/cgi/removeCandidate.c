@@ -23,7 +23,7 @@ int main(){
     tmp = cJSON_GetObjectItemCaseSensitive(json, "id");
     snprintf(id, 10001, "%s", tmp->valuestring);
 
-    sprintf(query, "UPDATE Candidate SET removed = 1 WHERE id = %s", id);
+    sprintf(query, "UPDATE Candidate SET deleted = 1 WHERE id = %s", id);
     printf("%s", query);
 
     setupDbNoOutput("localhost", "root", NULL, "suit");
