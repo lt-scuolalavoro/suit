@@ -174,7 +174,7 @@ Vue.component("suit-table", {
     }
   },
   mounted() {
-    axios.get("cgi/users.cgi")
+    axios.get("cgi/candidates.cgi")
     .then(response => {
       this.items = response.data;
       this.setInitialSituation();
