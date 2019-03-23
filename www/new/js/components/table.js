@@ -240,7 +240,7 @@ Vue.component("suit-table", {
                        :items = "row.item.contacts"
                        :fields = "detailFields">
         </b-table>
-        <div b-col sm="3" class="text-sm-left" v-else>No contact registered.</b-col>
+        <b-col sm="3" class="text-sm-left" v-else>No contact registered.</b-col>
       </b-card>
     </template>
     </b-table>

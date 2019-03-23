@@ -12,13 +12,14 @@ Vue.component("person-form", {
       },
       contactName: "",
       contactLink: "",
-
+      idToRemove: 0,
       fields: [
         { key: "name", label: "Name" },
         { key: "link", label: "Link" },
         { key: "action", label: "Action" }
       ],
-      date: "date"
+      date: "date",
+      removedContactsID: []
     };
   },
 
@@ -33,8 +34,9 @@ Vue.component("person-form", {
         this.contactLink = "";
       }
     },
-    showModalDelete(button) {
+    showModalDelete(button, row) {
       this.$root.$emit("bv::show::modal", "modalDelete", button);
+      this.idToRemove = row.index;
     },
     addCandidate() {
       axios
@@ -48,6 +50,11 @@ Vue.component("person-form", {
           contacts: this.person.contacts
         })
         .then(() => window.location = 'home.html')
+    },
+    removeContact() {
+      this.removedContactsID.push(this.idToRemove);
+      var index = this.person.contacts.indexOf(this.person.contacts[this.idToRemove]);
+      this.person.contacts.splice(index, 1);
     }
   },
 
@@ -148,7 +155,7 @@ Vue.component("person-form", {
 
                 <template slot="action" slot-scope="row">
                     <b-button-group>
-                        <b-button @click.stop="showModalDelete()" variant="outline-danger" title="Delete contact"size="sm"><i class="far fa-trash-alt"></i></b-button>
+                        <b-button @click.stop="showModalDelete(this, row)" variant="outline-danger" title="Delete contact"size="sm"><i class="far fa-trash-alt"></i></b-button>
                     </b-button-group>
                  </template>
                 
@@ -161,7 +168,7 @@ Vue.component("person-form", {
             <b-button @click="addCandidate" variant="outline-primary">Submit</b-button>
         </div>
 
-        <b-modal id="modalDelete" title="Delete contact">Are you sure?</b-modal>
+        <b-modal id="modalDelete" @ok="removeContact" title="Delete contact">Are you sure?</b-modal>
     </div>
     `
 });
