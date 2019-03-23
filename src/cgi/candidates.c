@@ -58,6 +58,7 @@ int main()
             //  Add to object 'candidate' the name of column and the value
             cJSON_AddItemToObject(candidate, fields[index], string);
         }
+        // ----Contacts start-----
         contacts = cJSON_CreateArray();
 
         sprintf(query, "SELECT * FROM Contacts WHERE candidateId = %d", candidateId);
@@ -95,6 +96,8 @@ int main()
         }
 
         cJSON_AddItemToObject(candidate, "contacts", contacts);
+        // ----Contacts end-----
+
         // Add the row to 'candidates'
         cJSON_AddItemToArray(candidates, candidate);
 

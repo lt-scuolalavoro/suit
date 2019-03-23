@@ -1,14 +1,18 @@
 Vue.component("person-form", {
+  props: {
+    edit: Boolean
+  },
   data() {
     return {
       person: {
+        id: 0,
         firstName: "",
         lastName: "",
         birthDate: "",
         employed: "",
         salary: "",
         notes: "",
-        contacts: [],
+        contacts: []
       },
       contactName: "",
       contactLink: "",
@@ -22,7 +26,30 @@ Vue.component("person-form", {
       removedContactsID: []
     };
   },
+  mounted() {
+    if (this.edit) {
+      let url = new URL(window.location.href);
+      let id = url.searchParams.get("id");
+      this.person.id = id;
 
+      axios
+        .get("cgi/candidate.cgi", {
+          params: {
+            id: this.person.id
+          }
+        })
+        .then(response => {
+          let data = response.data[0];
+          this.person.firstName = data.firstName;
+          this.person.lastName = data.lastName;
+          this.person.birthDate = data.birthDate;
+          this.person.employed = data.employed;
+          this.person.salary = data.salary;
+          this.person.notes = data.notes;
+          this.person.contacts = data.contacts;
+        });
+    }
+  },
   methods: {
     setContact() {
       if (this.contactName != "" && this.contactLink != "") {
@@ -30,30 +57,48 @@ Vue.component("person-form", {
           name: this.contactName,
           link: this.contactLink
         });
+        if (this.edit) {
+          let contact_id = "";
+          axios.get("cgi/contacts.cgi").then(response => {
+            let len = response.data.length;
+            contact_id = parseInt(response.data[len - 1].id) + 1;
+            contact_id = contact_id.toString();
+            let last = this.person.contacts.length - 1;
+            this.person.contacts[last].id = contact_id;
+            this.person.contacts[last].candidateId = this.person.id;
+          });
+        }
         this.contactName = "";
         this.contactLink = "";
       }
     },
     showModalDelete(button, row) {
       this.$root.$emit("bv::show::modal", "modalDelete", button);
-      this.idToRemove = row.index;
+      this.idToRemove = row.item.id;
     },
-    addCandidate() {
+    onSubmitClick() {
+      let op = this.edit ? "edit" : "add";
+
       axios
-        .post("cgi/addCandidate.cgi", {
+        .post("cgi/" + op + "Candidate.cgi", {
+          id: this.person.id,
           firstName: this.person.firstName,
           lastName: this.person.lastName,
           birthDate: this.person.birthDate,
           employed: this.person.employed,
           salary: this.person.salary,
           notes: this.person.notes,
-          contacts: this.person.contacts
+          contacts: this.person.contacts,
+          removed_contacts_ids: this.removedContactsID
         })
-        .then(() => window.location = 'home.html')
+        // .then(() => (window.location = "home.html"));
     },
     removeContact() {
       this.removedContactsID.push(this.idToRemove);
-      var index = this.person.contacts.indexOf(this.person.contacts[this.idToRemove]);
+      console.log(this.removedContactsID)
+      var index = this.person.contacts.indexOf(
+        this.person.contacts[this.idToRemove]
+      );
       this.person.contacts.splice(index, 1);
     }
   },
@@ -165,7 +210,7 @@ Vue.component("person-form", {
 
         <div align = "right">
             <b-button variant="outline-danger">Cancel</b-button>
-            <b-button @click="addCandidate" variant="outline-primary">Submit</b-button>
+            <b-button @click="onSubmitClick" variant="outline-primary">Submit</b-button>
         </div>
 
         <b-modal id="modalDelete" @ok="removeContact" title="Delete contact">Are you sure?</b-modal>

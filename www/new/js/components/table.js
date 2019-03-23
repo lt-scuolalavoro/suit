@@ -10,7 +10,7 @@ Vue.component("suit-table", {
       range1:0,
       range2:0,
       detailFields: [
-        { key: "contactName", label: "Contact name" },
+        { key: "name", label: "Contact name" },
         { key: "link", label: "Link" }
       ],
       options: [
@@ -41,6 +41,9 @@ Vue.component("suit-table", {
         this.condition+="d";
       }
       this.typeSearch();
+    },
+    onEditClick(id){
+      window.location.href='edit.html?id='+id
     },
     removeCandidate(){
       axios
@@ -226,7 +229,7 @@ Vue.component("suit-table", {
      <template slot="action" slot-scope="row">
          <b-button-group>
             <b-button variant="outline-primary" size="sm" @click.stop="row.toggleDetails"><i class="fas fa-ellipsis-v"></i></b-button>
-            <b-button variant="outline-primary" onclick="location.href='edit.html'" title="Edit candidate" size="sm"><i class="fas fa-pencil-alt"></i></b-button>
+            <b-button variant="outline-primary" @click="onEditClick(row.item.id)" title="Edit candidate" size="sm"><i class="fas fa-pencil-alt"></i></b-button>
             <b-button @click.stop="showModalDelete(this, row)" variant="outline-danger" title="Delete candidate"size="sm"><i class="far fa-trash-alt"></i></b-button>
          </b-button-group>
      </template>
