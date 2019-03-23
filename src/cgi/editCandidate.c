@@ -5,18 +5,19 @@
 int main()
 {
     char str[10000];
-    const cJSON *tmp = NULL;
-    const cJSON *tmp_contact = NULL;
+    cJSON *tmp = NULL;
+    cJSON *tmp_contact = NULL;
 
+    int id;
     char firstName[30];
     char lastName[30];
     char birthDate[12];
     char employed[3];
-    char salary[20];
+    int salary;
     char notes[256];
 
     int num_contacts;
-    int candidateId;
+    int removed_contacts_len;
     int index;
 
     char query[400];
@@ -24,12 +25,16 @@ int main()
     printf("Content-type: text/plain\n\n");
 
     scanf("%s", str);
+    // strcpy(str, "{\"id\":\"19\",\"firstName\":\"Gianni\",\"lastName\":\"Celeste\",\"birthDate\":\"2019-03-14\",\"employed\":\"1\",\"salary\":\"1300\",\"contacts\":[]}");
     cJSON *person = cJSON_Parse(str);
 
     if (person == NULL)
     {
         printf("Error");
     }
+
+    tmp = cJSON_GetObjectItemCaseSensitive(person, "id");
+    id = atoi(tmp->valuestring);
 
     tmp = cJSON_GetObjectItemCaseSensitive(person, "firstName");
     snprintf(firstName, 29, "%s", tmp->valuestring);
@@ -44,7 +49,7 @@ int main()
     snprintf(employed, 2, "%s", tmp->valuestring);
 
     tmp = cJSON_GetObjectItemCaseSensitive(person, "salary");
-    snprintf(salary, 18, "%s", tmp->valuestring);
+    salary = atoi(tmp->valuestring);
 
     tmp = cJSON_GetObjectItemCaseSensitive(person, "notes");
     if (tmp != NULL)
@@ -54,42 +59,57 @@ int main()
 
     setupDbNoOutput("localhost", "root", NULL, "suit");
 
-    sprintf(query, "INSERT INTO Candidate (firstName, lastName, birthDate, employed, salary, notes) VALUES ('%s', '%s', '%s', %s, %s, '%s')",
+    sprintf(query, "UPDATE Candidate SET firstName = '%s', lastName = '%s', birthDate = '%s', employed = %s, salary = %d, notes = '%s' WHERE id = %d",
             firstName,
             lastName,
             birthDate,
             employed,
-            strcmp(salary, "") == 0 ? "NULL" : salary,
-            strcmp(salary, "") == 0 ? "NULL" : notes);
+            salary,
+            notes,
+            id);
 
     executeQueryNoOutput(query);
+    // Remove contacts
+    tmp = cJSON_GetObjectItemCaseSensitive(person, "removed_contacts_ids");
+    removed_contacts_len = cJSON_GetArraySize(tmp);
+
+    for (index = 0; index < removed_contacts_len; index++)
+    {
+        tmp_contact = cJSON_GetArrayItem(tmp, index);
+        sprintf(query, "DELETE FROM Contacts WHERE id = %d", atoi(tmp_contact->valuestring));
+        executeQueryNoOutput(query);
+    }
+
     // Parse contacts
     tmp = cJSON_GetObjectItemCaseSensitive(person, "contacts");
     num_contacts = cJSON_GetArraySize(tmp);
 
     char contacts[num_contacts][2][256];
+    int contacts_id[num_contacts];
     // Save contacts into this matrix of strings [COL][ROW][STR_LENGTH]
     for (index = 0; index < num_contacts; index++)
     {
         tmp_contact = cJSON_GetArrayItem(tmp, index);
+        contacts_id[index] = atoi(cJSON_GetObjectItemCaseSensitive(tmp_contact, "id")->valuestring);
         snprintf(contacts[index][0], 255, "%s", cJSON_GetObjectItemCaseSensitive(tmp_contact, "name")->valuestring);
         snprintf(contacts[index][1], 255, "%s", cJSON_GetObjectItemCaseSensitive(tmp_contact, "link")->valuestring);
     }
-    // Take the id of the candidate's contacts
-    candidateId = executeIntQuery("SELECT id FROM Candidate ORDER BY ID DESC LIMIT 1");
-    // Save contacts to the db
+
     for (index = 0; index < num_contacts; index++)
     {
-        sprintf(query, "INSERT INTO Contacts VALUES (NULL, %d, '%s', '%s')",
-                candidateId,
+        sprintf(query, "INSERT INTO Contacts (name, link, id, candidateId) VALUES ('%s', '%s', %d, %d) ON DUPLICATE KEY UPDATE name = VALUES(name), link = VALUES(link), id = VALUES(id), candidateId = VALUES(candidateId)",
                 contacts[index][0],
-                contacts[index][1]);
+                contacts[index][1],
+                contacts_id[index],
+                id);
 
         executeQueryNoOutput(query);
     }
 
     closeProgram();
     cJSON_Delete(person);
+    cJSON_Delete(tmp_contact);
+    cJSON_Delete(tmp);
 
     return 0;
 }

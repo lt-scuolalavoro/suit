@@ -17,6 +17,7 @@ Vue.component("person-form", {
       contactName: "",
       contactLink: "",
       idToRemove: 0,
+      row_contact_index: 0,
       fields: [
         { key: "name", label: "Name" },
         { key: "link", label: "Link" },
@@ -75,6 +76,7 @@ Vue.component("person-form", {
     showModalDelete(button, row) {
       this.$root.$emit("bv::show::modal", "modalDelete", button);
       this.idToRemove = row.item.id;
+      this.row_contact_index = row.index;
     },
     onSubmitClick() {
       let op = this.edit ? "edit" : "add";
@@ -91,13 +93,12 @@ Vue.component("person-form", {
           contacts: this.person.contacts,
           removed_contacts_ids: this.removedContactsID
         })
-        // .then(() => (window.location = "home.html"));
+        .then(() => (window.location = "home.html"));
     },
     removeContact() {
       this.removedContactsID.push(this.idToRemove);
-      console.log(this.removedContactsID)
       var index = this.person.contacts.indexOf(
-        this.person.contacts[this.idToRemove]
+        this.person.contacts[this.row_contact_index]
       );
       this.person.contacts.splice(index, 1);
     }
