@@ -9,6 +9,10 @@ Vue.component("suit-table", {
       condition:"",
       range1:0,
       range2:0,
+      detailFields: [
+        { key: "contactName", label: "Contact name" },
+        { key: "link", label: "Link" }
+      ],
       options: [
         {text: 'Show all', value: 'all'}, 
         {text: 'Show deleted candidates', value: 'deleted', disabled: false}
@@ -227,23 +231,16 @@ Vue.component("suit-table", {
          </b-button-group>
      </template>
      <template slot="row-details" slot-scope="row">
-      <b-card>
-        <b-row class="mb-2">
-          <b-col sm="3" class="text-sm-right"><b>Full name: </b></b-col>
-          <b-col>{{ row.item.firstName +" "+ row.item.lastName }}</b-col>
+     <b-card>
+       <b-row class="mb-2">
+          <b-col v-if="row.item.notes != ''" sm="3" class="text-sm-left"><b>Notes: </b> {{ row.item.notes }} </b-col>
+          <b-col sm="3" class="text-sm-left" v-else>No notes available.</b-col>
         </b-row>
-        <b-row class="mb-2">
-          <b-col sm="3" class="text-sm-right"><b>Birth date: </b></b-col>
-          <b-col>{{ row.item.birthDate }}</b-col>
-        </b-row>
-        <b-row class="mb-2">
-          <b-col sm="3" class="text-sm-right"><b>Employed: </b></b-col>
-          <b-col>{{ row.item.employed == 1 ? 'Yes' : 'No' }}</b-col>
-        </b-row>
-        <b-row class="mb-2">
-          <b-col sm="3" class="text-sm-right"><b>Salary: </b></b-col>
-          <b-col>{{"€ "+row.item.salary }}</b-col>
-          </b-row>
+        <b-table v-if="row.item.contacts.length != 0"
+                       :items = "row.item.contacts"
+                       :fields = "detailFields">
+        </b-table>
+        <div b-col sm="3" class="text-sm-left" v-else>No contact registered.</b-col>
       </b-card>
     </template>
     </b-table>
