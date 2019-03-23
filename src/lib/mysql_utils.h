@@ -28,6 +28,17 @@ void closeProgram()
     mysql_close(con);
     exit(0);
 }
+int executeIntQuery(char *query){
+    if (mysql_query(con, query))
+    {
+        finishWithError();
+    }else{
+        MYSQL_RES *result = mysql_store_result(con);
+        MYSQL_ROW row = mysql_fetch_row(result);
+
+        return atoi(row[0]);
+    }
+}
 /* Execute query and print a feedback message
     Input: query, text desired to be displayed and a general argument
     Example:
@@ -45,6 +56,7 @@ void executeQuery(char *query, char *outputText, char *arg)
         printf("%s %s\n", arg, outputText);
     }
 }
+
 /*
     Execute query without giving feedback
 */

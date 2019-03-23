@@ -222,7 +222,7 @@ Vue.component("suit-table", {
      <template slot="action" slot-scope="row">
          <b-button-group>
             <b-button variant="outline-primary" size="sm" @click.stop="row.toggleDetails"><i class="fas fa-ellipsis-v"></i></b-button>
-            <b-button variant="outline-primary" onclick="location.href='user.html'" title="Edit candidate" size="sm"><i class="fas fa-pencil-alt"></i></b-button>
+            <b-button variant="outline-primary" onclick="location.href='edit.html'" title="Edit candidate" size="sm"><i class="fas fa-pencil-alt"></i></b-button>
             <b-button @click.stop="showModalDelete(this, row)" variant="outline-danger" title="Delete candidate"size="sm"><i class="far fa-trash-alt"></i></b-button>
          </b-button-group>
      </template>

@@ -44,6 +44,8 @@ Vue.component("person-form", {
           birthDate: this.person.birthDate,
           employed: this.person.employed,
           salary: this.person.salary,
+          notes: this.person.notes,
+          contacts: this.person.contacts
         })
         .then(() => window.location = 'home.html')
     }
