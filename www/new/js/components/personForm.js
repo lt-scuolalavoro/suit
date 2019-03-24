@@ -153,7 +153,7 @@ Vue.component("person-form", {
                       id="formSalary"
                       label="Salary:"
                       label-for="inputSalaty">
-            <b-form-input id="inputSalary"
+            <b-form-input id="inputSalary" :disabled='person.employed==0'
                           placeholder="insert salary here"
                           v-model="person.salary">
             </b-form-input>
