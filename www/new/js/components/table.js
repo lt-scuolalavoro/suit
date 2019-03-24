@@ -87,6 +87,26 @@ Vue.component("suit-table", {
         }
       }
     },
+    linkClicked(linkClicked) {
+    if (linkClicked.includes("@")) {
+        document.location = "mailto:"+linkClicked;
+    } else {
+      if (linkClicked.includes("www")) {
+        var checkLink = linkClicked.substring(0, 8);
+        if (checkLink==="https://") {
+          linkClicked = linkClicked.replace("https://", "");
+        } else {
+          if (checkLink.includes("http://")) {
+            linkClicked = linkClicked.replace("http://", "");
+          }
+        }
+        window.open("//"+linkClicked);
+      } else {
+        window.open('http://google.com/search?q='+linkClicked);
+      }
+      
+    }
+  },
     typeSearch(){
       let filteredList=[]
       let i
@@ -242,6 +262,9 @@ Vue.component("suit-table", {
         <b-table v-if="row.item.contacts.length != 0"
                        :items = "row.item.contacts"
                        :fields = "detailFields">
+          <template slot="link" slot-scope="data">
+            <b-link @click="linkClicked(data.value);">{{ data.value }}</b-link>
+          </template>
         </b-table>
         <b-col sm="3" class="text-sm-left" v-else>No contact registered.</b-col>
       </b-card>
