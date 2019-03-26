@@ -256,7 +256,7 @@ Vue.component("suit-table", {
      <template slot="row-details" slot-scope="row">
      <b-card>
        <b-row class="mb-2">
-          <b-col v-if="row.item.notes != ''" sm="3" class="text-sm-left"><b>Notes: </b> {{ row.item.notes }} </b-col>
+          <b-col v-if="row.item.notes != '' && row.item.notes != 'NULL'" sm="3" class="text-sm-left"><b>Notes: </b> {{ row.item.notes }} </b-col>
           <b-col sm="3" class="text-sm-left" v-else>No notes available.</b-col>
         </b-row>
         <b-table v-if="row.item.contacts.length != 0"
