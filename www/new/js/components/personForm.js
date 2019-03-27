@@ -88,10 +88,11 @@ Vue.component("person-form", {
       this.row_contact_index = row.index;
     },
     onSubmitClick() {
+      this.check5();
       let op = this.edit ? "edit" : "add";
       let ok = true;
       let i=0;
-      while (i<6 && ok) {
+      while (i<8 && ok) {
         ok = this.valid[i];
         i++;
       }
@@ -106,6 +107,14 @@ Vue.component("person-form", {
         }
         while (this.person.notes.includes(" ")) {
           this.person.notes = this.person.notes.replace(" ", "`")
+        }
+        for (i=0; i<this.person.contacts.length; i++) {
+          while (this.person.contacts[i].name.includes(" ")) {
+            this.person.contacts[i].name = this.person.contacts[i].name.replace(" ", "`")
+          }
+          while (this.person.contacts[i].link.includes(" ")) {
+            this.person.contacts[i].link = this.person.contacts[i].link.replace(" ", "`")
+          }
         }
         axios
         .post("cgi/" + op + "Candidate.cgi", {
@@ -155,7 +164,11 @@ Vue.component("person-form", {
       }
     },
     check5() {
-       this.valid[4] = !isNaN(this.person.salary) && !this.person.salary=="";
+      if (this.person.employed==0) {
+        this.valid[4] = true;
+      } else {
+        this.valid[4] = !isNaN(this.person.salary) && !this.person.salary=="";
+      }
     },
     check6() {
       if (this.person.notes == null || this.person.notes == "NULL") {

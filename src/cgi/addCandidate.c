@@ -6,6 +6,7 @@ int main()
 {
     char str[10000];
     const cJSON *tmp = NULL;
+    const cJSON *tmp2 = NULL;
     const cJSON *tmp_contact = NULL;
 
     char firstName[33];
@@ -81,12 +82,25 @@ int main()
     num_contacts = cJSON_GetArraySize(tmp);
 
     char contacts[num_contacts][2][256];
+    int i;
     // Save contacts into this matrix of strings [COL][ROW][STR_LENGTH]
     for (index = 0; index < num_contacts; index++)
     {
         tmp_contact = cJSON_GetArrayItem(tmp, index);
-        snprintf(contacts[index][0], 255, "%s", cJSON_GetObjectItemCaseSensitive(tmp_contact, "name")->valuestring);
-        snprintf(contacts[index][1], 255, "%s", cJSON_GetObjectItemCaseSensitive(tmp_contact, "link")->valuestring);
+        tmp2 = cJSON_GetObjectItemCaseSensitive(tmp_contact, "name");
+        for (i=0; i<255; i++) {
+            if (tmp2->valuestring[i] == '`') {
+               tmp2->valuestring[i] = ' ';
+            }
+        }
+        snprintf(contacts[index][0], 255, "%s", tmp2->valuestring);
+        tmp2 = cJSON_GetObjectItemCaseSensitive(tmp_contact, "link");
+        for (i=0; i<32; i++) {
+            if (tmp2->valuestring[i] == '`') {
+               tmp2->valuestring[i] = ' ';
+            }
+        }
+        snprintf(contacts[index][1], 255, "%s", tmp2->valuestring);
     }
     // Take the id of the candidate's contacts
     candidateId = executeIntQuery("SELECT id FROM Candidate ORDER BY ID DESC LIMIT 1");
