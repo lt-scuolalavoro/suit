@@ -37,9 +37,19 @@ int main()
     id = atoi(tmp->valuestring);
 
     tmp = cJSON_GetObjectItemCaseSensitive(person, "firstName");
+    for (index=0; index<29; index++) {
+        if (tmp->valuestring[index] == '`') {
+            tmp->valuestring[index] = ' ';
+        }
+    }
     snprintf(firstName, 29, "%s", tmp->valuestring);
 
     tmp = cJSON_GetObjectItemCaseSensitive(person, "lastName");
+    for (index=0; index<29; index++) {
+        if (tmp->valuestring[index] == '`') {
+            tmp->valuestring[index] = ' ';
+        }
+    }
     snprintf(lastName, 29, "%s", tmp->valuestring);
 
     tmp = cJSON_GetObjectItemCaseSensitive(person, "birthDate");
@@ -54,6 +64,11 @@ int main()
     tmp = cJSON_GetObjectItemCaseSensitive(person, "notes");
     if (tmp != NULL)
     {
+        for (index=0; index<29; index++) {
+            if (tmp->valuestring[index] == '`') {
+                tmp->valuestring[index] = ' ';
+            }
+        }
         snprintf(notes, 255, "%s", tmp->valuestring);
     }
 

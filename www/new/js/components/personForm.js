@@ -50,6 +50,14 @@ Vue.component("person-form", {
           this.person.salary = data.salary;
           this.person.notes = data.notes;
           this.person.contacts = data.contacts;
+          this.check1();
+          this.check2();
+          this.check3();
+          this.check6();
+          this.check7();
+          this.check8();
+          this.check4();
+          this.check5();
         });
     }
   },
@@ -91,6 +99,15 @@ Vue.component("person-form", {
       if (!ok) {
         alert("Missing or incorrect information. Try again.")
       } else {
+        while (this.person.firstName.includes(" ")) {
+          this.person.firstName = this.person.firstName.replace(" ", "`")
+        }
+        while (this.person.lastName.includes(" ")) {
+          this.person.lastName = this.person.lastName.replace(" ", "`")
+        }
+        while (this.person.notes.includes(" ")) {
+          this.person.notes = this.person.notes.replace(" ", "`")
+        }
         axios
         .post("cgi/" + op + "Candidate.cgi", {
           id: this.person.id,
