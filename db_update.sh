@@ -1,7 +1,7 @@
 #!/bin/bash
 #If sql is in src folder, move them in suit
 if [ -d "src/sql" ]; then
-	echo "$(mv src/sql sql)"
+	mv src/sql ./
 fi
 
 cd sql
@@ -25,11 +25,14 @@ fi
 echo "You are currently at version $v"
 
 if [ "$v" != "$f" ]; then
+	if [ "$v" = 0 ]; then
+		mysql -u root -e "CREATE DATABASE suit;"
+	fi
 	#Execute the command for every .sql file
 	for (( c=v+1; c<=f; c++ ))
 	do  
 		#Execute the v.sql
-		mysql -u root < v$c.sql
+		mysql suit -u root < v$c.sql
 	done
 fi
 
