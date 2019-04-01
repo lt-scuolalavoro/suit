@@ -13,4 +13,4 @@ CREATE TABLE IF NOT EXISTS Contacts (
         link VARCHAR(255)
 );
 
-UPDATE suit.version set db_version = 2;
+UPDATE suit.version SET db_version = 2;
