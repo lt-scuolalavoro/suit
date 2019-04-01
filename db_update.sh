@@ -1,5 +1,11 @@
 #!/bin/bash
-cd src/sql
+#If sql is in src folder, move them in suit
+if [ -d "src/sql" ]; then
+	echo "$(mv src/sql sql)"
+fi
+
+cd sql
+
 #File counter
 f=$(ls -q | wc -l);
 
