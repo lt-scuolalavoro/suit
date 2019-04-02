@@ -9,10 +9,10 @@ int main()
     cJSON *tmp_contact = NULL;
 
     int id;
-    char firstName[30];
-    char lastName[30];
-    char birthDate[12];
-    char employed[3];
+    char firstName[32];
+    char lastName[32];
+    char birthDate[11];
+    char employed[2];
     int salary;
     char notes[256];
 
@@ -42,7 +42,7 @@ int main()
             tmp->valuestring[index] = ' ';
         }
     }
-    snprintf(firstName, 29, "%s", tmp->valuestring);
+    snprintf(firstName, 32, "%s", tmp->valuestring);
 
     tmp = cJSON_GetObjectItemCaseSensitive(person, "lastName");
     for (index=0; index<32; index++) {
@@ -50,10 +50,10 @@ int main()
             tmp->valuestring[index] = ' ';
         }
     }
-    snprintf(lastName, 29, "%s", tmp->valuestring);
+    snprintf(lastName, 32, "%s", tmp->valuestring);
 
     tmp = cJSON_GetObjectItemCaseSensitive(person, "birthDate");
-    for (index=0; index<32; index++) {
+    for (index=0; index<11; index++) {
         if (tmp->valuestring[index] == '`') {
             tmp->valuestring[index] = ' ';
         }
@@ -61,7 +61,7 @@ int main()
     snprintf(birthDate, 11, "%s", tmp->valuestring);
 
     tmp = cJSON_GetObjectItemCaseSensitive(person, "employed");
-    for (index=0; index<32; index++) {
+    for (index=0; index<2; index++) {
         if (tmp->valuestring[index] == '`') {
             tmp->valuestring[index] = ' ';
         }
@@ -79,7 +79,7 @@ int main()
                 tmp->valuestring[index] = ' ';
             }
         }
-        snprintf(notes, index, "%s", tmp->valuestring);
+        snprintf(notes, 255, "%s", tmp->valuestring);
     }
 
     setupDbNoOutput("localhost", "root", NULL, "suit");
@@ -101,11 +101,6 @@ int main()
     for (index = 0; index < removed_contacts_len; index++)
     {
         tmp_contact = cJSON_GetArrayItem(tmp, index);
-        for (index=0; index<32; index++) {
-            if (tmp_contact->valuestring[index] == '`') {
-                tmp_contact->valuestring[index] = ' ';
-            }
-        }
         sprintf(query, "DELETE FROM Contacts WHERE id = %d", atoi(tmp_contact->valuestring));
         executeQueryNoOutput(query);
     }
@@ -142,4 +137,4 @@ int main()
     cJSON_Delete(tmp);
 
     return 0;
-}
+} 

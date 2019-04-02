@@ -6,19 +6,19 @@ int main()
 {
     char str[10000];
     const cJSON *tmp = NULL;
-    const cJSON *tmp2 = NULL;
     const cJSON *tmp_contact = NULL;
 
-    char firstName[33];
-    char lastName[33];
-    char birthDate[12];
-    char employed[3];
+    char firstName[32];
+    char lastName[32];
+    char birthDate[11];
+    char employed[2];
     char salary[20];
     char notes[256];
 
     int num_contacts;
     int candidateId;
     int index;
+
     char query[400];
 
     printf("Content-type: text/plain\n\n");
@@ -38,6 +38,7 @@ int main()
         }
     }
     snprintf(firstName, 32, "%s", tmp->valuestring);
+
     tmp = cJSON_GetObjectItemCaseSensitive(person, "lastName");
     for (index=0; index<32; index++) {
         if (tmp->valuestring[index] == '`') {
@@ -47,9 +48,19 @@ int main()
     snprintf(lastName, 32, "%s", tmp->valuestring);
 
     tmp = cJSON_GetObjectItemCaseSensitive(person, "birthDate");
+    for (index=0; index<11; index++) {
+        if (tmp->valuestring[index] == '`') {
+            tmp->valuestring[index] = ' ';
+        }
+    }
     snprintf(birthDate, 11, "%s", tmp->valuestring);
 
     tmp = cJSON_GetObjectItemCaseSensitive(person, "employed");
+    for (index=0; index<2; index++) {
+        if (tmp->valuestring[index] == '`') {
+            tmp->valuestring[index] = ' ';
+        }
+    }
     snprintf(employed, 2, "%s", tmp->valuestring);
 
     tmp = cJSON_GetObjectItemCaseSensitive(person, "salary");
@@ -60,7 +71,7 @@ int main()
     {
         for (index=0; index<255; index++) {
             if (tmp->valuestring[index] == '`') {
-               tmp->valuestring[index] = ' ';
+                tmp->valuestring[index] = ' ';
             }
         }
         snprintf(notes, 255, "%s", tmp->valuestring);
@@ -82,25 +93,12 @@ int main()
     num_contacts = cJSON_GetArraySize(tmp);
 
     char contacts[num_contacts][2][256];
-    int i;
     // Save contacts into this matrix of strings [COL][ROW][STR_LENGTH]
     for (index = 0; index < num_contacts; index++)
     {
         tmp_contact = cJSON_GetArrayItem(tmp, index);
-        tmp2 = cJSON_GetObjectItemCaseSensitive(tmp_contact, "name");
-        for (i=0; i<255; i++) {
-            if (tmp2->valuestring[i] == '`') {
-               tmp2->valuestring[i] = ' ';
-            }
-        }
-        snprintf(contacts[index][0], 255, "%s", tmp2->valuestring);
-        tmp2 = cJSON_GetObjectItemCaseSensitive(tmp_contact, "link");
-        for (i=0; i<32; i++) {
-            if (tmp2->valuestring[i] == '`') {
-               tmp2->valuestring[i] = ' ';
-            }
-        }
-        snprintf(contacts[index][1], 255, "%s", tmp2->valuestring);
+        snprintf(contacts[index][0], 255, "%s", cJSON_GetObjectItemCaseSensitive(tmp_contact, "name")->valuestring);
+        snprintf(contacts[index][1], 255, "%s", cJSON_GetObjectItemCaseSensitive(tmp_contact, "link")->valuestring);
     }
     // Take the id of the candidate's contacts
     candidateId = executeIntQuery("SELECT id FROM Candidate ORDER BY ID DESC LIMIT 1");

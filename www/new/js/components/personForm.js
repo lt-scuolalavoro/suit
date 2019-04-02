@@ -149,7 +149,7 @@ Vue.component("person-form", {
                       (/^[a-zA-Z() èéòà'ù]+$/.test(this.person.lastName)));
     },
     check3() {
-      this.valid[2] = !this.person.birthDate == "";
+      this.valid[2] = !this.person.birthDate == "" && ((parseInt(this.person.birthDate.substring(0, 4)))<(new Date().getFullYear()));
     },
     check4() {
       this.valid[3] = !this.person.employed == "";
@@ -165,10 +165,10 @@ Vue.component("person-form", {
       }
     },
     check5() {
-      if (this.person.employed==0) {
+      if (this.person.employed==0 && !this.person.employed=="") {
         this.valid[4] = true;
       } else {
-        this.valid[4] = !isNaN(this.person.salary) && !this.person.salary=="";
+        this.valid[4] = (!isNaN(this.person.salary) && !this.person.salary=="") && this.person.employed != "" && !this.person.salary.includes(" ");
       }
     },
     check6() {
@@ -207,7 +207,7 @@ Vue.component("person-form", {
 
   template: `
     <div align = "center">
-        <b-form-group label-cols-lg="7"	
+        <b-form-group label-cols-lg="2"	
                       id="formFirstName"
                       label="First name:"
                       label-for="inputFirstName">
@@ -219,7 +219,7 @@ Vue.component("person-form", {
             </b-form-input>
         </b-form-group>
 
-        <b-form-group label-cols-lg="7"	
+        <b-form-group label-cols-lg="2"	
                       id="formLastName"
                       label="Last name:"
                       label-for="inputLastName">
@@ -231,7 +231,7 @@ Vue.component("person-form", {
             </b-form-input>
         </b-form-group>
 
-        <b-form-group label-cols-lg="7"	
+        <b-form-group label-cols-lg="2"	
                       id="formBirthDate"
                       label="Birth date:"
                       label-for="inputBirthDate">
@@ -244,7 +244,7 @@ Vue.component("person-form", {
             </b-form-input>
         </b-form-group>
 
-        <b-form-group label-cols-lg="7"	
+        <b-form-group label-cols-lg="2"	
                       id="formEmployed"
                       label="Employed:"
                       label-for="inputEmployed">
@@ -258,7 +258,7 @@ Vue.component("person-form", {
             </b-form-radio-group>
         </b-form-group>
 
-        <b-form-group label-cols-lg="7"	
+        <b-form-group label-cols-lg="2"	
                       id="formSalary"
                       label="Salary:"
                       label-for="inputSalaty">
@@ -270,7 +270,7 @@ Vue.component("person-form", {
             </b-form-input>
         </b-form-group>
 
-        <b-form-group label-cols-lg="7"	
+        <b-form-group label-cols-lg="2"	
                       id="formNotes"
                       label="Notes:"
                       label-for="inputNotes">
@@ -284,7 +284,7 @@ Vue.component("person-form", {
             </b-form-textarea>
         </b-form-group>
 
-        <b-form-group label-cols-lg="7"	
+        <b-form-group label-cols-lg="2"	
                       id = "formContacts"
                       label = "Contacts:"
                       label-for = "inputContactName">
