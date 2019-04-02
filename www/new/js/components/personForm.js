@@ -72,6 +72,7 @@ Vue.component("person-form", {
           let contact_id = "";
           axios.get("cgi/contacts.cgi").then(response => {
             let len = response.data.length;
+            contact_id = parseInt(response.data[len - 1].id) + 1;
             contact_id = contact_id.toString();
             let last = this.person.contacts.length - 1;
             this.person.contacts[last].id = contact_id;
@@ -139,13 +140,13 @@ Vue.component("person-form", {
       this.valid[0] = (!this.person.firstName == '' &&
                       (this.person.firstName.length>=2 && 
                       this.person.firstName.length<=32) && 
-                      (/^[a-zA-Z() èéòà]+$/.test(this.person.firstName)));
+                      (/^[a-zA-Z() èéòà'ù]+$/.test(this.person.firstName)));
     },
     check2() {
       this.valid[1] = (!this.person.lastName == '' &&
                       (this.person.lastName.length>=2 && 
                       this.person.lastName.length<=32) && 
-                      (/^[a-zA-Z() èéòà]+$/.test(this.person.lastName)));
+                      (/^[a-zA-Z() èéòà'ù]+$/.test(this.person.lastName)));
     },
     check3() {
       this.valid[2] = !this.person.birthDate == "";
