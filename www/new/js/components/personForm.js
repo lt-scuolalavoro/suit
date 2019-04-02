@@ -106,7 +106,7 @@ Vue.component("person-form", {
 
   template: `
     <div align = "center">
-        <b-form-group horizontal
+        <b-form-group label-cols-lg="7"	
                       id="formFirstName"
                       label="First name:"
                       label-for="inputFirstName">
@@ -116,7 +116,7 @@ Vue.component("person-form", {
             </b-form-input>
         </b-form-group>
 
-        <b-form-group horizontal
+        <b-form-group label-cols-lg="7"	
                       id="formLastName"
                       label="Last name:"
                       label-for="inputLastName">
@@ -126,7 +126,7 @@ Vue.component("person-form", {
             </b-form-input>
         </b-form-group>
 
-        <b-form-group horizontal
+        <b-form-group label-cols-lg="7"	
                       id="formBirthDate"
                       label="Birth date:"
                       label-for="inputBirthDate">
@@ -137,7 +137,7 @@ Vue.component("person-form", {
             </b-form-input>
         </b-form-group>
 
-        <b-form-group horizontal
+        <b-form-group label-cols-lg="7"	
                       id="formEmployed"
                       label="Employed:"
                       label-for="inputEmployed">
@@ -149,7 +149,7 @@ Vue.component("person-form", {
             </b-form-radio-group>
         </b-form-group>
 
-        <b-form-group horizontal
+        <b-form-group label-cols-lg="7"	
                       id="formSalary"
                       label="Salary:"
                       label-for="inputSalaty">
@@ -159,7 +159,7 @@ Vue.component("person-form", {
             </b-form-input>
         </b-form-group>
 
-        <b-form-group horizontal
+        <b-form-group label-cols-lg="7"	
                       id="formNotes"
                       label="Notes:"
                       label-for="inputNotes">
@@ -171,7 +171,7 @@ Vue.component("person-form", {
             </b-form-textarea>
         </b-form-group>
 
-        <b-form-group horizontal
+        <b-form-group label-cols-lg="7"	
                       id = "formContacts"
                       label = "Contacts:"
                       label-for = "inputContactName">
