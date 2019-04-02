@@ -11,4 +11,4 @@ CREATE TABLE IF NOT EXISTS Contacts (
         link VARCHAR(255)
 );
 
-UPDATE suit.version SET db_version = 2;
+UPDATE suit.version SET `db_version`=`db_version` + 1 WHERE `db_version`= `db_version` LIMIT 1;
