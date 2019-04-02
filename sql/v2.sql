@@ -1,5 +1,3 @@
-USE suit;
-
 ALTER TABLE Candidate CHANGE `removed` `deleted` TINYINT(1);
 ALTER TABLE Candidate ALTER `deleted` SET DEFAULT 0;
 ALTER TABLE Candidate ALTER `salary` SET DEFAULT 0;
@@ -13,4 +11,4 @@ CREATE TABLE IF NOT EXISTS Contacts (
         link VARCHAR(255)
 );
 
-UPDATE suit.version set db_version = 2;
+UPDATE suit.version SET `db_version`=`db_version` + 1 WHERE `db_version`= `db_version` LIMIT 1;

@@ -12,9 +12,12 @@ Vue.component("person-form", {
         employed: "",
         salary: "",
         notes: "",
-        contacts: []
+        contacts: [],
       },
+      valid: [false, false, false, false, false, true, true, true],
+      state: false,
       contactName: "",
+      stringSalary: "Insert salary here",
       contactLink: "",
       idToRemove: 0,
       row_contact_index: 0,
@@ -32,7 +35,6 @@ Vue.component("person-form", {
       let url = new URL(window.location.href);
       let id = url.searchParams.get("id");
       this.person.id = id;
-
       axios
         .get("cgi/candidate.cgi", {
           params: {
@@ -48,21 +50,28 @@ Vue.component("person-form", {
           this.person.salary = data.salary;
           this.person.notes = data.notes;
           this.person.contacts = data.contacts;
+          this.check1();
+          this.check2();
+          this.check3();
+          this.check6();
+          this.check7();
+          this.check8();
+          this.check4();
+          this.check5();
         });
     }
   },
   methods: {
     setContact() {
-      if (this.contactName != "" && this.contactLink != "") {
+      if (this.contactName != "" && this.contactLink != "" && this.valid[6] && this.valid[7]) {
         this.person.contacts.push({
           name: this.contactName,
           link: this.contactLink
-        });
+      });
         if (this.edit) {
           let contact_id = "";
           axios.get("cgi/contacts.cgi").then(response => {
             let len = response.data.length;
-            contact_id = parseInt(response.data[len - 1].id) + 1;
             contact_id = contact_id.toString();
             let last = this.person.contacts.length - 1;
             this.person.contacts[last].id = contact_id;
@@ -79,9 +88,35 @@ Vue.component("person-form", {
       this.row_contact_index = row.index;
     },
     onSubmitClick() {
+      this.check5();
       let op = this.edit ? "edit" : "add";
-
-      axios
+      let ok = true;
+      let i=0;
+      while (i<8 && ok) {
+        ok = this.valid[i];
+        i++;
+      }
+      if (!ok) {
+        alert("Missing or incorrect information. Try again.")
+      } else {
+        while (this.person.firstName.includes(" ")) {
+          this.person.firstName = this.person.firstName.replace(" ", "`")
+        }
+        while (this.person.lastName.includes(" ")) {
+          this.person.lastName = this.person.lastName.replace(" ", "`")
+        }
+        while (this.person.notes.includes(" ")) {
+          this.person.notes = this.person.notes.replace(" ", "`")
+        }
+        for (i=0; i<this.person.contacts.length; i++) {
+          while (this.person.contacts[i].name.includes(" ")) {
+            this.person.contacts[i].name = this.person.contacts[i].name.replace(" ", "`")
+          }
+          while (this.person.contacts[i].link.includes(" ")) {
+            this.person.contacts[i].link = this.person.contacts[i].link.replace(" ", "`")
+          }
+        }
+        axios
         .post("cgi/" + op + "Candidate.cgi", {
           id: this.person.id,
           firstName: this.person.firstName,
@@ -94,6 +129,68 @@ Vue.component("person-form", {
           removed_contacts_ids: this.removedContactsID
         })
         .then(() => (window.location = "home.html"));
+      }
+      
+    },
+    resetSalary() {
+      this.person.salary="";
+    },
+    check1() {
+      this.valid[0] = (!this.person.firstName == '' &&
+                      (this.person.firstName.length>=2 && 
+                      this.person.firstName.length<=32) && 
+                      (/^[a-zA-Z() èéòà]+$/.test(this.person.firstName)));
+    },
+    check2() {
+      this.valid[1] = (!this.person.lastName == '' &&
+                      (this.person.lastName.length>=2 && 
+                      this.person.lastName.length<=32) && 
+                      (/^[a-zA-Z() èéòà]+$/.test(this.person.lastName)));
+    },
+    check3() {
+      this.valid[2] = !this.person.birthDate == "";
+    },
+    check4() {
+      this.valid[3] = !this.person.employed == "";
+      if (this.person.employed==0) {
+        this.state = true;
+        this.valid[4] = true;
+        this.resetSalary();
+        this.stringSalary="no salary needed";
+      } else {
+        this.state = false;
+        this.valid[4] = false;
+        this.stringSalary="insert salary here";
+      }
+    },
+    check5() {
+      if (this.person.employed==0) {
+        this.valid[4] = true;
+      } else {
+        this.valid[4] = !isNaN(this.person.salary) && !this.person.salary=="";
+      }
+    },
+    check6() {
+      if (this.person.notes == null || this.person.notes == "NULL") {
+        this.person.notes = "";
+      }
+      this.valid[5] = this.person.notes.length<=255;
+    },
+    check7() {
+      if (this.contactName != "") {
+        this.valid[6] = this.contactName.length>=2 && this.contactName.length<=32;
+        this.check8();
+      } else {
+        this.valid[6] = true;
+        this.valid[7] = true;
+      }
+    },
+    check8() {
+      if (this.valid[6]) {
+        this.valid[7] = (!this.contactLink == "" || this.contactName == "") && this.contactLink.length<=255;
+      } else {
+        this.valid[7] = false;
+      }
     },
     removeContact() {
       this.removedContactsID.push(this.idToRemove);
@@ -101,6 +198,9 @@ Vue.component("person-form", {
         this.person.contacts[this.row_contact_index]
       );
       this.person.contacts.splice(index, 1);
+    },
+    goBack() {
+      window.location = "home.html";
     }
   },
 
@@ -112,7 +212,9 @@ Vue.component("person-form", {
                       label-for="inputFirstName">
             <b-form-input id="inputFirstName"
                           placeholder="insert first name here"
-                          v-model="person.firstName">
+                          v-model="person.firstName"
+                          @input="check1();"
+                          :state="this.valid[0]">
             </b-form-input>
         </b-form-group>
 
@@ -122,7 +224,9 @@ Vue.component("person-form", {
                       label-for="inputLastName">
             <b-form-input id="inputLastName"
                           placeholder="insert last name here"
-                          v-model="person.lastName">
+                          v-model="person.lastName"
+                          @input="check2();"
+                          :state="this.valid[1]">
             </b-form-input>
         </b-form-group>
 
@@ -133,7 +237,9 @@ Vue.component("person-form", {
             <b-form-input id="inputBirthDate"
                           :type = "date"
                           placeholder="insert the birth date here "
-                          v-model="person.birthDate">
+                          v-model="person.birthDate"
+                          @input="check3();"
+                          :state="this.valid[2]">
             </b-form-input>
         </b-form-group>
 
@@ -143,7 +249,9 @@ Vue.component("person-form", {
                       label-for="inputEmployed">
             <b-form-radio-group
                     v-model="person.employed"
-                    id="inputEmployed">
+                    id="inputEmployed"
+                    @input="check4();"
+                    :state="this.valid[3]">
                 <b-form-radio value="1">Yes</b-form-radio>
                 <b-form-radio value="0">No</b-form-radio>
             </b-form-radio-group>
@@ -153,9 +261,11 @@ Vue.component("person-form", {
                       id="formSalary"
                       label="Salary:"
                       label-for="inputSalaty">
-            <b-form-input id="inputSalary"
-                          placeholder="insert salary here"
-                          v-model="person.salary">
+            <b-form-input id="inputSalary" :disabled='this.state'
+                          :placeholder="this.stringSalary"
+                          v-model="person.salary"
+                          @input="check5();"
+                          :state="this.valid[4]">
             </b-form-input>
         </b-form-group>
 
@@ -167,6 +277,8 @@ Vue.component("person-form", {
                       placeholder="insert notes about the candidate here"
                       v-model="person.notes"
                       :rows="3"
+                      @input="check6();"
+                      :state="this.valid[5]"
                       no-resize>
             </b-form-textarea>
         </b-form-group>
@@ -179,13 +291,17 @@ Vue.component("person-form", {
                 <b-col cols = "3">
                     <b-form-input id="inputContactName"
                                   placeholder="name (ex: Gmail)"
-                                  v-model="contactName">
+                                  v-model="contactName"
+                                  @input="check7();"
+                                  :state="this.valid[6]">
                     </b-form-input>
                 </b-col>
                 <b-col cols = "8">
                     <b-form-input id="inputContactLink"
                                   placeholder="link (ex: mariorossi@gmail.com)"
-                                  v-model="contactLink">
+                                  v-model="contactLink"
+                                  @input="check8();"
+                                  :state="this.valid[7]">
                     </b-form-input>
                 </b-col>
                 <b-col cols = "1">
@@ -210,7 +326,7 @@ Vue.component("person-form", {
             </b-form-group>
 
         <div align = "right">
-            <b-button variant="outline-danger">Cancel</b-button>
+            <b-button @click="goBack();" variant="outline-danger">Cancel</b-button>
             <b-button @click="onSubmitClick" variant="outline-primary">Submit</b-button>
         </div>
 
