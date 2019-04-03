@@ -99,22 +99,22 @@ Vue.component("person-form", {
       if (!ok) {
         alert("Missing or incorrect information. Try again.")
       } else {
-        while (this.person.firstName.includes(" ")) {
-          this.person.firstName = this.person.firstName.replace(" ", "`")
-        }
-        while (this.person.lastName.includes(" ")) {
-          this.person.lastName = this.person.lastName.replace(" ", "`")
-        }
-        while (this.person.notes.includes(" ")) {
-          this.person.notes = this.person.notes.replace(" ", "`")
-        }
+        this.person.firstName = this.replace(this.person.firstName, " ", "`");
+        this.person.firstName = this.replace(this.person.firstName, "'", "§");
+        this.person.firstName = this.replace(this.person.firstName, "§", "''");
+        this.person.lastName = this.replace(this.person.lastName, " ", "`");
+        this.person.lastName = this.replace(this.person.lastName, "'", "§");
+        this.person.lastName = this.replace(this.person.lastName, "§", "''");
+        this.person.notes = this.replace(this.person.notes, " ", "`");
+        this.person.notes = this.replace(this.person.notes, "'", "§");
+        this.person.notes = this.replace(this.person.notes, "§", "''");
         for (i=0; i<this.person.contacts.length; i++) {
-          while (this.person.contacts[i].name.includes(" ")) {
-            this.person.contacts[i].name = this.person.contacts[i].name.replace(" ", "`")
-          }
-          while (this.person.contacts[i].link.includes(" ")) {
-            this.person.contacts[i].link = this.person.contacts[i].link.replace(" ", "`")
-          }
+          this.person.contacts[i].name = this.replace(this.person.contacts[i].name, " ", "`");
+          this.person.contacts[i].name = this.replace(this.person.contacts[i].name, "'", "§");
+          this.person.contacts[i].name = this.replace(this.person.contacts[i].name, "§", "''");
+          this.person.contacts[i].link = this.replace(this.person.contacts[i].link, " ", "`");
+          this.person.contacts[i].link = this.replace(this.person.contacts[i].link, "'", "§");
+          this.person.contacts[i].link = this.replace(this.person.contacts[i].link, "§", "''");
         }
         axios
         .post("cgi/" + op + "Candidate.cgi", {
@@ -130,13 +130,18 @@ Vue.component("person-form", {
         })
         .then(() => (window.location = "home.html"));
       }
-      
     },
     resetSalary() {
       this.person.salary="";
     },
+    replace(str, old, ne) {
+      while(str.includes(old)) {
+        str = str.replace(old, ne);
+      }
+      return str;
+    },
     check1() {
-      this.valid[0] = (!this.person.firstName == '' &&
+      this.valid[0] = (this.person.firstName != '' &&
                       (this.person.firstName.length>=2 && 
                       this.person.firstName.length<=32) && 
                       (/^[a-zA-Z() èéòà'ù]+$/.test(this.person.firstName)));
@@ -206,7 +211,7 @@ Vue.component("person-form", {
 
   template: `
     <div align = "center">
-        <b-form-group label-cols-lg="2"	
+        <b-form-group label-cols-lg="2" 
                       id="formFirstName"
                       label="First name:"
                       label-for="inputFirstName">
@@ -218,7 +223,7 @@ Vue.component("person-form", {
             </b-form-input>
         </b-form-group>
 
-        <b-form-group label-cols-lg="2"	
+        <b-form-group label-cols-lg="2" 
                       id="formLastName"
                       label="Last name:"
                       label-for="inputLastName">
@@ -230,7 +235,7 @@ Vue.component("person-form", {
             </b-form-input>
         </b-form-group>
 
-        <b-form-group label-cols-lg="2"	
+        <b-form-group label-cols-lg="2" 
                       id="formBirthDate"
                       label="Birth date:"
                       label-for="inputBirthDate">
@@ -243,7 +248,7 @@ Vue.component("person-form", {
             </b-form-input>
         </b-form-group>
 
-        <b-form-group label-cols-lg="2"	
+        <b-form-group label-cols-lg="2" 
                       id="formEmployed"
                       label="Employed:"
                       label-for="inputEmployed">
@@ -257,7 +262,7 @@ Vue.component("person-form", {
             </b-form-radio-group>
         </b-form-group>
 
-        <b-form-group label-cols-lg="2"	
+        <b-form-group label-cols-lg="2" 
                       id="formSalary"
                       label="Salary:"
                       label-for="inputSalaty">
@@ -269,7 +274,7 @@ Vue.component("person-form", {
             </b-form-input>
         </b-form-group>
 
-        <b-form-group label-cols-lg="2"	
+        <b-form-group label-cols-lg="2" 
                       id="formNotes"
                       label="Notes:"
                       label-for="inputNotes">
@@ -283,7 +288,7 @@ Vue.component("person-form", {
             </b-form-textarea>
         </b-form-group>
 
-        <b-form-group label-cols-lg="2"	
+        <b-form-group label-cols-lg="2" 
                       id = "formContacts"
                       label = "Contacts:"
                       label-for = "inputContactName">
