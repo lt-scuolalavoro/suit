@@ -72,7 +72,6 @@ Vue.component("person-form", {
           let contact_id = "";
           axios.get("cgi/contacts.cgi").then(response => {
             let len = response.data.length;
-            contact_id = parseInt(response.data[len - 1].id) + 1;
             contact_id = contact_id.toString();
             let last = this.person.contacts.length - 1;
             this.person.contacts[last].id = contact_id;

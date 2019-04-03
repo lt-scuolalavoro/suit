@@ -9,10 +9,10 @@ int main()
     cJSON *tmp_contact = NULL;
 
     int id;
-    char firstName[32];
-    char lastName[32];
-    char birthDate[11];
-    char employed[2];
+    char firstName[30];
+    char lastName[30];
+    char birthDate[12];
+    char employed[3];
     int salary;
     char notes[256];
 
@@ -37,20 +37,20 @@ int main()
     id = atoi(tmp->valuestring);
 
     tmp = cJSON_GetObjectItemCaseSensitive(person, "firstName");
-    for (index=0; index<32; index++) {
+    for (index=0; index<29; index++) {
         if (tmp->valuestring[index] == '`') {
             tmp->valuestring[index] = ' ';
         }
     }
-    snprintf(firstName, 32, "%s", tmp->valuestring);
+    snprintf(firstName, 29, "%s", tmp->valuestring);
 
     tmp = cJSON_GetObjectItemCaseSensitive(person, "lastName");
-    for (index=0; index<32; index++) {
+    for (index=0; index<29; index++) {
         if (tmp->valuestring[index] == '`') {
             tmp->valuestring[index] = ' ';
         }
     }
-    snprintf(lastName, 32, "%s", tmp->valuestring);
+    snprintf(lastName, 29, "%s", tmp->valuestring);
 
     tmp = cJSON_GetObjectItemCaseSensitive(person, "birthDate");
     for (index=0; index<11; index++) {
