@@ -14,8 +14,8 @@ Vue.component("person-form", {
         notes: "",
         contacts: [],
       },
-      valid: [false, false, false, false, false, true, true, true],
-      state: false,
+      valid: [null, null, null, null, null, null, null, null],
+      state: true,
       contactName: "",
       stringSalary: "Insert salary here",
       contactLink: "",
@@ -88,6 +88,13 @@ Vue.component("person-form", {
       this.row_contact_index = row.index;
     },
     onSubmitClick() {
+      this.check1();
+      this.check2();
+      this.check3();
+      this.check6();
+      this.check7();
+      this.check8();
+      this.check4();
       this.check5();
       let op = this.edit ? "edit" : "add";
       let ok = true;
@@ -96,9 +103,7 @@ Vue.component("person-form", {
         ok = this.valid[i];
         i++;
       }
-      if (!ok) {
-        alert("Missing or incorrect information. Try again.")
-      } else {
+      if (ok) {
         this.person.firstName = this.replace(this.person.firstName, " ", "`");
         this.person.firstName = this.replace(this.person.firstName, "'", "§");
         this.person.firstName = this.replace(this.person.firstName, "§", "''");
@@ -163,7 +168,11 @@ Vue.component("person-form", {
         this.resetSalary();
         this.stringSalary="no salary needed";
       } else {
-        this.state = false;
+        if (this.person.employed == "") {
+          this.state = true;
+        } else {
+          this.state = false;
+        }
         this.valid[4] = false;
         this.stringSalary="insert salary here";
       }
@@ -218,21 +227,30 @@ Vue.component("person-form", {
             <b-form-input id="inputFirstName"
                           placeholder="insert first name here"
                           v-model="person.firstName"
+                          aria-describedby="f1"
                           @input="check1();"
                           :state="this.valid[0]">
             </b-form-input>
+            <b-form-invalid-feedback align="left">
+                Enter at least 2 and at most 32 characters. Only letters and apostrophes accepted.
+            </b-form-invalid-feedback>
         </b-form-group>
 
         <b-form-group label-cols-lg="2" 
+
                       id="formLastName"
                       label="Last name:"
                       label-for="inputLastName">
             <b-form-input id="inputLastName"
                           placeholder="insert last name here"
                           v-model="person.lastName"
+                          aria-describedby="f1"
                           @input="check2();"
                           :state="this.valid[1]">
             </b-form-input>
+          <b-form-invalid-feedback align="left">
+                Enter at least 2 and at most 32 characters. Only letters and apostrophes accepted.
+          </b-form-invalid-feedback>
         </b-form-group>
 
         <b-form-group label-cols-lg="2" 
@@ -243,9 +261,13 @@ Vue.component("person-form", {
                           :type = "date"
                           placeholder="insert the birth date here "
                           v-model="person.birthDate"
+                          aria-describedby="f1"
                           @input="check3();"
                           :state="this.valid[2]">
             </b-form-input>
+          <b-form-invalid-feedback align="left">
+              Enter a valid date.
+          </b-form-invalid-feedback>
         </b-form-group>
 
         <b-form-group label-cols-lg="2" 
@@ -272,6 +294,9 @@ Vue.component("person-form", {
                           @input="check5();"
                           :state="this.valid[4]">
             </b-form-input>
+            <b-form-invalid-feedback align="left">
+              Salary must be a number.
+            </b-form-invalid-feedback>
         </b-form-group>
 
         <b-form-group label-cols-lg="2" 
@@ -286,6 +311,9 @@ Vue.component("person-form", {
                       :state="this.valid[5]"
                       no-resize>
             </b-form-textarea>
+            <b-form-invalid-feedback align="left">
+              Enter at most 255 characters.
+            </b-form-invalid-feedback>
         </b-form-group>
 
         <b-form-group label-cols-lg="2" 
@@ -308,6 +336,9 @@ Vue.component("person-form", {
                                   @input="check8();"
                                   :state="this.valid[7]">
                     </b-form-input>
+                  <b-form-invalid-feedback align="left">
+                    Insert the contact link.
+                  </b-form-invalid-feedback>
                 </b-col>
                 <b-col cols = "1">
                     <b-button id = "ContactsButton"
