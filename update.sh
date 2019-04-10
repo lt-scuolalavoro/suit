@@ -1,5 +1,27 @@
 #!/bin/bash
 
+#########################
+# The command line help #
+#########################
+display_help() {
+    echo "Usage: $0 [option...] {start|stop|restart}" >&2
+    echo
+    echo "   -e, --everything         Update everything "
+    echo "   -cdb, --createdb              Create the database "
+    echo "   -db, --database             Update the database "
+    echo "   -cgi              Compile CGI "
+    echo "   -d, --drop              Delete the database "
+    echo "   -dbv, --dbversion             Get the database version "
+    echo
+    # echo some stuff here for the -a or --add-options 
+    exit 1
+}
+
+create_db(){
+    mysql -u root -e "CREATE DATABASE IF NOT EXISTS suit;"
+    exit 1
+}
+
 #Function to color phrase 
 cecho(){
     RED="\033[0;31m"
@@ -15,35 +37,49 @@ clear
 
 #The argument of .sh will called with number [ arg1 = 1, arg2 = 2, etc.]
 case $1 in
-    "--help")
+    "-h" | "--help")
 
-        echo "-e : Update everything"
-        echo "-cdb : Create database" 
-        echo "-db : Update database"
-        echo "-cgi : Compile cgi"
-        echo "-drop : Delete database"
-        echo ""
+        display_help
 
     ;;
 
-    "-e")
+    "-dbv" | "-dbversion")
+        v=$(echo "SELECT * FROM version " | mysql suit -u root 2> /dev/null )
+        v="$(echo $v | tr -dc '0-9')"
+
+        if [ -z "$v" ]; then
+            v=0;
+        fi
+
+        echo "Database version : $v."
+    ;;
+
+    "-d" | "-drop")
+        mysql -u root 2> /dev/null < DROP DATABASE suit;
+        echo "Database suit deleted."
+    ;;
+
+    "-cdb" | "--createdb")
+
+        create_db
+        cecho "GREEN" "Database created."
+
+    ;;
+
+    "-e" | "--everything")
 
         cecho "YELLOW" "Updating everything..."
         echo ""
 
     ;;&
 
-    "-cdb"|"-e")
-
-        mysql -u root -e "CREATE DATABASE IF NOT EXISTS suit;"
-
-    ;;&
-
-    "-db"|"-e")
+    "-db" | "--database" | "-e" | "--everything")
 
         #File counter
         f=$(ls sql -q | wc -l);
         
+        create_db
+
         #Get version from tables
         #We can use 2> /dev/null to suppress the output error
         #If the database doesn't exists it return an error and for this reason we delete the error message
@@ -66,7 +102,7 @@ case $1 in
             done
 
             #TODO rimuovere l'andata a capo
-            cecho "GREEN" "Database updated from version" 
+            cecho "GREEN" "Database updated from version" -n 
             cecho "RED" " $v"
             cecho "GREEN" "to version $f."
 
@@ -78,16 +114,7 @@ case $1 in
 
     ;;&
     
-    
-    2|1)
-        cecho "YELLOW" "Updating database..."
-        #If sql is in src folder, move them in suit
-        if [ -d "src/sql" ]; then
-            mv src/sql ./
-        fi
-    ;;&
-    
-    3|1)    
+    "-cgi" | "-e" | "--everything")    
         cecho "YELLOW" "Compiling cgi ..."
         for file in src/cgi/*;
         do
@@ -95,7 +122,9 @@ case $1 in
         done
         cecho "GREEN" "Cgi compiled successfully."
     ;;
-    *) ;;
+    *) 
+        cecho "RED" "Insert the correct argument. Use -h to see all the command"
+    ;;
 esac
 
 echo ""
