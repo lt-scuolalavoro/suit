@@ -16,14 +16,14 @@ int main(int argc, char const *argv[])
         {
             printf("<h1>Suit Database - Non-removed candidates</h1>");
             // Call the function that executes the query in the db and prints the result in a table
-            printCandidates("WHERE removed = 0");
+            printCandidates("WHERE deleted = 0");
         }
         else
         {
             if (!strcmp(action, "btn=RemovedCandidates"))
             {
                 printf("<h1>Suit Database - Removed candidates</h1>");
-                printCandidates("WHERE removed = 1");
+                printCandidates("WHERE deleted = 1");
             }
             else
             {
