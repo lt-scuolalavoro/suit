@@ -11,6 +11,9 @@ update.sh
 .SH DESCRIPTION
 Used to create, update, delete, get the version of the update and update the CGI.
 
+.B \-\-help\fR
+Display this help and exit
+
 .SH OPTIONS
 .B \-cdb ", " \-\-createdb\fR
 Create suit database.

@@ -3,23 +3,19 @@
 #########################
 # The command line help #
 #########################
-display_help() {
-    echo "Usage: $0 [option...] {start|stop|restart}" >&2
-    echo
-    echo "   -e, --everything         Update everything "
-    echo "   -cdb, --createdb              Create the database "
-    echo "   -db, --database             Update the database "
-    echo "   -cgi              Compile CGI "
-    echo "   -d, --drop              Delete the database "
-    echo "   -dbv, --dbversion             Get the database version "
-    echo
-    # echo some stuff here for the -a or --add-options 
-    exit 1
-}
 
 create_db(){
     mysql -u root -e "CREATE DATABASE IF NOT EXISTS suit;"
-    exit 1
+}
+
+check_everything () {
+    if [ "$1" == "-e" -o "$1" == everything ]; then
+        #true
+        return 1
+    else
+        #false
+        return 0
+    fi
 }
 
 #Function to color phrase 
@@ -35,47 +31,53 @@ cecho(){
 
 clear
 
-#The argument of .sh will called with number [ arg1 = 1, arg2 = 2, etc.]
-case $1 in
-    "-h" | "--help")
+#boolean to check if the user have wrong the pharameter
+check_invalid_phar=1
 
-        display_help
+#Show the man of ./update.sh
+if [ "$1" == "--help" ]; then
+    man ./update
+fi
 
-    ;;
+#Check if the user wants to do all the options
+check_everything $1
+#$? catch the last thing that happened, in this case the return of check_everything
+EV=$?
 
-    "-dbv" | "-dbversion")
-        v=$(echo "SELECT * FROM version " | mysql suit -u root 2> /dev/null )
-        v="$(echo $v | tr -dc '0-9')"
+if [ "$EV" == "1" ]; then
+    cecho "YELLOW" "Updating everything..."
+    echo ""
+fi
 
-        if [ -z "$v" ]; then
-            v=0;
-        fi
+#Show the database version
+if [ "$1" == "-dbv" -o "$1" == "--dbversion" ]; then
+    check_invalid_phar=0
 
-        echo "Database version : $v."
-    ;;
+    v=$(echo "SELECT * FROM version " | mysql suit -u root 2> /dev/null )
+    v="$(echo $v | tr -dc '0-9')"
 
-    "-d" | "-drop")
-        mysql -u root 2> /dev/null < DROP DATABASE suit;
-        echo "Database suit deleted."
-    ;;
+    if [ -z "$v" ]; then
+         v=0;
+    fi
 
-    "-cdb" | "--createdb")
+    echo "Database version : $v."
+    echo ""
+fi
 
-        create_db
-        cecho "GREEN" "Database created."
+#Delete the database
+if [ "$1" == "-d" -o "$1" == "--drop" ]; then
+    check_invalid_phar=0
 
-    ;;
+    mysql -u root -e "DROP DATABASE IF EXISTS suit;"
+    cecho "YELLOW" "Database suit deleted."
+    echo ""
+fi
 
-    "-e" | "--everything")
+#Update the database
+if [ "$1" == "-db" -o "$1" == "--database" -o "$EV" == "1" ]; then
+    check_invalid_phar=0
 
-        cecho "YELLOW" "Updating everything..."
-        echo ""
-
-    ;;&
-
-    "-db" | "--database" | "-e" | "--everything")
-
-        #File counter
+    #File counter
         f=$(ls sql -q | wc -l);
         
         create_db
@@ -103,28 +105,33 @@ case $1 in
 
             #TODO rimuovere l'andata a capo
             cecho "GREEN" "Database updated from version" -n 
-            cecho "RED" " $v"
+            cecho "RED" "$v"
             cecho "GREEN" "to version $f."
 
             else
-                echo "Already up to date."
+                echo "Database already up to date."
         fi
-
         echo ""
+fi
 
-    ;;&
-    
-    "-cgi" | "-e" | "--everything")    
-        cecho "YELLOW" "Compiling cgi ..."
+#Compile CGI
+if [ "$1" == "-cgi" -o "$EV" == "1" ]; then
+    check_invalid_phar=0
+
+    cecho "YELLOW" "Compiling cgi ..."
         for file in src/cgi/*;
         do
             gcc $file -o www/new/cgi/$(basename "$file")gi `mysql_config --libs --cflags`
         done
         cecho "GREEN" "Cgi compiled successfully."
-    ;;
-    *) 
-        cecho "RED" "Insert the correct argument. Use -h to see all the command"
-    ;;
-esac
+        echo ""
+fi
 
-echo ""
+if [ "$check_invalid_phar" == 1 ]; then
+    cecho "RED" "Insert the correct argument. Use man ./update"
+    echo ""
+
+    exit 0
+fi
+
+#The argument of .sh will called with number [ arg1 = 1, arg2 = 2, etc.]
