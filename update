@@ -1,0 +1,49 @@
+.\" Manpage for update.sh.
+.\" Contact Emanuele Rizzi to correct errors or typos.
+.TH man 8 "07 Agu 2019" "0.0.1" "update man page"
+.SH NAME
+update.sh
+
+.SH SYNOPSIS
+.B update
+\fB\fIOPTION\fR...
+
+.SH DESCRIPTION
+Used to create, update, delete, get the version of the update and update the CGI.
+
+.B \-\-help\fR
+Display this help and exit
+
+.SH OPTIONS
+.B \-cdb ", " \-\-createdb\fR
+Create suit database.
+
+.B \-db ", " \-\-database\fR
+Update suit database.
+
+.B \-dbv ", " \-\-dbversion =\fIINT\fR
+Get the current database version.
+
+.B \-d ", " \-\-drop\fR
+Get the current database version.
+
+.B \-cgi
+Compile CGI
+
+.B \-e ", " \-\-everything \fR
+Create database if not exists, update the database, compile CGI if not compiled.
+
+.SH SEE ALSO
+Full wiki on <https://github.com/lt-scuolalavoro/suit/wiki>
+
+.SH BUGS
+No known bugs.
+
+.SH REPORTING BUGS
+Report issues opening a new issues on github <https://github.com/lt-scuolalavoro/suit/issues/new>
+
+.SH COPYRIGHT
+       Copyright  ©  we haven't a copyright :'(
+
+.SH AUTHOR
+Written by Emanuele R. , developed by Emanuele R. and Giuseppe L.
